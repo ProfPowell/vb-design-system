@@ -1,0 +1,2179 @@
+// src/lib/bundle-registry.js
+var reducedMotionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+var components = /* @__PURE__ */ new Map();
+function registerComponent(tag, impl, opts = {}) {
+  const priority = opts.priority ?? 10;
+  const meta = { impl, bundle: opts.bundle, contract: opts.contract, priority };
+  const existing = components.get(tag);
+  if (customElements.get(tag)) {
+    if (!existing || existing.priority >= priority) {
+      if (existing && existing.priority === priority && existing.impl !== impl) {
+        console.warn(
+          `[VB Bundle] Tag <${tag}> already registered by "${existing.bundle}" (priority ${existing.priority}). Skipping "${opts.bundle}".`
+        );
+      }
+      return;
+    }
+    console.warn(
+      `[VB Bundle] Tag <${tag}> defined by "${existing.bundle}" cannot be replaced (customElements.define is permanent). "${opts.bundle}" has higher priority but arrived late.`
+    );
+    return;
+  }
+  if (existing && existing.priority >= priority) {
+    if (existing.priority === priority) {
+      console.warn(
+        `[VB Bundle] Tag <${tag}> already registered by "${existing.bundle}". Skipping "${opts.bundle}" (first wins at equal priority).`
+      );
+    }
+    return;
+  }
+  components.set(tag, meta);
+  customElements.define(tag, impl);
+}
+
+// src/lib/vb-element.js
+var VBElement = class extends HTMLElement {
+  #cleanups = [];
+  /** @type {ElementInternals | undefined} */
+  #internals;
+  connectedCallback() {
+    if (this.hasAttribute("data-upgraded")) return;
+    if (this.setup() === false) return;
+    this.setAttribute("data-upgraded", "");
+    queueMicrotask(() => {
+      this.dispatchEvent(new CustomEvent(`${this.localName}:upgraded`, { bubbles: true }));
+    });
+  }
+  disconnectedCallback() {
+    for (const fn of this.#cleanups) fn();
+    this.#cleanups = [];
+    this.removeAttribute("data-upgraded");
+    this.teardown();
+  }
+  /**
+   * Track an event listener for automatic cleanup on disconnect.
+   * @param {EventTarget} target
+   * @param {string} event
+   * @param {EventListenerOrEventListenerObject} handler
+   * @param {AddEventListenerOptions} [opts]
+   */
+  listen(target, event, handler, opts) {
+    target.addEventListener(event, handler, opts);
+    this.#cleanups.push(() => target.removeEventListener(event, handler, opts));
+  }
+  /**
+   * Override in subclass. Return false to abort upgrade.
+   * @returns {boolean | void}
+   */
+  setup() {
+  }
+  /** Override in subclass for cleanup beyond event listeners. */
+  teardown() {
+  }
+  /**
+   * Toggle a CustomStateSet entry targetable via the `:state(name)` CSS selector.
+   * Use for component-private flags. For author-facing state, keep using
+   * data-* / aria-* attributes — see admin/specs/custom-state-set-research.md.
+   *
+   * Lazily attaches ElementInternals on first call; subclasses that already
+   * attached internals (form-associated components) must hand them over via
+   * `_adoptInternals(this.attachInternals())` in their constructor to avoid
+   * the double-attach throw.
+   *
+   * @param {string} name
+   * @param {boolean} on
+   */
+  setState(name, on) {
+    if (!this.#internals) this.#internals = this.attachInternals();
+    const states = this.#internals.states;
+    try {
+      if (on) states.add(name);
+      else states.delete(name);
+    } catch {
+      const legacy = `--${name}`;
+      if (on) states.add(legacy);
+      else states.delete(legacy);
+    }
+  }
+  /**
+   * Hand pre-attached ElementInternals to the base class. Form-associated
+   * subclasses call this in their constructor right after attachInternals().
+   * @param {ElementInternals} internals
+   */
+  _adoptInternals(internals) {
+    if (!this.#internals) this.#internals = internals;
+  }
+};
+
+// src/utils/copy-init.js
+var COPIED_DURATION = 1500;
+var ANNOUNCE_DURATION = 1e3;
+var SELECTOR = "[data-copy], [data-copy-target], [data-paste-target]";
+var DEFAULT_ANNOUNCE = "Copied to clipboard";
+var DEFAULT_PASTE_ANNOUNCE = "Pasted from clipboard";
+var resetTimers = /* @__PURE__ */ new WeakMap();
+async function copyText(text, options = {}) {
+  if (text == null || text === "") return false;
+  const { button, announceMessage = DEFAULT_ANNOUNCE, duration = COPIED_DURATION } = options;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    return false;
+  }
+  applyFeedback({ button, duration, announceMessage, eventDetail: { text } });
+  return true;
+}
+function applyFeedback({ button, duration, announceMessage, eventDetail, state = "copied", eventName = "copy" }) {
+  if (button) {
+    button.dataset.state = state;
+    const prior = resetTimers.get(button);
+    if (prior) clearTimeout(prior);
+    resetTimers.set(button, setTimeout(() => {
+      delete button.dataset.state;
+      resetTimers.delete(button);
+    }, duration));
+    button.dispatchEvent(new CustomEvent(eventName, {
+      bubbles: true,
+      detail: eventDetail
+    }));
+  }
+  announce(announceMessage, button ?? document.body);
+}
+async function pasteFromClipboard(target, options = {}) {
+  const { button, announceMessage = DEFAULT_PASTE_ANNOUNCE, duration = COPIED_DURATION } = options;
+  let text;
+  try {
+    text = await navigator.clipboard.readText();
+  } catch {
+    return null;
+  }
+  if (target) {
+    if ("value" in target && (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) {
+      target.value = text;
+    } else {
+      target.textContent = text;
+    }
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  applyFeedback({
+    button,
+    duration,
+    announceMessage,
+    eventDetail: { text },
+    state: "pasted",
+    eventName: "paste"
+  });
+  return text;
+}
+function initCopyButtons(root = document) {
+  root.querySelectorAll(SELECTOR).forEach(enhanceButton);
+}
+function enhanceButton(button) {
+  if (button.hasAttribute("data-copy-init")) return;
+  button.setAttribute("data-copy-init", "");
+  button.addEventListener("click", () => {
+    if (button.dataset.pasteTarget) {
+      const target = document.querySelector(button.dataset.pasteTarget);
+      if (!target) return;
+      pasteFromClipboard(target, { button });
+      return;
+    }
+    const text = getText(button);
+    if (!text) return;
+    copyText(text, { button });
+  });
+}
+function getText(button) {
+  if (button.dataset.copy) return button.dataset.copy;
+  if (button.dataset.copyTarget) {
+    const target = document.querySelector(button.dataset.copyTarget);
+    if (!target) return "";
+    const attr = button.dataset.copyAttr;
+    if (attr) return target.getAttribute(attr) ?? "";
+    return target.textContent ?? "";
+  }
+  return "";
+}
+function announce(message, context) {
+  const el = document.createElement("div");
+  el.setAttribute("role", "status");
+  el.setAttribute("aria-live", "polite");
+  el.className = "visually-hidden";
+  el.textContent = message;
+  context.appendChild(el);
+  setTimeout(() => el.remove(), ANNOUNCE_DURATION);
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => initCopyButtons());
+} else {
+  initCopyButtons();
+}
+var observer = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    for (const node of mutation.addedNodes) {
+      if (node.nodeType !== Node.ELEMENT_NODE) continue;
+      const el = (
+        /** @type {Element} */
+        node
+      );
+      if (el.matches(SELECTOR)) {
+        enhanceButton(
+          /** @type {HTMLElement} */
+          el
+        );
+      }
+      el.querySelectorAll(SELECTOR).forEach((child) => enhanceButton(
+        /** @type {HTMLElement} */
+        child
+      ));
+    }
+  }
+});
+observer.observe(document.documentElement, { childList: true, subtree: true });
+
+// src/web-components/color-palette/logic.js
+var ColorPalette = class extends VBElement {
+  static observedAttributes = ["colors", "names", "layout", "show-values", "show-names", "size", "editable"];
+  /** @type {string[]} */
+  #colors = [];
+  setup() {
+    this.#render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) this.#render();
+  }
+  #render() {
+    const colorsRaw = this.getAttribute("colors") || "";
+    const namesRaw = this.getAttribute("names") || "";
+    const layout = this.getAttribute("layout") || "inline";
+    const size = this.getAttribute("size") || "md";
+    const showValues = this.hasAttribute("show-values");
+    const showNames = this.hasAttribute("show-names") || namesRaw.length > 0;
+    const editable = this.hasAttribute("editable");
+    const colors = this.#parseColorList(colorsRaw);
+    this.#colors = colors.slice();
+    const names = namesRaw ? namesRaw.split(",").map((n) => n.trim()) : [];
+    const sizes = { sm: 48, md: 80, lg: 120 };
+    const px = sizes[size] || 80;
+    let containerStyle = `display:flex;flex-wrap:wrap;gap:var(--size-xs,0.5rem)`;
+    if (layout === "grid") {
+      containerStyle = `display:grid;grid-template-columns:repeat(auto-fill,minmax(${px}px,1fr));gap:var(--size-xs,0.5rem)`;
+    } else if (layout === "list") {
+      containerStyle = `display:flex;flex-direction:column;gap:var(--size-xs,0.5rem)`;
+    }
+    const swatches = colors.map((color, i) => {
+      const name = names[i] || "";
+      const contrast = this.#contrastColor(color);
+      const wrapStyle = layout === "list" ? `display:flex;flex-direction:row;align-items:center;gap:0.75rem` : `display:flex;flex-direction:column;align-items:center;gap:0.25rem;max-inline-size:${px}px`;
+      const boxSize = layout === "list" ? 36 : px;
+      const buttonStyle = `background:${color};color:${contrast};width:${boxSize}px;height:${boxSize}px;border:1px solid oklch(0% 0 0/0.15);border-radius:var(--radius-s,0.25rem);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-family:var(--font-mono,monospace);position:relative;overflow:hidden;flex-shrink:0`;
+      if (editable) {
+        const hexValue = this.#ensureHex(color);
+        return `<div class="swatch-wrap" role="listitem" style="${wrapStyle}">
+          <label class="color-box color-box-edit" style="${buttonStyle};cursor:pointer" data-index="${i}" title="Click to edit${name ? ": " + name : ""}" aria-label="${name || "Color " + (i + 1)}: ${color}. Click to edit.">
+            <input type="color" class="color-input" value="${hexValue}" data-index="${i}" style="position:absolute;inset:0;opacity:0;cursor:pointer;inline-size:100%;block-size:100%" aria-label="${name || "Color " + (i + 1)} picker">
+            <span class="color-value" style="font-size:0.625rem;line-height:1.2;opacity:${showValues ? "1" : "0"};text-align:center;padding:2px 4px;word-break:break-all;transition:opacity 0.15s ease;pointer-events:none">${this.#formatValue(color)}</span>
+          </label>
+          ${showNames && name ? `<span style="font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666);text-align:center;max-inline-size:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>` : ""}
+        </div>`;
+      }
+      return `<div class="swatch-wrap" role="listitem" style="${wrapStyle}">
+        <button type="button" class="color-box" data-index="${i}"
+          style="${buttonStyle}"
+          title="Click to copy${name ? ": " + name : ""}"
+          aria-label="${name || "Color " + (i + 1)}: ${color}">
+          <span class="color-value" style="font-size:0.625rem;line-height:1.2;opacity:${showValues ? "1" : "0"};text-align:center;padding:2px 4px;word-break:break-all;transition:opacity 0.15s ease">${this.#formatValue(color)}</span>
+        </button>
+        ${showNames && name ? `<span style="font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666);text-align:center;max-inline-size:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>` : ""}
+      </div>`;
+    }).join("");
+    this.innerHTML = `<div class="palette ${layout}" role="list" aria-label="Color palette" style="${containerStyle}">${swatches}</div>`;
+    if (editable) {
+      this.#wireEditable(names);
+    } else {
+      this.#resolveVarColors(colors, names);
+      this.#wireReadonly(colors, names, showValues);
+    }
+  }
+  #wireReadonly(colors, names, showValues) {
+    this.querySelectorAll(".color-box").forEach((el) => {
+      const btn = (
+        /** @type {HTMLElement} */
+        el
+      );
+      if (!showValues) {
+        btn.addEventListener("pointerenter", () => {
+          const val = (
+            /** @type {HTMLElement | null} */
+            btn.querySelector(".color-value")
+          );
+          if (val) val.style.opacity = "1";
+        });
+        btn.addEventListener("pointerleave", () => {
+          const val = (
+            /** @type {HTMLElement | null} */
+            btn.querySelector(".color-value")
+          );
+          if (val) val.style.opacity = "0";
+        });
+      }
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.dataset.index);
+        const color = colors[idx];
+        const name = names[idx] || "";
+        copyText(color, { button: btn, announceMessage: "Color copied" });
+        this.dispatchEvent(new CustomEvent("color-palette:select", {
+          bubbles: true,
+          detail: { color, name, index: idx }
+        }));
+        btn.style.outline = "3px solid currentColor";
+        btn.style.outlineOffset = "2px";
+        setTimeout(() => {
+          btn.style.outline = "";
+          btn.style.outlineOffset = "";
+        }, 600);
+      });
+    });
+  }
+  #wireEditable(names) {
+    this.querySelectorAll(".color-input").forEach((input) => {
+      input.addEventListener("input", () => {
+        const idx = Number(input.dataset.index);
+        const hex = input.value;
+        this.#colors[idx] = hex;
+        const label = (
+          /** @type {HTMLElement | null} */
+          input.parentElement
+        );
+        if (label) {
+          label.style.background = hex;
+          label.style.color = this.#contrastColor(hex);
+          const valSpan = label.querySelector(".color-value");
+          if (valSpan) valSpan.textContent = this.#formatValue(hex);
+          label.title = `Click to edit${names[idx] ? ": " + names[idx] : ""} (${hex})`;
+          label.setAttribute("aria-label", `${names[idx] || "Color " + (idx + 1)}: ${hex}. Click to edit.`);
+        }
+        this.setAttribute("colors", this.#colors.join(","));
+        this.dispatchEvent(new CustomEvent("color-palette:change", {
+          bubbles: true,
+          detail: {
+            color: hex,
+            name: names[idx] || "",
+            index: idx,
+            colors: this.#colors.slice()
+          }
+        }));
+      });
+    });
+  }
+  /** Public accessor — used by sibling components that need the current palette. */
+  get colors() {
+    return this.#colors.slice();
+  }
+  /** Resolve var() references to computed hex after swatches are in the DOM */
+  #resolveVarColors(colors, names) {
+    this.querySelectorAll(".color-box").forEach((btn) => {
+      const idx = Number(btn.dataset.index);
+      const raw = colors[idx];
+      if (!raw || !raw.includes("var(")) return;
+      const computed = getComputedStyle(btn).backgroundColor;
+      const hex = this.#rgbToHex(computed) || computed;
+      colors[idx] = hex;
+      this.#colors[idx] = hex;
+      const val = btn.querySelector(".color-value");
+      if (val) val.textContent = hex;
+      btn.style.color = this.#contrastColor(hex);
+      const name = names[idx] || "";
+      btn.title = `Click to copy${name ? ": " + name : ""} (${hex})`;
+      btn.setAttribute("aria-label", `${name || "Color " + (idx + 1)}: ${hex}`);
+    });
+  }
+  /** Convert rgb(r, g, b) to hex string */
+  #rgbToHex(rgb) {
+    const m = rgb.match(/rgba?\(\s*([\d.]+),?\s*([\d.]+),?\s*([\d.]+)/);
+    if (!m) return null;
+    const [, r, g, b] = m;
+    const toHex = (n) => Math.round(Number(n)).toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+  /** Ensure a color string is a #rrggbb hex suitable for <input type="color">. */
+  #ensureHex(color) {
+    if (/^#[0-9a-f]{6}$/i.test(color)) return color.toLowerCase();
+    if (/^#[0-9a-f]{3}$/i.test(color)) {
+      return ("#" + color.slice(1).split("").map((c) => c + c).join("")).toLowerCase();
+    }
+    if (typeof document === "undefined") return "#000000";
+    const probe = document.createElement("span");
+    probe.style.color = color;
+    probe.style.display = "none";
+    document.body.appendChild(probe);
+    const computed = getComputedStyle(probe).color;
+    probe.remove();
+    return this.#rgbToHex(computed) || "#000000";
+  }
+  /** Shorten oklch values for display */
+  #formatValue(color) {
+    if (color.startsWith("#")) return color;
+    const oklch = color.match(/oklch\(\s*([\d.]+)%?\s+([\d.]+)\s+([\d.]+)/);
+    if (oklch) return `${oklch[1]}% .${oklch[2].replace("0.", "")}`;
+    return color.length > 12 ? color.slice(0, 12) + "\u2026" : color;
+  }
+  /** Parse comma-separated color list, handling oklch() which contains commas */
+  #parseColorList(raw) {
+    if (!raw) return [];
+    const colors = [];
+    let depth = 0;
+    let current = "";
+    for (const ch of raw) {
+      if (ch === "(") depth++;
+      else if (ch === ")") depth--;
+      if (ch === "," && depth === 0) {
+        colors.push(current.trim());
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+    if (current.trim()) colors.push(current.trim());
+    return colors;
+  }
+  /** Return black or white depending on perceived lightness */
+  #contrastColor(color) {
+    const oklchMatch = color.match(/oklch\(\s*([\d.]+)%?\s/);
+    if (oklchMatch) {
+      const L = parseFloat(oklchMatch[1]);
+      const lightness = L > 1 ? L / 100 : L;
+      return lightness > 0.6 ? "#000" : "#fff";
+    }
+    if (color.startsWith("#")) {
+      const hex = color.replace("#", "");
+      const r = parseInt(hex.substring(0, 2), 16) / 255;
+      const g = parseInt(hex.substring(2, 4), 16) / 255;
+      const b = parseInt(hex.substring(4, 6), 16) / 255;
+      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      return lum > 0.4 ? "#000" : "#fff";
+    }
+    return "#000";
+  }
+};
+registerComponent("color-palette", ColorPalette);
+
+// src/web-components/type-specimen/logic.js
+var QUICK_FONTS = ["system-ui", "Georgia", "Inter, sans-serif", '"JetBrains Mono", monospace', "Verdana", "Cambria", "ui-serif"];
+var TypeSpecimen = class extends VBElement {
+  static observedAttributes = ["font-family", "label", "sample", "show-scale", "show-weights", "show-characters", "weights", "editable", "target", "token"];
+  setup() {
+    this.#render();
+    this.#wireEditing();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) {
+      this.#render();
+      this.#wireEditing();
+    }
+  }
+  #render() {
+    const fontFamily = this.getAttribute("font-family") || "system-ui";
+    const label = this.getAttribute("label") || fontFamily.replace(/['"]/g, "").split(",")[0];
+    const sample = this.getAttribute("sample") || "The quick brown fox jumps over the lazy dog";
+    const showScale = this.hasAttribute("show-scale");
+    const showWeights = this.hasAttribute("show-weights");
+    const showChars = this.hasAttribute("show-characters");
+    const weightsAttr = this.getAttribute("weights") || "300,400,500,600,700";
+    const weights = weightsAttr.split(",").map((w) => w.trim());
+    let html = "";
+    const editable = this.hasAttribute("editable");
+    const labelHTML = editable ? `<input type="text" class="specimen-font-input" value="${fontFamily.replace(/"/g, "&quot;")}" aria-label="Font family" style="font:inherit;padding:0.25rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);min-inline-size:18rem;max-inline-size:100%;font-family:${fontFamily};font-size:var(--font-size-sm,0.875rem)">
+          <span class="specimen-quick" style="display:inline-flex;flex-wrap:wrap;gap:0.25rem;margin-inline-start:0.5rem">
+            ${QUICK_FONTS.map((f) => `<button type="button" class="specimen-quick-btn" data-font="${f.replace(/"/g, "&quot;")}" style="font:inherit;font-size:var(--font-size-xs,0.75rem);padding:0.125rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:999px;background:var(--color-surface,#fff);color:var(--color-text,#222);cursor:pointer">${f.split(",")[0].replace(/["']/g, "")}</button>`).join("")}
+          </span>` : `<span class="specimen-label">${label}</span>`;
+    html += `<div class="specimen-header" style="font-family:${fontFamily}">
+      ${labelHTML}
+      <p class="specimen-sample" contenteditable="plaintext-only" spellcheck="false">${sample}</p>
+    </div>`;
+    if (showChars) {
+      html += `<div class="specimen-chars" style="font-family:${fontFamily}">
+        <div class="char-row"><span class="char-label">Upper</span>${"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((c) => `<span>${c}</span>`).join("")}</div>
+        <div class="char-row"><span class="char-label">Lower</span>${"abcdefghijklmnopqrstuvwxyz".split("").map((c) => `<span>${c}</span>`).join("")}</div>
+        <div class="char-row"><span class="char-label">Digits</span>${"0123456789".split("").map((c) => `<span>${c}</span>`).join("")}</div>
+        <div class="char-row"><span class="char-label">Punct</span>${"!@#$%^&*()_+-=[]{}|;:,.<>?".split("").map((c) => `<span>${c === "<" ? "&lt;" : c === ">" ? "&gt;" : c === "&" ? "&amp;" : c}</span>`).join("")}</div>
+      </div>`;
+    }
+    if (showWeights) {
+      html += `<div class="specimen-weights">`;
+      for (const w of weights) {
+        html += `<div class="weight-sample" style="font-family:${fontFamily};font-weight:${w}">
+          <span class="weight-label">${w}</span>
+          <span class="weight-text">Aa</span>
+        </div>`;
+      }
+      html += `</div>`;
+    }
+    if (showScale) {
+      const scale = [
+        { name: "xs", rem: 0.75 },
+        { name: "sm", rem: 0.875 },
+        { name: "md", rem: 1 },
+        { name: "lg", rem: 1.125 },
+        { name: "xl", rem: 1.25 },
+        { name: "2xl", rem: 1.5 },
+        { name: "3xl", rem: 1.875 },
+        { name: "4xl", rem: 2.25 },
+        { name: "5xl", rem: 3 }
+      ];
+      html += `<div class="specimen-scale">`;
+      for (const step of scale) {
+        html += `<div class="scale-step" style="font-family:${fontFamily};font-size:${step.rem}rem">
+          <span class="scale-label">${step.name}</span>
+          <span class="scale-text">${sample.substring(0, 30)}</span>
+        </div>`;
+      }
+      html += `</div>`;
+    }
+    this.innerHTML = html;
+  }
+  #wireEditing() {
+    if (!this.hasAttribute("editable")) return;
+    const input = (
+      /** @type {HTMLInputElement | null} */
+      this.querySelector(".specimen-font-input")
+    );
+    if (input) {
+      this.listen(input, "input", () => this.#applyFontFamily(input.value));
+    }
+    this.querySelectorAll(".specimen-quick-btn").forEach((btn) => {
+      this.listen(btn, "click", () => {
+        const font = btn.getAttribute("data-font") || "";
+        if (input) input.value = font;
+        this.#applyFontFamily(font);
+      });
+    });
+  }
+  #applyFontFamily(value) {
+    const target = (
+      /** @type {HTMLElement | null} */
+      this.#resolveTarget()
+    );
+    const token = this.getAttribute("token") || "font-family-base";
+    if (target) target.style.setProperty(`--${token}`, value);
+    this.setAttribute("font-family", value);
+    this.dispatchEvent(new CustomEvent("type-specimen:change", {
+      bubbles: true,
+      detail: { fontFamily: value, token, target: this.getAttribute("target") || ":root" }
+    }));
+  }
+  #resolveTarget() {
+    const sel = this.getAttribute("target") || ":root";
+    try {
+      return sel === ":root" ? document.documentElement : document.querySelector(sel);
+    } catch {
+      return document.documentElement;
+    }
+  }
+};
+registerComponent("type-specimen", TypeSpecimen);
+
+// src/web-components/spacing-specimen/logic.js
+var SpacingSpecimen = class extends VBElement {
+  static observedAttributes = ["tokens", "prefix", "show-values", "label", "editable", "target"];
+  setup() {
+    this.#render();
+    this.#wireEditing();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) {
+      this.#render();
+      this.#wireEditing();
+    }
+  }
+  #render() {
+    const tokensAttr = this.getAttribute("tokens") || "3xs,2xs,xs,s,m,l,xl,2xl,3xl";
+    const prefix = this.getAttribute("prefix") || "--size-";
+    const showValues = this.getAttribute("show-values") !== "false";
+    const label = this.getAttribute("label") || "";
+    const editable = this.hasAttribute("editable");
+    const tokens = tokensAttr.split(",").map((t) => t.trim());
+    let html = "";
+    if (label) {
+      html += `<div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted,#666);margin-block-end:0.75rem;font-family:var(--font-sans,system-ui)">${label}</div>`;
+    }
+    html += `<div role="list" aria-label="${label || "Spacing scale"}" style="display:flex;flex-direction:column;gap:0.25rem">`;
+    for (const name of tokens) {
+      const varName = `${prefix}${name}`;
+      const valueControl = editable ? `<input type="text" class="scale-edit" data-token="${name}" aria-label="${name} value" style="font-family:var(--font-mono,monospace);font-size:0.75rem;padding:0.125rem 0.375rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-surface,#fff);color:var(--color-text,#222);inline-size:6rem;text-align:end">` : showValues ? `<span class="scale-value" style="font-family:var(--font-mono,monospace);font-size:0.75rem;color:var(--color-text-muted,#666);font-variant-numeric:tabular-nums;min-inline-size:3.5rem;text-align:end"></span>` : "";
+      html += `<div role="listitem" style="display:grid;grid-template-columns:3rem 1fr auto;align-items:center;gap:0.75rem;min-block-size:1.75rem">
+        <span style="font-family:var(--font-mono,monospace);font-size:0.875rem;color:var(--color-text-muted,#666);text-align:end">${name}</span>
+        <div class="scale-bar" style="display:block;block-size:var(--size-m,1rem);min-inline-size:2px;inline-size:var(${varName});background:var(--color-interactive,oklch(55% 0.2 260));border-radius:var(--radius-s,0.25rem)" aria-hidden="true"></div>
+        ${valueControl}
+      </div>`;
+    }
+    html += "</div>";
+    this.innerHTML = html;
+    requestAnimationFrame(() => {
+      if (editable) {
+        const cs = getComputedStyle(this);
+        this.querySelectorAll(".scale-edit").forEach((node) => {
+          const input = (
+            /** @type {HTMLInputElement} */
+            node
+          );
+          const name = input.getAttribute("data-token");
+          const raw = cs.getPropertyValue(`${prefix}${name}`).trim();
+          input.value = raw || "";
+        });
+      } else if (showValues) {
+        this.querySelectorAll(".scale-bar").forEach((bar) => {
+          const px = bar.getBoundingClientRect().width;
+          const valueEl = bar.nextElementSibling;
+          if (valueEl) valueEl.textContent = `${Math.round(px * 100) / 100}px`;
+        });
+      }
+    });
+  }
+  #wireEditing() {
+    if (!this.hasAttribute("editable")) return;
+    const prefix = this.getAttribute("prefix") || "--size-";
+    this.querySelectorAll(".scale-edit").forEach((input) => {
+      this.listen(input, "change", () => this.#applyTokenEdit(input, prefix));
+      this.listen(input, "keydown", (e) => {
+        if (
+          /** @type {KeyboardEvent} */
+          e.key === "Enter"
+        ) this.#applyTokenEdit(input, prefix);
+      });
+    });
+  }
+  #applyTokenEdit(input, prefix) {
+    const name = input.getAttribute("data-token");
+    const value = input.value.trim();
+    if (!name || !value) return;
+    const target = (
+      /** @type {HTMLElement | null} */
+      this.#resolveTarget()
+    );
+    const token = `${prefix}${name}`;
+    if (target) target.style.setProperty(token, value);
+    this.dispatchEvent(new CustomEvent("spacing-specimen:change", {
+      bubbles: true,
+      detail: { name, value, token, target: this.getAttribute("target") || ":root" }
+    }));
+  }
+  #resolveTarget() {
+    const sel = this.getAttribute("target") || ":root";
+    try {
+      return sel === ":root" ? document.documentElement : document.querySelector(sel);
+    } catch {
+      return document.documentElement;
+    }
+  }
+};
+registerComponent("spacing-specimen", SpacingSpecimen);
+
+// src/web-components/token-specimen/logic.js
+var TYPE_DEFAULTS = {
+  shadow: {
+    prefix: "--shadow-",
+    tokens: "xs,s,m,l,xl,2xl"
+  },
+  radius: {
+    prefix: "--radius-",
+    tokens: "xs,s,m,l,xl,2xl,full"
+  },
+  border: {
+    prefix: "--border-width-",
+    tokens: "thin,medium,thick"
+  },
+  color: {
+    prefix: "--color-",
+    tokens: "primary,secondary,accent,success,warning,error,info"
+  },
+  size: {
+    prefix: "--size-",
+    tokens: "3xs,2xs,xs,s,m,l,xl,2xl,3xl"
+  },
+  icon: {
+    prefix: "",
+    tokens: "home,search,settings,user,bell,heart,star,check,x,chevron-right,menu,trash"
+  }
+};
+var RENDERERS = {
+  shadow: renderShadow,
+  radius: renderRadius,
+  border: renderBorder,
+  color: renderColor,
+  size: renderSize,
+  icon: renderIcon
+};
+var TokenSpecimen = class extends VBElement {
+  static observedAttributes = ["type", "tokens", "prefix", "show-values", "label", "size", "icon-set", "editable", "target"];
+  setup() {
+    this.#render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) this.#render();
+  }
+  #render() {
+    const type = this.getAttribute("type") || "shadow";
+    const defaults = TYPE_DEFAULTS[type] || TYPE_DEFAULTS.shadow;
+    const prefix = this.getAttribute("prefix") || defaults.prefix;
+    const tokensAttr = this.getAttribute("tokens") || defaults.tokens;
+    const showValues = this.getAttribute("show-values") !== "false";
+    const label = this.getAttribute("label") || "";
+    const tokens = tokensAttr.split(",").map((t) => t.trim());
+    const renderer = RENDERERS[type] || RENDERERS.shadow;
+    let html = "";
+    if (label) {
+      html += `<p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted,#666);margin-block-end:0.75rem;font-family:var(--font-sans,system-ui)">${label}</p>`;
+    }
+    html += renderer(tokens, prefix, showValues, this);
+    this.innerHTML = html;
+    const editable = this.hasAttribute("editable") && type !== "icon";
+    if (showValues && type !== "icon") {
+      requestAnimationFrame(() => {
+        this.#readComputedValues(type, prefix, tokens);
+        if (editable) this.#injectEditors(type, prefix);
+      });
+    } else if (editable) {
+      requestAnimationFrame(() => this.#injectEditors(type, prefix));
+    }
+  }
+  #injectEditors(type, prefix) {
+    const cs = getComputedStyle(this);
+    this.querySelectorAll("[data-token-value]").forEach((node) => {
+      const el = (
+        /** @type {HTMLElement} */
+        node
+      );
+      const name = el.dataset.tokenValue;
+      const raw = cs.getPropertyValue(`${prefix}${name}`).trim();
+      const input = document.createElement("input");
+      input.type = type === "color" && /^#[0-9a-f]{3,8}$/i.test(raw) ? "color" : "text";
+      input.value = raw || "";
+      input.className = "ts-edit";
+      input.setAttribute("data-token", name || "");
+      input.setAttribute("aria-label", `${name} value`);
+      input.style.cssText = `font-family:var(--font-mono,monospace);font-size:0.625rem;padding:0.125rem 0.25rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-surface,#fff);color:var(--color-text,#222);inline-size:${type === "color" ? "3rem" : "100%"};${type === "color" ? "block-size:1.5rem;padding:0;" : "max-inline-size:8rem;"}`;
+      el.replaceWith(input);
+      this.listen(input, "change", () => this.#applyEdit(input, prefix));
+      this.listen(input, "keydown", (e) => {
+        if (
+          /** @type {KeyboardEvent} */
+          e.key === "Enter"
+        ) this.#applyEdit(input, prefix);
+      });
+    });
+  }
+  #applyEdit(input, prefix) {
+    const name = input.getAttribute("data-token");
+    const value = input.value.trim();
+    if (!name || !value) return;
+    const target = (
+      /** @type {HTMLElement | null} */
+      this.#resolveTarget()
+    );
+    const token = `${prefix}${name}`;
+    if (target) target.style.setProperty(token, value);
+    this.dispatchEvent(new CustomEvent("token-specimen:change", {
+      bubbles: true,
+      detail: { name, value, token, target: this.getAttribute("target") || ":root" }
+    }));
+  }
+  #resolveTarget() {
+    const sel = this.getAttribute("target") || ":root";
+    try {
+      return sel === ":root" ? document.documentElement : document.querySelector(sel);
+    } catch {
+      return document.documentElement;
+    }
+  }
+  #readComputedValues(type, prefix, tokens) {
+    const cs = getComputedStyle(this);
+    this.querySelectorAll("[data-token-value]").forEach((node) => {
+      const el = (
+        /** @type {HTMLElement} */
+        node
+      );
+      const name = el.dataset.tokenValue;
+      const raw = cs.getPropertyValue(`${prefix}${name}`).trim();
+      if (type === "radius" || type === "size") {
+        const sample = this.querySelector(`[data-token-sample="${name}"]`);
+        if (sample) {
+          const prop = type === "radius" ? "borderRadius" : "width";
+          const rect = type === "size" ? sample.getBoundingClientRect().width : null;
+          el.textContent = rect != null ? `${Math.round(rect * 100) / 100}px` : raw || "\u2014";
+        }
+      } else {
+        el.textContent = raw || "\u2014";
+      }
+    });
+  }
+};
+function renderShadow(tokens, prefix, showValues) {
+  let html = `<div role="list" style="display:flex;flex-wrap:wrap;gap:1rem;align-items:end">`;
+  for (const name of tokens) {
+    html += `<div role="listitem" style="text-align:center">
+      <div style="width:7rem;height:5rem;background:var(--color-surface,#fff);border-radius:var(--radius-m,0.5rem);box-shadow:var(${prefix}${name})" aria-hidden="true"></div>
+      <p style="font-family:var(--font-mono,monospace);font-size:0.75rem;color:var(--color-text-muted,#666);margin-block-start:0.5rem">${name}</p>
+      ${showValues ? `<p data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.625rem;color:var(--color-text-muted,#999);max-width:7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></p>` : ""}
+    </div>`;
+  }
+  html += "</div>";
+  return html;
+}
+function renderRadius(tokens, prefix, showValues) {
+  let html = `<div role="list" style="display:flex;flex-wrap:wrap;gap:1rem;align-items:end">`;
+  for (const name of tokens) {
+    html += `<div role="listitem" style="text-align:center">
+      <div data-token-sample="${name}" style="width:4.5rem;height:4.5rem;background:var(--color-primary,oklch(55% 0.2 260));border-radius:var(${prefix}${name});display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.75rem;font-family:var(--font-mono,monospace)" aria-hidden="true">${name}</div>
+      ${showValues ? `<p data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.625rem;color:var(--color-text-muted,#999);margin-block-start:0.25rem"></p>` : ""}
+    </div>`;
+  }
+  html += "</div>";
+  return html;
+}
+function renderBorder(tokens, prefix, showValues) {
+  let html = `<div role="list" style="display:flex;flex-direction:column;gap:0.75rem">`;
+  for (const name of tokens) {
+    html += `<div role="listitem" style="display:grid;grid-template-columns:4rem 1fr auto;align-items:center;gap:0.75rem">
+      <span style="font-family:var(--font-mono,monospace);font-size:0.875rem;color:var(--color-text-muted,#666);text-align:end">${name}</span>
+      <div style="border-block-start:var(${prefix}${name}) solid var(--color-text,#333);min-inline-size:4rem" aria-hidden="true"></div>
+      ${showValues ? `<span data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.75rem;color:var(--color-text-muted,#666);font-variant-numeric:tabular-nums"></span>` : ""}
+    </div>`;
+  }
+  html += "</div>";
+  return html;
+}
+function renderColor(tokens, prefix, showValues) {
+  let html = `<div role="list" style="display:flex;flex-wrap:wrap;gap:0.75rem">`;
+  for (const name of tokens) {
+    html += `<div role="listitem" style="text-align:center">
+      <div style="width:4rem;height:3rem;background:var(${prefix}${name});border-radius:var(--radius-s,0.25rem);border:1px solid var(--color-border,#ddd)" aria-hidden="true"></div>
+      <p style="font-family:var(--font-mono,monospace);font-size:0.625rem;color:var(--color-text-muted,#666);margin-block-start:0.25rem">${name}</p>
+      ${showValues ? `<p data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.5625rem;color:var(--color-text-muted,#999);max-width:4rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></p>` : ""}
+    </div>`;
+  }
+  html += "</div>";
+  return html;
+}
+function renderSize(tokens, prefix, showValues) {
+  let html = `<div role="list" style="display:flex;flex-direction:column;gap:0.25rem">`;
+  for (const name of tokens) {
+    html += `<div role="listitem" style="display:grid;grid-template-columns:3rem 1fr auto;align-items:center;gap:0.75rem;min-block-size:1.75rem">
+      <span style="font-family:var(--font-mono,monospace);font-size:0.875rem;color:var(--color-text-muted,#666);text-align:end">${name}</span>
+      <div data-token-sample="${name}" style="display:block;block-size:var(--size-m,1rem);min-inline-size:2px;inline-size:var(${prefix}${name});background:var(--color-interactive,oklch(55% 0.2 260));border-radius:var(--radius-s,0.25rem)" aria-hidden="true"></div>
+      ${showValues ? `<span data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.75rem;color:var(--color-text-muted,#666);font-variant-numeric:tabular-nums;min-inline-size:3.5rem;text-align:end"></span>` : ""}
+    </div>`;
+  }
+  html += "</div>";
+  return html;
+}
+function renderIcon(tokens, _prefix, showValues, host) {
+  const size = host?.getAttribute("size") || "md";
+  const iconSet = host?.getAttribute("icon-set") || "";
+  const setAttr = iconSet ? ` set="${iconSet}"` : "";
+  let html = `<div role="list" style="display:flex;flex-wrap:wrap;gap:1rem">`;
+  for (const name of tokens) {
+    html += `<div role="listitem" style="display:flex;flex-direction:column;align-items:center;gap:0.375rem;min-inline-size:4.5rem">
+      <span style="display:inline-flex;align-items:center;justify-content:center;padding:var(--size-s,0.75rem);background:var(--color-surface-raised,#f5f5f5);border-radius:var(--radius-s,0.25rem);border:1px solid var(--color-border,#ddd);color:var(--color-text,#222)">
+        <icon-wc name="${name}" size="${size}"${setAttr}></icon-wc>
+      </span>
+      ${showValues ? `<code style="font-family:var(--font-mono,monospace);font-size:0.625rem;color:var(--color-text-muted,#666);max-inline-size:5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</code>` : ""}
+    </div>`;
+  }
+  html += "</div>";
+  return html;
+}
+registerComponent("token-specimen", TokenSpecimen);
+
+// src/web-components/component-sampler/logic.js
+var COMPONENT_RENDERERS = {
+  button: () => `
+    <layout-cluster data-layout-gap="s">
+      <button>Primary</button>
+      <button class="secondary">Secondary</button>
+      <button disabled>Disabled</button>
+    </layout-cluster>`,
+  input: () => `
+    <layout-stack data-layout-gap="xs">
+      <input type="text" placeholder="Text input" aria-label="Sample text input"/>
+      <input type="email" placeholder="email@example.com" aria-label="Sample email"/>
+      <input type="text" value="Read only" readonly aria-label="Read-only input"/>
+    </layout-stack>`,
+  select: () => `
+    <select aria-label="Sample select">
+      <option>Choose an option</option>
+      <option>Option A</option>
+      <option>Option B</option>
+      <option>Option C</option>
+    </select>`,
+  checkbox: () => `
+    <layout-stack data-layout-gap="xs">
+      <label><input type="checkbox" checked="checked"/> Checked option</label>
+      <label><input type="checkbox"/> Unchecked option</label>
+      <label><input type="checkbox" disabled/> Disabled option</label>
+    </layout-stack>`,
+  radio: () => `
+    <layout-stack data-layout-gap="xs">
+      <label><input type="radio" name="sampler-radio" checked="checked"/> Selected</label>
+      <label><input type="radio" name="sampler-radio"/> Unselected</label>
+      <label><input type="radio" name="sampler-radio" disabled/> Disabled</label>
+    </layout-stack>`,
+  badge: () => `
+    <layout-cluster data-layout-gap="xs">
+      <layout-badge>Default</layout-badge>
+      <layout-badge data-color="success">Success</layout-badge>
+      <layout-badge data-color="warning">Warning</layout-badge>
+      <layout-badge data-color="danger">Danger</layout-badge>
+      <layout-badge data-color="info">Info</layout-badge>
+    </layout-cluster>`,
+  progress: () => `
+    <layout-stack data-layout-gap="xs">
+      <progress value="33" max="100">33%</progress>
+      <progress value="66" max="100">66%</progress>
+      <progress value="100" max="100">100%</progress>
+    </layout-stack>`,
+  range: () => `
+    <input type="range" min="0" max="100" value="50" aria-label="Sample range"/>`,
+  textarea: () => `
+    <textarea rows="3" placeholder="Textarea sample" aria-label="Sample textarea" style="width:100%"></textarea>`
+};
+var ComponentSampler = class extends VBElement {
+  static observedAttributes = ["components", "label", "compact"];
+  setup() {
+    this.#render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) this.#render();
+  }
+  #render() {
+    const componentsAttr = this.getAttribute("components") || "button,input,select,checkbox,radio,badge,progress";
+    const label = this.getAttribute("label") || "";
+    const compact = this.hasAttribute("compact");
+    const components2 = componentsAttr.split(",").map((c) => c.trim());
+    const gap = compact ? "0.75rem" : "1.25rem";
+    let html = "";
+    if (label) {
+      html += `<p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted,#666);margin-block-end:0.75rem;font-family:var(--font-sans,system-ui)">${label}</p>`;
+    }
+    html += `<section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:${gap}">`;
+    for (const name of components2) {
+      const renderer = COMPONENT_RENDERERS[name];
+      if (!renderer) continue;
+      html += `<article style="border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);padding:var(--size-m,1rem);background:var(--color-surface,#fff)">
+        <p style="font-size:0.625rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted,#999);margin-block-end:var(--size-s,0.5rem);font-family:var(--font-sans,system-ui)">${name}</p>
+        ${renderer()}
+      </article>`;
+    }
+    html += "</section>";
+    this.innerHTML = html;
+  }
+};
+registerComponent("component-sampler", ComponentSampler);
+
+// src/web-components/color-picker/_color-utils.js
+function hslToRgb(h, s, l) {
+  s /= 100;
+  l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
+  return {
+    r: Math.round(f(0) * 255),
+    g: Math.round(f(8) * 255),
+    b: Math.round(f(4) * 255)
+  };
+}
+function rgbToHsl(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  let h = 0;
+  let s = 0;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / d + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / d + 4) / 6;
+        break;
+    }
+  }
+  return {
+    h: Math.round(h * 360),
+    s: Math.round(s * 100),
+    l: Math.round(l * 100)
+  };
+}
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, "");
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  const n = parseInt(hex, 16);
+  return {
+    r: n >> 16 & 255,
+    g: n >> 8 & 255,
+    b: n & 255
+  };
+}
+function rgbToHex(r, g, b) {
+  return "#" + [r, g, b].map(
+    (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")
+  ).join("");
+}
+function hexToHsl(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  return rgbToHsl(r, g, b);
+}
+function hslToHex(h, s, l) {
+  const { r, g, b } = hslToRgb(h, s, l);
+  return rgbToHex(r, g, b);
+}
+
+// src/web-components/semantic-palette/_color-math.js
+var srgbToLinear = (c) => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+var linearToSrgb = (c) => c <= 31308e-7 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+var clamp01 = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
+function hexToOklch(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const lr = srgbToLinear(r / 255);
+  const lg = srgbToLinear(g / 255);
+  const lb = srgbToLinear(b / 255);
+  const lcone = 0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb;
+  const mcone = 0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb;
+  const scone = 0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb;
+  const lp = Math.cbrt(lcone);
+  const mp = Math.cbrt(mcone);
+  const sp = Math.cbrt(scone);
+  const L = 0.2104542553 * lp + 0.793617785 * mp - 0.0040720468 * sp;
+  const A = 1.9779984951 * lp - 2.428592205 * mp + 0.4505937099 * sp;
+  const B = 0.0259040371 * lp + 0.7827717662 * mp - 0.808675766 * sp;
+  const c = Math.sqrt(A * A + B * B);
+  let h = Math.atan2(B, A) * 180 / Math.PI;
+  if (h < 0) h += 360;
+  return { l: L, c, h };
+}
+function oklchToHex(l, c, h) {
+  const hr = h * Math.PI / 180;
+  const A = c * Math.cos(hr);
+  const B = c * Math.sin(hr);
+  const lp = l + 0.3963377774 * A + 0.2158037573 * B;
+  const mp = l - 0.1055613458 * A - 0.0638541728 * B;
+  const sp = l - 0.0894841775 * A - 1.291485548 * B;
+  const lcone = lp * lp * lp;
+  const mcone = mp * mp * mp;
+  const scone = sp * sp * sp;
+  const lr = 4.0767416621 * lcone - 3.3077115913 * mcone + 0.2309699292 * scone;
+  const lg = -1.2684380046 * lcone + 2.6097574011 * mcone - 0.3413193965 * scone;
+  const lb = -0.0041960863 * lcone - 0.7034186147 * mcone + 1.707614701 * scone;
+  const r = clamp01(linearToSrgb(lr));
+  const g = clamp01(linearToSrgb(lg));
+  const b = clamp01(linearToSrgb(lb));
+  return rgbToHex(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+}
+function resolveToHex(input, probeEl) {
+  if (!input) return null;
+  const s = String(input).trim();
+  if (/^#[0-9a-f]{6}$/i.test(s)) return s.toLowerCase();
+  if (/^#[0-9a-f]{3}$/i.test(s)) {
+    return ("#" + s.slice(1).split("").map((c) => c + c).join("")).toLowerCase();
+  }
+  if (typeof document === "undefined") return null;
+  const probe = probeEl || document.createElement("span");
+  if (!probeEl) {
+    probe.style.display = "none";
+    document.body.appendChild(probe);
+  }
+  probe.style.color = "";
+  probe.style.color = s;
+  const computed = getComputedStyle(probe).color;
+  if (!probeEl) probe.remove();
+  const m = computed.match(/rgba?\(\s*([0-9.]+)[\s,]+([0-9.]+)[\s,]+([0-9.]+)/);
+  if (!m) return null;
+  return rgbToHex(Math.round(+m[1]), Math.round(+m[2]), Math.round(+m[3]));
+}
+function formatOklch({ l, c, h }) {
+  return `oklch(${(l * 100).toFixed(1)}% ${c.toFixed(3)} ${h.toFixed(1)})`;
+}
+function relativeLuminance(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const channel = (v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+function contrastRatio(hex1, hex2) {
+  const l1 = relativeLuminance(hex1);
+  const l2 = relativeLuminance(hex2);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+function wcagLevel(ratio) {
+  if (ratio >= 7) return "AAA";
+  if (ratio >= 4.5) return "AA";
+  return "Fail";
+}
+function pickContrastingHex(hex) {
+  return relativeLuminance(hex) > 0.4 ? "#000000" : "#ffffff";
+}
+
+// src/web-components/palette-generator/_palette-utils.js
+var wrap = (h) => (h % 360 + 360) % 360;
+function complementary(h, s, l) {
+  return {
+    colors: [hslToHex(h, s, l), hslToHex(wrap(h + 180), s, l)],
+    names: ["Base", "Complement"]
+  };
+}
+function analogous(h, s, l) {
+  return {
+    colors: [
+      hslToHex(wrap(h - 30), s, l),
+      hslToHex(h, s, l),
+      hslToHex(wrap(h + 30), s, l)
+    ],
+    names: ["Analog A", "Base", "Analog B"]
+  };
+}
+function triadic(h, s, l) {
+  return {
+    colors: [
+      hslToHex(h, s, l),
+      hslToHex(wrap(h + 120), s, l),
+      hslToHex(wrap(h + 240), s, l)
+    ],
+    names: ["Base", "Triad A", "Triad B"]
+  };
+}
+function splitComplementary(h, s, l) {
+  return {
+    colors: [
+      hslToHex(h, s, l),
+      hslToHex(wrap(h + 150), s, l),
+      hslToHex(wrap(h + 210), s, l)
+    ],
+    names: ["Base", "Split A", "Split B"]
+  };
+}
+function tetradic(h, s, l) {
+  return {
+    colors: [
+      hslToHex(h, s, l),
+      hslToHex(wrap(h + 90), s, l),
+      hslToHex(wrap(h + 180), s, l),
+      hslToHex(wrap(h + 270), s, l)
+    ],
+    names: ["Base", "Tetrad A", "Tetrad B", "Tetrad C"]
+  };
+}
+var MONO_STEPS = [
+  { label: "50", l: 96 },
+  { label: "100", l: 90 },
+  { label: "200", l: 80 },
+  { label: "300", l: 70 },
+  { label: "400", l: 60 },
+  { label: "500", l: 50 },
+  { label: "600", l: 40 },
+  { label: "700", l: 30 },
+  { label: "800", l: 22 },
+  { label: "900", l: 15 },
+  { label: "950", l: 10 }
+];
+function monochromatic(h, s, _l) {
+  const colors = [];
+  const names = [];
+  for (const step of MONO_STEPS) {
+    const satAdj = step.l > 85 || step.l < 20 ? Math.max(s * 0.6, 5) : s;
+    colors.push(hslToHex(h, Math.round(satAdj), step.l));
+    names.push(step.label);
+  }
+  return { colors, names };
+}
+var algorithms = {
+  complementary,
+  analogous,
+  triadic,
+  "split-complementary": splitComplementary,
+  tetradic,
+  monochromatic
+};
+function generatePalette(hex, harmony) {
+  const { h, s, l } = hexToHsl(hex);
+  const fn = algorithms[harmony] || algorithms.complementary;
+  return fn(h, s, l);
+}
+
+// src/web-components/semantic-palette/logic.js
+var BRAND_ROLES = ["primary", "secondary", "accent"];
+var STATUS_ROLES = ["success", "warning", "error", "info"];
+var ALL_ROLES = [...BRAND_ROLES, ...STATUS_ROLES];
+var ROLE_LABELS = {
+  primary: "Primary",
+  secondary: "Secondary",
+  accent: "Accent",
+  success: "Success",
+  warning: "Warning",
+  error: "Error",
+  info: "Info"
+};
+var LEVEL_COLORS = {
+  aaa: { bg: "oklch(92% 0.08 145)", fg: "oklch(30% 0.12 145)" },
+  aa: { bg: "oklch(94% 0.08 90)", fg: "oklch(35% 0.12 70)" },
+  fail: { bg: "oklch(92% 0.08 25)", fg: "oklch(35% 0.15 25)" }
+};
+var MONO = "var(--font-mono, monospace)";
+var MUTED = "var(--color-text-muted, #666)";
+var BORDER = "var(--color-border, #ddd)";
+var SURFACE = "var(--color-surface, #fff)";
+var TEXT = "var(--color-text, #222)";
+var RADIUS_S = "var(--radius-s, 0.25rem)";
+var RADIUS_M = "var(--radius-m, 0.5rem)";
+var SemanticPalette = class extends VBElement {
+  static observedAttributes = ["colors", "roles", "show-export", "label"];
+  /** @type {string[]} */
+  #colors = [];
+  /** @type {string[]} */
+  #roles = [];
+  /** @type {HTMLElement|null} */
+  #source = null;
+  /** @type {HTMLElement|null} */
+  #previews = null;
+  /** @type {HTMLElement|null} */
+  #probe = null;
+  setup() {
+    this.#probe = document.createElement("span");
+    this.#probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
+    this.append(this.#probe);
+    this.#source = this.querySelector("color-palette, palette-generator");
+    this.#resolveRoles();
+    this.#readColors();
+    this.#renderShell();
+    this.#renderPreviews("init");
+    this.#wireSource();
+    this.#wireExport();
+    this.#emitChange("init");
+  }
+  attributeChangedCallback(name) {
+    if (!this.isConnected || !this.hasAttribute("data-upgraded")) return;
+    if (name === "roles") this.#resolveRoles();
+    if (name === "colors") this.#readColors();
+    this.#renderShell();
+    this.#renderPreviews("attribute");
+    this.#wireExport();
+    this.#emitChange("attribute");
+  }
+  teardown() {
+    this.#probe?.remove();
+    this.#probe = null;
+  }
+  // ── Source + state ─────────────────────────────────────────────────
+  #readColors() {
+    const cp = this.querySelector("color-palette");
+    if (cp) {
+      if (typeof /** @type {any} */
+      cp.colors !== "undefined" && /** @type {any} */
+      cp.colors.length) {
+        this.#colors = /** @type {any} */
+        cp.colors.slice();
+        return;
+      }
+      const raw2 = cp.getAttribute("colors") || "";
+      const parsed = raw2.split(",").map((s) => s.trim()).filter(Boolean);
+      if (parsed.length) {
+        this.#colors = parsed;
+        return;
+      }
+    }
+    const pg = this.querySelector("palette-generator");
+    if (pg) {
+      const seed = pg.getAttribute("seed") || /** @type {HTMLInputElement | null} */
+      pg.querySelector('input[type="color"]')?.value || "";
+      const harmony = pg.getAttribute("harmony") || "complementary";
+      if (seed) {
+        try {
+          const { colors } = generatePalette(seed, harmony);
+          this.#colors = colors.slice();
+          return;
+        } catch {
+        }
+      }
+    }
+    const raw = this.getAttribute("colors") || "";
+    this.#colors = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  #resolveRoles() {
+    const raw = this.getAttribute("roles") || BRAND_ROLES.join(",");
+    const roles = raw.split(",").map((s) => s.trim().toLowerCase()).filter((r) => ALL_ROLES.includes(r));
+    this.#roles = roles.length ? roles : [...BRAND_ROLES];
+  }
+  #mapping() {
+    const map = {};
+    for (let i = 0; i < this.#roles.length; i++) {
+      map[this.#roles[i]] = this.#colors[i] || this.#colors[this.#colors.length - 1] || "#888888";
+    }
+    return map;
+  }
+  // ── Render ─────────────────────────────────────────────────────────
+  #renderShell() {
+    const existing = this.querySelector(":scope > .sp-shell");
+    if (existing) existing.remove();
+    const label = this.getAttribute("label");
+    const showExport = this.hasAttribute("show-export");
+    const shell = document.createElement("div");
+    shell.className = "sp-shell";
+    shell.style.cssText = "display:flex;flex-direction:column;gap:var(--size-m,1rem);margin-block-start:var(--size-s,0.75rem)";
+    if (label) {
+      const p = document.createElement("p");
+      p.style.cssText = "font-weight:600;margin:0";
+      p.textContent = label;
+      shell.append(p);
+    }
+    const previews = document.createElement("section");
+    previews.className = "sp-previews";
+    previews.setAttribute("aria-label", "Role previews");
+    previews.style.cssText = `display:grid;grid-template-columns:repeat(auto-fill,minmax(min(22rem,100%),1fr));gap:var(--size-m,1rem)`;
+    shell.append(previews);
+    this.#previews = previews;
+    if (showExport) {
+      shell.insertAdjacentHTML("beforeend", this.#renderExport());
+    }
+    this.append(shell);
+  }
+  #renderPreviews(_source) {
+    if (!this.#previews) return;
+    const map = this.#mapping();
+    this.#previews.innerHTML = this.#roles.map((role) => this.#renderCard(role, map[role])).join("");
+  }
+  #renderCard(role, hex) {
+    const roleLabel = ROLE_LABELS[role] || role;
+    const isStatus = STATUS_ROLES.includes(role);
+    const samples = isStatus ? this.#renderStatusSamples(role, hex) : this.#renderBrandSamples(role, hex);
+    const cardStyle = `display:flex;flex-direction:column;gap:var(--size-s,0.75rem);padding:var(--size-m,1rem);border:1px solid ${BORDER};border-radius:${RADIUS_M};background:${SURFACE};min-inline-size:0`;
+    return `<article class="sp-card" data-role="${role}" aria-label="${roleLabel} role preview" style="${cardStyle}">
+      <header style="display:flex;align-items:center;justify-content:space-between;gap:var(--size-s,0.75rem)">
+        <div>
+          <code style="font-family:${MONO};font-size:var(--font-size-sm,0.875rem);font-weight:600">${role}</code>
+          <span style="display:block;font-size:var(--font-size-xs,0.75rem);color:${MUTED}">${roleLabel}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="sp-swatch" style="display:inline-block;inline-size:1.75rem;block-size:1.75rem;border-radius:${RADIUS_S};border:1px solid oklch(0% 0 0 / 0.15);background:${hex}"></span>
+          <code style="font-family:${MONO};font-size:var(--font-size-xs,0.75rem);color:${MUTED}">${hex}</code>
+        </div>
+      </header>
+      <div class="sp-samples" style="display:flex;flex-wrap:wrap;gap:var(--size-s,0.75rem);align-items:flex-start">${samples}</div>
+    </article>`;
+  }
+  #renderBrandSamples(role, hex) {
+    const textOnRole = this.#resolveTextOnRole(role, hex);
+    const surface = this.#resolveSurface();
+    const subtleBg = this.#resolveSubtle(role, hex);
+    const subtleFg = this.#darken(hex);
+    return [
+      this.#sample({
+        render: `<button type="button" tabindex="-1" style="all:unset;display:inline-block;padding:0.375rem 0.875rem;border-radius:${RADIUS_S};background:${hex};color:${textOnRole};font-family:inherit;font-size:var(--font-size-sm,0.875rem);font-weight:600;cursor:default">Button</button>`,
+        fg: textOnRole,
+        bg: hex,
+        caption: "On role"
+      }),
+      this.#sample({
+        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-sm,0.875rem);font-weight:500;text-decoration:underline">Linked text</span>`,
+        fg: hex,
+        bg: surface || "#ffffff",
+        caption: "On surface"
+      }),
+      this.#sample({
+        render: `<span style="display:inline-block;padding:0.125rem 0.5rem;border-radius:999px;background:${subtleBg};color:${subtleFg};font-size:var(--font-size-xs,0.75rem);font-weight:600;letter-spacing:0.04em;text-transform:uppercase">Badge</span>`,
+        fg: subtleFg,
+        bg: subtleBg,
+        caption: "Subtle"
+      })
+    ].join("");
+  }
+  #renderStatusSamples(role, hex) {
+    const surface = this.#resolveSurface();
+    const subtleBg = this.#resolveStatusSubtle(role, hex);
+    const statusText = this.#resolveStatusText(role, hex);
+    const onRole = pickContrastingHex(hex);
+    return [
+      this.#sample({
+        render: `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-radius:${RADIUS_S};background:${subtleBg};color:${statusText};border:1px solid ${hex};font-size:var(--font-size-sm,0.875rem);max-inline-size:100%">
+          <span style="display:inline-block;inline-size:0.5rem;block-size:0.5rem;border-radius:50%;background:${hex};flex-shrink:0"></span>
+          <span><strong>${ROLE_LABELS[role] || role}</strong> \u2014 message text</span>
+        </div>`,
+        fg: statusText,
+        bg: subtleBg,
+        caption: "Alert"
+      }),
+      this.#sample({
+        render: `<span style="display:inline-block;padding:0.125rem 0.5rem;border-radius:999px;background:${hex};color:${onRole};font-size:var(--font-size-xs,0.75rem);font-weight:700;letter-spacing:0.04em;text-transform:uppercase">${role}</span>`,
+        fg: onRole,
+        bg: hex,
+        caption: "Badge"
+      }),
+      this.#sample({
+        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-sm,0.875rem);font-weight:600">Inline status</span>`,
+        fg: hex,
+        bg: surface || "#ffffff",
+        caption: "On surface"
+      })
+    ].join("");
+  }
+  #sample({ render, fg, bg, caption }) {
+    const fgHex = resolveToHex(fg, this.#probe || void 0) || "#000000";
+    const bgHex = resolveToHex(bg, this.#probe || void 0) || "#ffffff";
+    const ratio = contrastRatio(fgHex, bgHex);
+    const level = wcagLevel(ratio).toLowerCase();
+    const lc = LEVEL_COLORS[level];
+    const chipStyle = `display:inline-flex;align-items:center;gap:0.25rem;padding:0.125rem 0.375rem;border-radius:${RADIUS_S};font-family:${MONO};font-size:var(--font-size-xs,0.75rem);background:${lc.bg};color:${lc.fg}`;
+    return `<div style="display:flex;flex-direction:column;gap:0.25rem;align-items:flex-start;min-inline-size:0;max-inline-size:100%">
+      <div style="max-inline-size:100%">${render}</div>
+      <div style="display:flex;align-items:center;gap:0.375rem;font-size:var(--font-size-xs,0.75rem);color:${MUTED}">
+        <span style="${chipStyle}" title="${caption}: ${ratio.toFixed(2)}:1">${ratio.toFixed(2)} <small>${level.toUpperCase()}</small></span>
+        <span>${caption}</span>
+      </div>
+    </div>`;
+  }
+  #renderExport() {
+    const toolbar = `display:flex;gap:var(--size-2xs,0.375rem);padding-block-start:var(--size-xs,0.5rem);border-block-start:1px solid ${BORDER}`;
+    const btn = `padding:0.375rem 0.875rem;border:1px solid ${BORDER};border-radius:${RADIUS_S};background:${SURFACE};color:${TEXT};cursor:pointer;font:inherit;font-size:var(--font-size-sm,0.875rem)`;
+    return `<div class="sp-export" role="toolbar" aria-label="Export semantic palette" style="${toolbar}">
+      <button type="button" class="sp-copy-css" style="${btn}">Copy Theme CSS</button>
+      <button type="button" class="sp-copy-json" style="${btn}">Copy JSON</button>
+    </div>`;
+  }
+  // ── Wiring ─────────────────────────────────────────────────────────
+  #wireSource() {
+    const cp = this.querySelector("color-palette");
+    if (cp) {
+      this.listen(cp, "color-palette:change", () => {
+        this.#readColors();
+        this.#renderPreviews("palette");
+        this.#emitChange("palette");
+      });
+    }
+    const pg = this.querySelector("palette-generator");
+    if (pg) {
+      this.listen(pg, "palette-generator:generate", () => {
+        this.#readColors();
+        this.#renderPreviews("palette");
+        this.#emitChange("palette");
+      });
+    }
+  }
+  #wireExport() {
+    const cssBtn = this.querySelector(".sp-copy-css");
+    const jsonBtn = this.querySelector(".sp-copy-json");
+    if (cssBtn) {
+      this.listen(cssBtn, "click", () => {
+        copyText(this.#buildCSS(), {
+          button: (
+            /** @type {HTMLElement} */
+            cssBtn
+          ),
+          announceMessage: "Theme CSS copied"
+        });
+      });
+    }
+    if (jsonBtn) {
+      this.listen(jsonBtn, "click", () => {
+        copyText(JSON.stringify(this.#mapping(), null, 2), {
+          button: (
+            /** @type {HTMLElement} */
+            jsonBtn
+          ),
+          announceMessage: "JSON copied"
+        });
+      });
+    }
+  }
+  // ── Token resolution ───────────────────────────────────────────────
+  #cs() {
+    return getComputedStyle(this);
+  }
+  #resolveSurface() {
+    return this.#cs().getPropertyValue("--color-surface").trim() || "#ffffff";
+  }
+  #resolveTextOnRole(role, fallbackHex) {
+    const explicit = this.#cs().getPropertyValue(`--color-text-on-${role}`).trim();
+    return explicit || pickContrastingHex(fallbackHex);
+  }
+  #resolveSubtle(role, fallbackHex) {
+    const explicit = this.#cs().getPropertyValue(`--color-${role}-subtle`).trim();
+    if (explicit) return explicit;
+    const { h } = hexToOklch(fallbackHex);
+    return oklchToHex(0.95, 0.03, h);
+  }
+  #resolveStatusSubtle(role, fallbackHex) {
+    const explicit = this.#cs().getPropertyValue(`--color-${role}-subtle`).trim();
+    if (explicit) return explicit;
+    const { h } = hexToOklch(fallbackHex);
+    return oklchToHex(0.94, 0.05, h);
+  }
+  #resolveStatusText(role, fallbackHex) {
+    const explicit = this.#cs().getPropertyValue(`--color-${role}-text`).trim();
+    if (explicit) return explicit;
+    const { h } = hexToOklch(fallbackHex);
+    return oklchToHex(0.3, 0.14, h);
+  }
+  #darken(hex) {
+    const { l, c, h } = hexToOklch(hex);
+    return oklchToHex(Math.max(0.2, l - 0.25), c, h);
+  }
+  // ── Export + emit ──────────────────────────────────────────────────
+  #buildCSS() {
+    const map = this.#mapping();
+    const brand = [];
+    const status = [];
+    for (const role of this.#roles) {
+      const hex = map[role];
+      if (!hex) continue;
+      const { l, c, h } = hexToOklch(hex);
+      if (BRAND_ROLES.includes(role)) {
+        brand.push(
+          `  --hue-${role}: ${h.toFixed(1)};`,
+          `  --lightness-${role}: ${(l * 100).toFixed(1)}%;`,
+          `  --chroma-${role}: ${c.toFixed(3)};`
+        );
+      } else {
+        status.push(`  --color-${role}: ${formatOklch({ l, c, h })};`);
+      }
+    }
+    const parts = [];
+    if (brand.length) parts.push("  /* Brand seeds */", ...brand);
+    if (status.length) {
+      if (brand.length) parts.push("");
+      parts.push("  /* Status colors */", ...status);
+    }
+    return `:root {
+${parts.join("\n")}
+}
+`;
+  }
+  #emitChange(source) {
+    this.dispatchEvent(new CustomEvent("semantic-palette:change", {
+      bubbles: true,
+      detail: { mapping: this.#mapping(), tokens: this.#buildCSS(), source }
+    }));
+  }
+};
+registerComponent("semantic-palette", SemanticPalette);
+
+// src/web-components/motion-specimen/logic.js
+var DEFAULT_EASINGS = "1,2,3,4,5,in-1,in-2,in-3,out-1,out-2,out-3,out-4,out-5,elastic-1,elastic-2,squish-1,squish-2";
+var DEFAULT_DURATIONS = "instant,fast,normal,slow,slower";
+var KEYFRAMES_ID = "ms-keyframes";
+var KEYFRAMES_CSS = `
+@keyframes ms-slide { from { inset-inline-start: 0 } to { inset-inline-start: calc(100% - 1rem) } }
+@keyframes ms-fill { 0% { transform: scaleX(0) } 60% { transform: scaleX(1) } 100% { transform: scaleX(1); opacity: 0.3 } }
+@media (prefers-reduced-motion: reduce) {
+  motion-specimen .ms-dot { animation: none !important; inset-inline-start: calc(50% - 0.5rem) !important }
+  motion-specimen .ms-bar-fill { animation: none !important; transform: scaleX(0.6) !important; opacity: 0.6 !important }
+}
+`;
+function ensureKeyframes() {
+  if (typeof document === "undefined" || document.getElementById(KEYFRAMES_ID)) return;
+  const style = document.createElement("style");
+  style.id = KEYFRAMES_ID;
+  style.textContent = KEYFRAMES_CSS;
+  document.head.append(style);
+}
+var MONO2 = "var(--font-mono, monospace)";
+var MUTED2 = "var(--color-text-muted, #666)";
+var INTERACTIVE = "var(--color-interactive, oklch(55% 0.2 260))";
+var SUNKEN = "var(--color-surface-sunken, #f1f1f1)";
+var MotionSpecimen = class extends VBElement {
+  static observedAttributes = ["type", "tokens", "prefix", "duration", "show-values", "label"];
+  setup() {
+    ensureKeyframes();
+    this.#render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected && this.hasAttribute("data-upgraded")) this.#render();
+  }
+  #render() {
+    const type = this.getAttribute("type") || "easing";
+    const previewDuration = this.getAttribute("duration") || "1.2s";
+    const showValues = this.getAttribute("show-values") !== "false";
+    const label = this.getAttribute("label") || "";
+    let html = "";
+    if (label) html += `<p style="font-weight:600;margin:0 0 var(--size-s,0.75rem)">${label}</p>`;
+    if (type === "easing" || type === "both") {
+      html += this.#renderEasingSection(previewDuration, showValues);
+    }
+    if (type === "duration" || type === "both") {
+      if (type === "both") html += `<div aria-hidden="true" style="block-size:var(--size-m,1rem)"></div>`;
+      html += this.#renderDurationSection(showValues);
+    }
+    this.innerHTML = html;
+    if (showValues) {
+      requestAnimationFrame(() => this.#fillValues());
+    }
+  }
+  #rowStyle() {
+    return `display:grid;grid-template-columns:5rem 1fr auto;align-items:center;gap:var(--size-s,0.75rem);min-block-size:1.75rem`;
+  }
+  #nameStyle() {
+    return `font-family:${MONO2};font-size:var(--font-size-sm,0.875rem);color:${MUTED2};text-align:end`;
+  }
+  #valueStyle() {
+    return `font-family:${MONO2};font-size:var(--font-size-xs,0.75rem);color:${MUTED2};font-variant-numeric:tabular-nums;white-space:nowrap`;
+  }
+  #listStyle() {
+    return `list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--size-2xs,0.375rem)`;
+  }
+  #renderEasingSection(previewDuration, showValues) {
+    const names = (this.getAttribute("tokens") || DEFAULT_EASINGS).split(",").map((s) => s.trim());
+    const prefix = this.getAttribute("prefix") || "--ease-";
+    const trackStyle = `position:relative;display:block;block-size:0.5rem;background:${SUNKEN};border-radius:999px`;
+    const dotStyle = `position:absolute;inset-block-start:50%;inset-inline-start:0;inline-size:1rem;block-size:1rem;background:${INTERACTIVE};border-radius:50%;transform:translateY(-50%)`;
+    const rows = names.map((name) => {
+      const varName = `${prefix}${name}`;
+      return `<li class="ms-row ms-row-ease" role="listitem" style="${this.#rowStyle()}">
+        <span style="${this.#nameStyle()}">${name}</span>
+        <span style="${trackStyle}" aria-hidden="true">
+          <span class="ms-dot" style="${dotStyle};animation: ms-slide ${previewDuration} var(${varName}) infinite alternate"></span>
+        </span>
+        ${showValues ? `<span class="ms-value" data-var="${varName}" style="${this.#valueStyle()}"></span>` : ""}
+      </li>`;
+    }).join("");
+    return `<ul class="ms-list" role="list" aria-label="Easing scale" style="${this.#listStyle()}">${rows}</ul>`;
+  }
+  #renderDurationSection(showValues) {
+    const names = (this.getAttribute("tokens") || DEFAULT_DURATIONS).split(",").map((s) => s.trim());
+    const prefix = this.getAttribute("prefix") || "--duration-";
+    const barStyle = `position:relative;display:block;block-size:0.5rem;background:${SUNKEN};border-radius:999px;overflow:hidden`;
+    const fillStyle = `position:absolute;inset-block:0;inset-inline-start:0;inline-size:100%;background:${INTERACTIVE};transform-origin:left center;animation-name:ms-fill;animation-iteration-count:infinite;animation-timing-function:linear`;
+    const rows = names.map((name) => {
+      const varName = `${prefix}${name}`;
+      return `<li class="ms-row ms-row-dur" role="listitem" style="${this.#rowStyle()}">
+        <span style="${this.#nameStyle()}">${name}</span>
+        <span style="${barStyle}" aria-hidden="true">
+          <span class="ms-bar-fill" style="${fillStyle};animation-duration: var(${varName})"></span>
+        </span>
+        ${showValues ? `<span class="ms-value" data-var="${varName}" style="${this.#valueStyle()}"></span>` : ""}
+      </li>`;
+    }).join("");
+    return `<ul class="ms-list" role="list" aria-label="Duration scale" style="${this.#listStyle()}">${rows}</ul>`;
+  }
+  #fillValues() {
+    this.querySelectorAll(".ms-value").forEach((el) => {
+      const v = el.getAttribute("data-var");
+      if (!v) return;
+      const computed = getComputedStyle(this).getPropertyValue(v).trim();
+      el.textContent = computed || "\u2014";
+    });
+  }
+};
+registerComponent("motion-specimen", MotionSpecimen);
+
+// src/web-components/theme-export/dtcg-serialize.js
+var VB_NS = "com.vanilla-breeze";
+var SPEC = "2025.10";
+function serializeDTCG(entries, options = {}) {
+  const root = {};
+  const unmapped = [];
+  let seedDerivation = false;
+  for (const [name, rawValue] of entries) {
+    const value = String(rawValue).trim();
+    const target = mapPrefix(name);
+    if (!target) {
+      unmapped.push(name);
+      continue;
+    }
+    if (target.path[0] === "color" && target.path[1] === "seeds") {
+      seedDerivation = true;
+    }
+    const token = buildToken(name, value, target);
+    insertAt(root, target.path, target.name, token);
+  }
+  const meta = { spec: SPEC };
+  if (options.vbVersion) meta.vbVersion = options.vbVersion;
+  if (seedDerivation) meta.seedDerivation = true;
+  if (unmapped.length) meta.unmapped = unmapped;
+  root.$extensions = { [VB_NS]: meta };
+  return root;
+}
+function mapPrefix(name) {
+  const prefixes = [
+    // color seeds (must precede --color-)
+    { p: "--hue-", path: ["color", "seeds"], type: "number", keep: true },
+    { p: "--lightness-", path: ["color", "seeds"], type: "number", keep: true },
+    { p: "--chroma-", path: ["color", "seeds"], type: "number", keep: true },
+    // color
+    { p: "--color-", path: ["color"], type: "color" },
+    // typography
+    { p: "--font-size-", path: ["typography", "size"], type: "dimension" },
+    { p: "--font-weight-", path: ["typography", "weight"], type: "fontWeight" },
+    { p: "--font-", path: ["typography", "family"], type: "fontFamily" },
+    { p: "--line-height-", path: ["typography", "lineHeight"], type: "number" },
+    { p: "--letter-spacing-", path: ["typography", "letterSpacing"], type: "dimension" },
+    // spacing
+    { p: "--size-", path: ["spacing"], type: "dimension" },
+    // border
+    { p: "--radius-", path: ["border", "radius"], type: "dimension" },
+    { p: "--border-width-", path: ["border", "width"], type: "dimension" },
+    // motion
+    { p: "--duration-", path: ["motion", "duration"], type: "duration" },
+    { p: "--ease-", path: ["motion", "easing"], type: "cubicBezier" },
+    // effect
+    { p: "--shadow-", path: ["effect", "shadow"], type: "shadow" }
+  ];
+  for (const { p, path, type, keep } of prefixes) {
+    if (name.startsWith(p)) {
+      const tail = keep ? name.slice(2) : name.slice(p.length);
+      return { path, type, name: tail };
+    }
+  }
+  return null;
+}
+function buildToken(_name, value, target) {
+  switch (target.type) {
+    case "color":
+      return buildColorToken(value);
+    case "fontFamily":
+      return { $type: "fontFamily", $value: parseFontFamily(value) };
+    case "fontWeight":
+      return { $type: "fontWeight", $value: parseNumber(value) };
+    case "number":
+      return buildNumberToken(value);
+    case "dimension":
+      return buildDimensionToken(value);
+    case "duration":
+      return { $type: "duration", $value: parseDuration(value) };
+    case "cubicBezier":
+      return buildCubicBezierToken(value);
+    case "shadow":
+      return buildShadowToken(value);
+    default:
+      return { $value: value };
+  }
+}
+function buildColorToken(value) {
+  const ld = parseLightDark(value);
+  if (ld) {
+    return {
+      $root: { $type: "color", $value: parseColorValue(ld.light) ?? opaque(ld.light) },
+      light: { $type: "color", $value: parseColorValue(ld.light) ?? opaque(ld.light) },
+      dark: { $type: "color", $value: parseColorValue(ld.dark) ?? opaque(ld.dark) },
+      $extensions: { [VB_NS]: { lightDark: value } }
+    };
+  }
+  if (/\bfrom\b/.test(value) && /^oklch\(/i.test(value)) {
+    return {
+      $type: "color",
+      $value: { colorSpace: "srgb", components: [0, 0, 0] },
+      $extensions: { [VB_NS]: { expression: value } }
+    };
+  }
+  const parsed = parseColorValue(value);
+  if (parsed) return { $type: "color", $value: parsed };
+  return { $type: "color", $value: { colorSpace: "srgb", components: [0, 0, 0] }, $extensions: { [VB_NS]: { literal: value } } };
+}
+function opaque(value) {
+  return { colorSpace: "srgb", components: [0, 0, 0], $vbLiteral: value };
+}
+function parseColorValue(raw) {
+  const value = String(raw).trim();
+  let m = value.match(/^oklch\(\s*([^)]+)\)\s*$/i);
+  if (m) {
+    const [comps, alpha] = splitAlpha(m[1]);
+    const parts = comps.trim().split(/\s+/);
+    if (parts.length < 3) return null;
+    const L = parsePercentOrNumber(parts[0]);
+    const C = parseNumber(parts[1]);
+    const H = parseNumber(parts[2]);
+    if ([L, C, H].some(Number.isNaN)) return null;
+    const out = {
+      colorSpace: "oklch",
+      // OKLCH lightness is 0–1; VB writes 55%.
+      components: [normalizeLightness(parts[0], L), C, H]
+    };
+    if (alpha != null) out.alpha = alpha;
+    return out;
+  }
+  m = value.match(/^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
+  if (m) {
+    const hex = m[1];
+    let r, g, b, a;
+    if (hex.length === 3 || hex.length === 4) {
+      r = parseInt(hex[0] + hex[0], 16) / 255;
+      g = parseInt(hex[1] + hex[1], 16) / 255;
+      b = parseInt(hex[2] + hex[2], 16) / 255;
+      if (hex.length === 4) a = parseInt(hex[3] + hex[3], 16) / 255;
+    } else {
+      r = parseInt(hex.slice(0, 2), 16) / 255;
+      g = parseInt(hex.slice(2, 4), 16) / 255;
+      b = parseInt(hex.slice(4, 6), 16) / 255;
+      if (hex.length === 8) a = parseInt(hex.slice(6, 8), 16) / 255;
+    }
+    const out = {
+      colorSpace: "srgb",
+      components: [r, g, b],
+      hex: "#" + (hex.length <= 4 ? hex.slice(0, 3).split("").map((c) => c + c).join("") : hex.slice(0, 6)).toLowerCase()
+    };
+    if (a != null) out.alpha = a;
+    return out;
+  }
+  m = value.match(/^rgba?\(\s*([^)]+)\)\s*$/i);
+  if (m) {
+    const parts = m[1].split(/\s*,\s*|\s+/).filter(Boolean);
+    if (parts.length < 3) return null;
+    const r = parseRGBChannel(parts[0]);
+    const g = parseRGBChannel(parts[1]);
+    const b = parseRGBChannel(parts[2]);
+    const out = { colorSpace: "srgb", components: [r, g, b] };
+    if (parts[3] != null) out.alpha = parsePercentOrNumber(parts[3]);
+    return out;
+  }
+  return null;
+}
+function normalizeLightness(raw, parsed) {
+  if (typeof raw === "string" && raw.endsWith("%")) return parsed / 100;
+  return parsed;
+}
+function splitAlpha(inner) {
+  const idx = inner.indexOf("/");
+  if (idx < 0) return [inner, null];
+  const comps = inner.slice(0, idx);
+  const alpha = parsePercentOrNumber(inner.slice(idx + 1).trim());
+  return [comps, alpha];
+}
+function parseRGBChannel(s) {
+  const v = s.trim();
+  if (v.endsWith("%")) return parseFloat(v) / 100;
+  return parseFloat(v) / 255;
+}
+function buildNumberToken(value) {
+  const n = parsePercentOrNumber(value);
+  const tok = { $type: "number", $value: n };
+  if (typeof value === "string" && value.trim().endsWith("%")) {
+    tok.$extensions = { [VB_NS]: { unit: "%" } };
+  }
+  return tok;
+}
+function buildDimensionToken(value) {
+  const v = String(value).trim();
+  const m = v.match(/^(-?[\d.]+)(px|rem|em|%)?$/);
+  if (!m) return { $type: "dimension", $value: { value: 0, unit: "px" }, $extensions: { [VB_NS]: { literal: v } } };
+  const n = parseFloat(m[1]);
+  const unit = m[2] || "px";
+  const dtcgUnit = unit === "px" || unit === "rem" ? unit : "rem";
+  const tok = { $type: "dimension", $value: { value: n, unit: dtcgUnit } };
+  if (unit !== "px" && unit !== "rem") {
+    tok.$extensions = { [VB_NS]: { unit } };
+  }
+  return tok;
+}
+function parseNumber(value) {
+  return parseFloat(String(value).trim());
+}
+function parsePercentOrNumber(value) {
+  const v = String(value).trim();
+  if (v.endsWith("%")) return parseFloat(v);
+  return parseFloat(v);
+}
+function parseFontFamily(value) {
+  const out = [];
+  let buf = "";
+  let quote = null;
+  for (const ch of String(value)) {
+    if (quote) {
+      if (ch === quote) {
+        quote = null;
+        continue;
+      }
+      buf += ch;
+    } else if (ch === '"' || ch === "'") {
+      quote = ch;
+    } else if (ch === ",") {
+      const t2 = buf.trim();
+      if (t2) out.push(t2);
+      buf = "";
+    } else {
+      buf += ch;
+    }
+  }
+  const t = buf.trim();
+  if (t) out.push(t);
+  return out;
+}
+function parseDuration(value) {
+  const v = String(value).trim();
+  let m = v.match(/^(-?[\d.]+)(ms|s)$/);
+  if (m) return { value: parseFloat(m[1]), unit: m[2] };
+  return { value: parseFloat(v), unit: "ms" };
+}
+function buildCubicBezierToken(value) {
+  const m = String(value).match(/^cubic-bezier\(\s*([^)]+)\)\s*$/i);
+  if (!m) return { $type: "cubicBezier", $value: [0, 0, 1, 1], $extensions: { [VB_NS]: { literal: value } } };
+  const parts = m[1].split(",").map((s) => parseFloat(s.trim()));
+  if (parts.length !== 4 || parts.some(Number.isNaN)) {
+    return { $type: "cubicBezier", $value: [0, 0, 1, 1], $extensions: { [VB_NS]: { literal: value } } };
+  }
+  return { $type: "cubicBezier", $value: parts };
+}
+function buildShadowToken(value) {
+  const stops = splitTopLevelCommas(String(value));
+  const parsed = stops.map(parseShadowStop);
+  if (parsed.some((p) => p == null)) {
+    return { $type: "shadow", $value: { offsetX: { value: 0, unit: "px" }, offsetY: { value: 0, unit: "px" }, blur: { value: 0, unit: "px" }, color: { colorSpace: "srgb", components: [0, 0, 0] } }, $extensions: { [VB_NS]: { literal: value } } };
+  }
+  if (parsed.length === 1) return { $type: "shadow", $value: parsed[0] };
+  return { $type: "shadow", $value: parsed };
+}
+function parseShadowStop(raw) {
+  const s = raw.trim();
+  const colorMatch = s.match(/(#[0-9a-f]{3,8}|rgba?\([^)]+\)|oklch\([^)]+\))$/i);
+  if (!colorMatch) return null;
+  const color = parseColorValue(colorMatch[0]);
+  if (!color) return null;
+  const dimsRaw = s.slice(0, colorMatch.index).trim();
+  const dims = dimsRaw.split(/\s+/).filter(Boolean);
+  if (dims.length < 3) return null;
+  const dim = (i) => parseDimensionPart(dims[i]);
+  const out = {
+    offsetX: dim(0),
+    offsetY: dim(1),
+    blur: dim(2),
+    color
+  };
+  if (dims[3]) out.spread = dim(3);
+  return out;
+}
+function parseDimensionPart(part) {
+  const m = part.match(/^(-?[\d.]+)(px|rem|em)?$/);
+  if (!m) return { value: 0, unit: "px" };
+  const n = parseFloat(m[1]);
+  const unit = m[2] || "px";
+  const dtcgUnit = unit === "px" || unit === "rem" ? unit : "rem";
+  return { value: n, unit: dtcgUnit };
+}
+function splitTopLevelCommas(value) {
+  const out = [];
+  let buf = "";
+  let depth = 0;
+  for (const ch of value) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    if (ch === "," && depth === 0) {
+      out.push(buf);
+      buf = "";
+    } else {
+      buf += ch;
+    }
+  }
+  if (buf.trim()) out.push(buf);
+  return out;
+}
+function parseLightDark(value) {
+  const m = String(value).match(/^light-dark\(\s*([\s\S]+)\s*\)\s*$/i);
+  if (!m) return null;
+  const parts = splitTopLevelCommas(m[1]);
+  if (parts.length !== 2) return null;
+  return { light: parts[0].trim(), dark: parts[1].trim() };
+}
+function insertAt(root, path, name, token) {
+  let node = root;
+  for (const key of path) {
+    if (!node[key] || typeof node[key] !== "object") node[key] = {};
+    node = node[key];
+  }
+  node[name] = token;
+}
+
+// src/web-components/theme-export/logic.js
+var DEFAULT_INCLUDE = "--color-,--hue-,--lightness-,--chroma-,--font-,--size-,--radius-,--shadow-,--border-width-,--ease-,--duration-,--line-height-,--letter-spacing-";
+var LIVE_EVENTS = [
+  "type-specimen:change",
+  "spacing-specimen:change",
+  "token-specimen:change",
+  "semantic-palette:change"
+];
+var ThemeExport = class extends VBElement {
+  static observedAttributes = ["scope", "selector", "include", "format", "label", "live"];
+  setup() {
+    this.#render();
+    this.#refresh();
+    this.#wireButtons();
+    this.#wireLive();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected && this.hasAttribute("data-upgraded")) {
+      this.#render();
+      this.#refresh();
+      this.#wireButtons();
+      this.#wireLive();
+    }
+  }
+  #scopeEl() {
+    const sel = this.getAttribute("scope") || ":root";
+    try {
+      return sel === ":root" ? document.documentElement : document.querySelector(sel);
+    } catch {
+      return document.documentElement;
+    }
+  }
+  #prefixes() {
+    const raw = this.getAttribute("include") || DEFAULT_INCLUDE;
+    return raw.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  #collect() {
+    const scope = this.#scopeEl();
+    if (!scope) return [];
+    const prefixes = this.#prefixes();
+    const style = (
+      /** @type {HTMLElement} */
+      scope.style
+    );
+    const entries = [];
+    for (let i = 0; i < style.length; i++) {
+      const name = style.item(i);
+      if (!name.startsWith("--")) continue;
+      if (!prefixes.some((p) => name.startsWith(p))) continue;
+      const value = style.getPropertyValue(name).trim();
+      if (value) entries.push([name, value]);
+    }
+    return entries;
+  }
+  #format(entries) {
+    const format = this.getAttribute("format") || "css";
+    if (format === "json") {
+      const obj = Object.fromEntries(entries);
+      return JSON.stringify(obj, null, 2);
+    }
+    if (format === "dtcg") {
+      const vbVersion = this.getAttribute("vb-version") || void 0;
+      return JSON.stringify(serializeDTCG(entries, { vbVersion }), null, 2);
+    }
+    const selector = this.getAttribute("selector") || ":root";
+    if (!entries.length) {
+      return `${selector} {
+  /* No theme overrides detected yet. Edit a specimen to populate. */
+}
+`;
+    }
+    const lines = entries.map(([name, value]) => `  ${name}: ${value};`).join("\n");
+    return `${selector} {
+${lines}
+}
+`;
+  }
+  #render() {
+    const label = this.getAttribute("label") || "";
+    const labelHTML = label ? `<p style="font-weight:600;margin:0 0 var(--size-xs,0.5rem)">${label}</p>` : "";
+    const toolbarStyle = `display:flex;gap:var(--size-2xs,0.375rem);margin-block-end:var(--size-xs,0.5rem);align-items:center;flex-wrap:wrap`;
+    const btn = `padding:0.375rem 0.75rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-surface,#fff);color:var(--color-text,#222);cursor:pointer;font:inherit;font-size:var(--font-size-xs,0.75rem)`;
+    const sel = `padding:0.375rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-surface,#fff);color:var(--color-text,#222);font:inherit;font-size:var(--font-size-xs,0.75rem)`;
+    const ta = `inline-size:100%;block-size:16rem;padding:var(--size-s,0.75rem);border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-surface-sunken,#f8f8f8);color:var(--color-text,#222);font-family:var(--font-mono,monospace);font-size:var(--font-size-xs,0.75rem);white-space:pre;overflow:auto;tab-size:2;resize:vertical;box-sizing:border-box`;
+    const current = this.getAttribute("format") || "css";
+    this.innerHTML = `
+      ${labelHTML}
+      <div class="te-toolbar" style="${toolbarStyle}">
+        <label style="display:flex;gap:var(--size-2xs,0.375rem);align-items:center;font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666)">
+          Format
+          <select class="te-format" style="${sel}" aria-label="Output format">
+            <option value="css"${current === "css" ? " selected" : ""}>CSS</option>
+            <option value="json"${current === "json" ? " selected" : ""}>JSON</option>
+            <option value="dtcg"${current === "dtcg" ? " selected" : ""}>DTCG</option>
+          </select>
+        </label>
+        <button type="button" class="te-refresh" style="${btn}" aria-label="Refresh">Refresh</button>
+        <button type="button" class="te-copy" style="${btn}">Copy</button>
+        <button type="button" class="te-download" style="${btn}">Download</button>
+        <span class="te-count" style="align-self:center;font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666);margin-inline-start:auto"></span>
+      </div>
+      <textarea class="te-output" readonly aria-label="Theme output" style="${ta}"></textarea>
+    `;
+  }
+  #refresh() {
+    const entries = this.#collect();
+    const output = this.#format(entries);
+    const ta = this.querySelector(".te-output");
+    const count = this.querySelector(".te-count");
+    if (ta) ta.value = output;
+    if (count) count.textContent = `${entries.length} token${entries.length === 1 ? "" : "s"}`;
+    this.dispatchEvent(new CustomEvent("theme-export:change", {
+      bubbles: true,
+      detail: { output, format: this.getAttribute("format") || "css", tokens: Object.fromEntries(entries) }
+    }));
+  }
+  #wireButtons() {
+    const refresh = this.querySelector(".te-refresh");
+    const copy = this.querySelector(".te-copy");
+    const download = this.querySelector(".te-download");
+    const formatSel = (
+      /** @type {HTMLSelectElement|null} */
+      this.querySelector(".te-format")
+    );
+    if (formatSel) {
+      this.listen(formatSel, "change", () => {
+        this.setAttribute("format", formatSel.value);
+      });
+    }
+    if (refresh) this.listen(refresh, "click", () => this.#refresh());
+    if (copy) {
+      this.listen(copy, "click", () => {
+        const ta = (
+          /** @type {HTMLTextAreaElement} */
+          this.querySelector(".te-output")
+        );
+        if (!ta) return;
+        copyText(ta.value, {
+          button: (
+            /** @type {HTMLElement} */
+            copy
+          ),
+          announceMessage: "Theme copied"
+        });
+      });
+    }
+    if (download) {
+      this.listen(download, "click", () => this.#download());
+    }
+  }
+  #download() {
+    const ta = (
+      /** @type {HTMLTextAreaElement} */
+      this.querySelector(".te-output")
+    );
+    if (!ta) return;
+    const format = this.getAttribute("format") || "css";
+    let ext = "css";
+    let mime = "text/css";
+    let filename = "theme.css";
+    if (format === "json") {
+      ext = "json";
+      mime = "application/json";
+      filename = "theme.json";
+    } else if (format === "dtcg") {
+      ext = "tokens.json";
+      mime = "application/design-tokens+json";
+      filename = "theme.tokens.json";
+    }
+    const blob = new Blob([ta.value], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  #wireLive() {
+    if (!this.hasAttribute("live")) return;
+    for (const ev of LIVE_EVENTS) {
+      this.listen(document, ev, () => this.#refresh());
+    }
+  }
+};
+registerComponent("theme-export", ThemeExport);

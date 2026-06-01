@@ -1,0 +1,65 @@
+{
+  "name": "@profpowell/vb-design-system",
+  "version": "0.1.0",
+  "description": "Design-system documentation components for Vanilla Breeze: color, type, spacing, token and motion specimens, semantic palette, component sampler, and theme export.",
+  "license": "MIT",
+  "author": "Patrick Powell",
+  "type": "module",
+  "homepage": "https://github.com/ProfPowell/vb-design-system#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProfPowell/vb-design-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ProfPowell/vb-design-system/issues"
+  },
+  "keywords": [
+    "vanilla-breeze",
+    "web-components",
+    "design-system",
+    "design-tokens",
+    "specimen",
+    "theme"
+  ],
+  "files": [
+    "src",
+    "dist"
+  ],
+  "main": "./dist/vb-design-system.js",
+  "module": "./src/index.js",
+  "style": "./dist/vb-design-system.css",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "default": "./dist/vb-design-system.js"
+    },
+    "./css": "./src/index.css",
+    "./dist/css": "./dist/vb-design-system.css",
+    "./color-palette": "./src/web-components/color-palette/logic.js",
+    "./type-specimen": "./src/web-components/type-specimen/logic.js",
+    "./spacing-specimen": "./src/web-components/spacing-specimen/logic.js",
+    "./token-specimen": "./src/web-components/token-specimen/logic.js",
+    "./component-sampler": "./src/web-components/component-sampler/logic.js",
+    "./semantic-palette": "./src/web-components/semantic-palette/logic.js",
+    "./motion-specimen": "./src/web-components/motion-specimen/logic.js",
+    "./theme-export": "./src/web-components/theme-export/logic.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "npm run build:js && npm run build:css",
+    "build:js": "esbuild src/index.js --bundle --format=esm --outfile=dist/vb-design-system.js && esbuild src/index.js --bundle --format=esm --minify --outfile=dist/vb-design-system.min.js",
+    "build:css": "esbuild src/index.css --bundle --outfile=dist/vb-design-system.css && esbuild src/index.css --bundle --minify --outfile=dist/vb-design-system.min.css",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "vanilla-breeze": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "vanilla-breeze": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.0"
+  }
+}
