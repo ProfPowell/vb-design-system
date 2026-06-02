@@ -43,6 +43,18 @@ mkdirSync(themesTo, { recursive: true });
 cpSync(themesFrom, themesTo, { recursive: true });
 console.log('  ✓ src/pages/cdn/themes (' + readdirSync(themesTo).length + ' files)');
 
+// Core elements the Meridian showcase uses (standalone, conflict-free)
+cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/brand-mark.js'), resolve(vendor, 'brand-mark.js'));
+cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/icon-wc.js'), resolve(vendor, 'icon-wc.js'));
+// design-system CSS patterns (do-dont, token-table) shipped by the package
+mkdirSync(resolve(vendor, 'patterns'), { recursive: true });
+cp(resolve(repoRoot, 'src/patterns/do-dont.css'), resolve(vendor, 'patterns/do-dont.css'));
+cp(resolve(repoRoot, 'src/patterns/token-table.css'), resolve(vendor, 'patterns/token-table.css'));
+// Cherry-picked icon for the Meridian showcase (lucide set is 7.5MB — copy only what's used)
+const iconsTo = resolve(siteRoot, 'src/pages/cdn/icons/lucide');
+mkdirSync(iconsTo, { recursive: true });
+cp(resolve(nm, 'vanilla-breeze/dist/cdn/icons/lucide/mountain.svg'), resolve(iconsTo, 'mountain.svg'));
+
 console.log('Copying pack bundle…');
 cp(resolve(repoRoot, 'dist/vb-design-system.js'), resolve(packDir, 'vb-design-system.js'));
 cp(resolve(repoRoot, 'dist/vb-design-system.css'), resolve(packDir, 'vb-design-system.css'));

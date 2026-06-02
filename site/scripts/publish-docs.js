@@ -39,6 +39,8 @@ function walk(dir) {
 if (BASE) {
   const tp = join(to, 'assets/vendor/vb-theme-picker.js');
   if (existsSync(tp)) writeFileSync(tp, readFileSync(tp,'utf8').replaceAll('/cdn/themes/', BASE + '/cdn/themes/'));
+  const iw = join(to, 'assets/vendor/icon-wc.js');
+  if (existsSync(iw)) writeFileSync(iw, readFileSync(iw,'utf8').replaceAll('/cdn/icons/', BASE + '/cdn/icons/'));
 }
 walk(to);
 console.log(`Published ${from} -> ${to}${BASE ? ` (base ${BASE})` : ' (no base prefix)'}`);

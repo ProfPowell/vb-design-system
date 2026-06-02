@@ -6,3 +6,7 @@
 @import "./web-components/component-sampler/styles.css";
 @import "./web-components/semantic-palette/styles.css";
 @import "./web-components/motion-specimen/styles.css";
+
+/* design-system authoring patterns */
+@import "./patterns/do-dont.css";
+@import "./patterns/token-table.css";
