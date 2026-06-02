@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Us — Alpenglow Gear</title>
+  <meta name="description" content="Alpenglow Gear was founded in 2018 in Boulder, Colorado. Learn about our mission, team, and commitment to ultralight, durable outdoor equipment.">
+  <link id="vb-css" rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css" disabled>
+  <style>
+    .nav-mobile { display: none; }
+    @media (max-width: 48rem) {
+      .nav-desktop { display: none; }
+      .nav-mobile { display: block; }
+    }
+
+    /* Section spacing */
+    main > layout-center {
+      padding-block: var(--size-2xl, 3rem);
+    }
+    main > layout-center + layout-center {
+      border-block-start: 1px solid var(--color-border, #ddd);
+    }
+
+    /* Team avatar */
+    .team-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: var(--radius-full, 50%);
+      object-fit: cover;
+      border: 3px solid var(--color-border, #ddd);
+    }
+
+    /* Team card layout */
+    .team-card {
+      text-align: center;
+    }
+    .team-card h3 { margin-block-end: 0; }
+    .team-card .team-role {
+      font-weight: 600;
+      color: var(--color-interactive, oklch(55% 0.2 260));
+      font-size: var(--font-size-sm, 0.875rem);
+    }
+    .team-card p:last-child {
+      color: var(--color-text-muted, #666);
+      font-size: var(--font-size-sm, 0.875rem);
+    }
+
+    /* Values icon */
+    .value-icon {
+      color: var(--color-interactive, oklch(55% 0.2 260));
+    }
+
+    /* Timeline — uses VB pattern from /docs/patterns/data/timeline/ */
+    .timeline {
+      --timeline-line-color: var(--color-border);
+      --timeline-dot-color: var(--color-interactive);
+      --timeline-dot-size: 0.75rem;
+      position: relative;
+      padding-inline-start: var(--size-xl);
+      list-style: none;
+      margin: 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: calc(var(--timeline-dot-size) / 2);
+      top: var(--size-2xs);
+      bottom: var(--size-2xs);
+      width: 2px;
+      background: var(--timeline-line-color);
+    }
+    @scope (.timeline) {
+      li {
+        position: relative;
+        padding-block-end: var(--size-l);
+      }
+      li:last-child { padding-block-end: 0; }
+      li::before {
+        content: '';
+        position: absolute;
+        left: calc(-1 * var(--size-xl) + (var(--timeline-dot-size) / 2) - (var(--timeline-dot-size) / 2));
+        top: var(--size-2xs);
+        width: var(--timeline-dot-size);
+        height: var(--timeline-dot-size);
+        background: var(--timeline-dot-color);
+        border-radius: 50%;
+        border: 2px solid var(--color-surface);
+        box-shadow: 0 0 0 2px var(--timeline-dot-color);
+      }
+      time {
+        font-size: var(--font-size-sm);
+        color: var(--color-text-muted);
+        font-weight: 600;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Skip link -->
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10001;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to content</a>
+
+  <!-- SITE HEADER -->
+  <header class="site" data-sticky="">
+    <a class="active-parent" href="/vb-design-system/showcase/alpenglow/">
+      <brand-mark>Alpenglow Gear</brand-mark>
+    </a>
+    <nav class="pills horizontal nav-desktop" aria-label="Main">
+      <ul>
+        <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/products/">Products</a></li>
+        <li><a class="active" href="/vb-design-system/showcase/alpenglow/about/" aria-current="page">About</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+      </ul>
+    </nav>
+    <nav class="nav-mobile" aria-label="Mobile navigation">
+      <details>
+        <summary>Menu</summary>
+        <ul>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/">Products</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/about/" aria-current="page">About</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main id="main">
+
+    <!-- Breadcrumb -->
+    <layout-center>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li aria-current="page">About</li>
+        </ol>
+      </nav>
+    </layout-center>
+
+    <!-- Hero -->
+    <layout-center>
+      <layout-stack data-layout-gap="s">
+        <h1>Our Story</h1>
+        <p style="color: var(--color-text-muted, #666); max-inline-size: 55ch;">How a garage workshop in Boulder became the outdoor industry's most obsessive engineering lab.</p>
+      </layout-stack>
+    </layout-center>
+
+    <!-- Mission -->
+    <layout-center>
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>The Beginning</h2>
+
+        <layout-text>
+          <p>In the spring of 2018, Jamie Chen walked away from a career designing carbon fiber components for satellite launch vehicles. After a decade in aerospace engineering, the pull of the mountains had become impossible to ignore. Working from a rented garage in Boulder, Colorado, Jamie set out to solve a problem that had nagged at every summit attempt and every long-distance trail: outdoor gear that forced you to choose between light weight and lasting durability.</p>
+
+          <p>The name came first. <dfn>Alpenglow</dfn> is the golden-pink light that illuminates mountain peaks just before sunrise and just after sunset — that brief, luminous window when the world feels both fragile and infinite. It seemed like the right word for a company built on precision, beauty, and the belief that the best gear disappears into the experience rather than defining it.</p>
+        </layout-text>
+
+        <h3>Engineering Philosophy</h3>
+
+        <layout-text>
+          <p>From day one, the philosophy was clear: ultralight engineering meets lifetime durability. Where other brands cut weight by cutting corners — thinner fabrics, fewer reinforcements, cheaper hardware — Alpenglow invested in materials science. Jamie's aerospace background meant access to computational modeling tools that most outdoor companies never touch. Every seam placement, every panel cut, every buckle geometry is optimized before a single prototype gets sewn.</p>
+        </layout-text>
+
+        <blockquote>
+          <p>"I spent ten years making things that had to survive launch vibrations and thermal cycling in orbit. A backpack only has to survive rain and rock. The engineering principles are the same — you just have to care enough to apply them."</p>
+          <footer>— <cite>Jamie Chen, Founder</cite></footer>
+        </blockquote>
+
+        <h3>Tested by Athletes, Not Just Labs</h3>
+
+        <layout-text>
+          <p>Every Alpenglow product must pass what the team calls the "500-Mile Rule." Before any product reaches production, it accumulates at least 500 miles of real-world trail testing by athletes who have no financial stake in telling the company what it wants to hear.</p>
+
+          <p>That commitment to honest testing has earned Alpenglow a reputation that no marketing budget could buy. When PCT thru-hikers started recommending the Trail Runner Pack to strangers at trail registers, the company knew it was on the right path.</p>
+        </layout-text>
+      </section>
+    </layout-center>
+
+    <!-- Timeline -->
+    <layout-center>
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>Our Journey</h2>
+        <ol class="timeline">
+          <li>
+            <time datetime="2018">2018</time>
+            <p>Founded in a Boulder garage. First product: the original Trail Runner Pack 24L, hand-sewn in batches of 50.</p>
+          </li>
+          <li>
+            <time datetime="2019">2019</time>
+            <p>Summit Shelter tent line launches. A PCT thru-hiker's review goes viral on Reddit.</p>
+          </li>
+          <li>
+            <time datetime="2020">2020</time>
+            <p>Opens first dedicated factory in Fort Collins, Colorado. 100% renewable energy from day one.</p>
+          </li>
+          <li>
+            <time datetime="2021">2021</time>
+            <p>Beacon headlamp line launches. Partners with Search &amp; Rescue teams across Colorado, Wyoming, and Montana.</p>
+          </li>
+          <li>
+            <time datetime="2022">2022</time>
+            <p>Lifetime Repair Promise introduced. Opens dedicated repair center in Bozeman, Montana.</p>
+          </li>
+          <li>
+            <time datetime="2023">2023</time>
+            <p>Reaches 50,000 customers. Launches recycled materials initiative.</p>
+          </li>
+          <li>
+            <time datetime="2024">2024</time>
+            <p>International expansion to the EU and Japan. Achieves carbon-neutral certification.</p>
+          </li>
+          <li>
+            <time datetime="2025">2025</time>
+            <p>Opens flagship retail store on Pearl Street in Boulder.</p>
+          </li>
+          <li>
+            <time datetime="2026">2026</time>
+            <p>Next-generation product lines in development. Over 100 employees across three facilities.</p>
+          </li>
+        </ol>
+      </section>
+    </layout-center>
+
+    <!-- Team -->
+    <layout-center>
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>The Team</h2>
+        <layout-grid data-layout-min="16rem">
+
+          <layout-card>
+            <article class="team-card" data-layout="stack" data-layout-gap="xs" style="align-items: center; padding: var(--size-l, 1.5rem);">
+              <user-avatar data-size="2xl">
+                <img src="https://i.pravatar.cc/150?img=33" alt="Jamie Chen">
+              </user-avatar>
+              <h3>Jamie Chen</h3>
+              <p class="team-role">Founder &amp; CEO</p>
+              <p>Former aerospace engineer. Summited six of the seven continental high points. Believes the best gear should be invisible.</p>
+            </article>
+          </layout-card>
+
+          <layout-card>
+            <article class="team-card" data-layout="stack" data-layout-gap="xs" style="align-items: center; padding: var(--size-l, 1.5rem);">
+              <user-avatar data-size="2xl">
+                <img src="https://i.pravatar.cc/150?img=14" alt="Riley Nakamura">
+              </user-avatar>
+              <h3>Riley Nakamura</h3>
+              <p class="team-role">Head of Product</p>
+              <p>Industrial designer from Patagonia. Obsessed with reducing pack weight by individual grams.</p>
+            </article>
+          </layout-card>
+
+          <layout-card>
+            <article class="team-card" data-layout="stack" data-layout-gap="xs" style="align-items: center; padding: var(--size-l, 1.5rem);">
+              <user-avatar data-size="2xl">
+                <img src="https://i.pravatar.cc/150?img=26" alt="Avery Santos">
+              </user-avatar>
+              <h3>Avery Santos</h3>
+              <p class="team-role">Lead Engineer</p>
+              <p>Materials scientist specializing in high-performance textiles. Holds three patents in waterproof membrane technology.</p>
+            </article>
+          </layout-card>
+
+          <layout-card>
+            <article class="team-card" data-layout="stack" data-layout-gap="xs" style="align-items: center; padding: var(--size-l, 1.5rem);">
+              <user-avatar data-size="2xl">
+                <img src="https://i.pravatar.cc/150?img=47" alt="Morgan Blackwood">
+              </user-avatar>
+              <h3>Morgan Blackwood</h3>
+              <p class="team-role">Community Director</p>
+              <p>Trail runner and outdoor educator. Manages the Ambassador program and trail maintenance volunteer initiative.</p>
+            </article>
+          </layout-card>
+
+        </layout-grid>
+      </section>
+    </layout-center>
+
+    <!-- Values -->
+    <layout-center>
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>What We Believe</h2>
+        <layout-grid data-layout-min="15rem">
+
+          <article data-layout="stack" data-layout-gap="s">
+            <span class="value-icon"><icon-wc name="shield-check" size="xl"></icon-wc></span>
+            <h3>Build to Last</h3>
+            <p>We design products to outlive trends. Repairable, upgradeable, and built from materials chosen for longevity. Our Lifetime Repair Promise means we stand behind every stitch.</p>
+          </article>
+
+          <article data-layout="stack" data-layout-gap="s">
+            <span class="value-icon"><icon-wc name="feather" size="xl"></icon-wc></span>
+            <h3>Lighten the Load</h3>
+            <p>Every gram matters on the trail. We engineer weight out of our products without engineering out reliability. Aerospace-grade materials make it possible.</p>
+          </article>
+
+          <article data-layout="stack" data-layout-gap="s">
+            <span class="value-icon"><icon-wc name="leaf" size="xl"></icon-wc></span>
+            <h3>Protect the Trail</h3>
+            <p>Carbon-neutral operations, recycled materials, and a 1% for the Planet commitment. Our volunteer crews logged over 2,000 trail maintenance hours last year.</p>
+          </article>
+
+          <article data-layout="stack" data-layout-gap="s">
+            <span class="value-icon"><icon-wc name="users" size="xl"></icon-wc></span>
+            <h3>Community First</h3>
+            <p>We sponsor trail maintenance crews, host skills clinics, and believe the outdoors belong to everyone. Our Ambassador program connects 200+ athletes with communities.</p>
+          </article>
+
+        </layout-grid>
+      </section>
+    </layout-center>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site">
+    <layout-grid data-layout-min="12rem">
+      <nav aria-label="Shop">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/">All Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Support">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/order/">Order Status</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#shipping">Shipping &amp; Returns</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#warranty">Warranty</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#sizing">Size Guide</a></li>
+        </ul>
+      </nav>
+      <section aria-label="Newsletter">
+        <h3>Newsletter</h3>
+        <form class="inline" action="#" method="post">
+          <label for="footer-email">Email</label>
+          <input id="footer-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Subscribe</button>
+        </form>
+      </section>
+    </layout-grid>
+    <p><small>© <time datetime="2026">2026</time> Alpenglow Gear. All rights reserved.</small></p>
+  </footer>
+
+  <script src="/vb-design-system/showcase/alpenglow/_theme-switcher.js"></script>
+</body>
+</html>

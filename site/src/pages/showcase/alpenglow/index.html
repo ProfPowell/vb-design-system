@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alpenglow Gear — Outdoor Equipment for Every Summit</title>
+  <meta name="description" content="Premium outdoor gear built to last. Packs, shelter, lighting, and more for hikers, climbers, and trail runners." />
+  <link id="vb-css" rel="stylesheet" href="/assets/vendor/vanilla-breeze.css" disabled />
+  <style>
+    /* Mobile nav: show hamburger on small screens, horizontal nav on large */
+    .nav-mobile { display: none; }
+    @media (max-width: 48rem) {
+      .nav-desktop { display: none; }
+      .nav-mobile { display: block; }
+    }
+
+    /* Hero background image */
+    .hero-bg {
+      background-image: url("images/hero-light.jpg");
+      background-size: cover;
+      background-position: center 40%;
+      position: relative;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .hero-bg { background-image: url("images/hero-dark.jpg"); }
+    }
+
+    .hero-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        oklch(0% 0 0 / 0.3) 0%,
+        oklch(0% 0 0 / 0.55) 50%,
+        oklch(0% 0 0 / 0.7) 100%);
+    }
+
+    .hero-bg > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-bg h1,
+    .hero-bg p {
+      color: white;
+      text-shadow: 0 2px 12px oklch(0% 0 0 / 0.5);
+    }
+
+    /* CTA buttons */
+    .cta-primary,
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.75rem;
+      font-weight: 600;
+      font-size: var(--font-size-sm, 0.875rem);
+      text-decoration: none;
+      border-radius: var(--radius-m, 0.5rem);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .cta-primary {
+      background: var(--color-interactive, oklch(55% 0.2 260));
+      color: white;
+      box-shadow: 0 4px 12px oklch(0% 0 0 / 0.3);
+    }
+
+    .cta-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px oklch(0% 0 0 / 0.4);
+    }
+
+    .cta-secondary {
+      background: oklch(100% 0 0 / 0.15);
+      color: white;
+      border: 1px solid oklch(100% 0 0 / 0.3);
+      backdrop-filter: blur(4px);
+    }
+
+    .cta-secondary:hover {
+      background: oklch(100% 0 0 / 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Product images */
+    .product-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: var(--radius-m, 0.5rem) var(--radius-m, 0.5rem) 0 0;
+    }
+
+    /* Section spacing */
+    main > section,
+    main > layout-center {
+      padding-block: var(--size-2xl, 3rem);
+    }
+
+    main > layout-center + layout-center {
+      border-block-start: 1px solid var(--color-border, #ddd);
+    }
+
+    /* Testimonial carousel */
+    carousel-wc .testimonial {
+      width: min(500px, 85vw);
+    }
+
+    .testimonial {
+      margin: 0;
+      padding: var(--size-xl, 1.5rem);
+      background: var(--color-surface-raised, #f5f5f5);
+      border-radius: var(--radius-l, 0.75rem);
+      box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,.08));
+    }
+
+    .testimonial-quote {
+      font-size: var(--font-size-lg, 1.125rem);
+      line-height: var(--line-height-relaxed, 1.7);
+      color: var(--color-text, #222);
+      margin: 0;
+    }
+
+    .testimonial footer { margin-top: var(--size-l, 1rem); }
+    .testimonial footer::before,
+    .testimonial cite::before { content: none; }
+    .testimonial cite { font-style: normal; }
+
+    .testimonial .author-name {
+      display: block;
+      font-weight: 600;
+      color: var(--color-text, #222);
+    }
+
+    .testimonial .author-role {
+      display: block;
+      font-size: var(--font-size-sm, 0.875rem);
+      color: var(--color-text-muted, #666);
+    }
+
+    .quote-icon {
+      color: var(--color-interactive, oklch(55% 0.2 260));
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Skip link -->
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10001;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to content</a>
+
+  <!-- SITE HEADER -->
+  <header class="site" data-sticky>
+    <a href="/showcase/alpenglow/">
+      <brand-mark>Alpenglow Gear</brand-mark>
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav class="pills horizontal nav-desktop" aria-label="Main">
+      <ul>
+        <li><a href="/showcase/alpenglow/" aria-current="page">Home</a></li>
+        <li><a href="/showcase/alpenglow/products/">Products</a></li>
+        <li><a href="/showcase/alpenglow/about/">About</a></li>
+        <li><a href="/showcase/alpenglow/blog/">Blog</a></li>
+        <li><a href="/showcase/alpenglow/faq/">FAQ</a></li>
+        <li><a href="/showcase/alpenglow/contact/">Contact</a></li>
+        <li><a href="/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+      </ul>
+    </nav>
+
+    <!-- Mobile navigation -->
+    <nav class="nav-mobile" aria-label="Mobile navigation">
+      <details>
+        <summary>Menu</summary>
+        <ul>
+          <li><a href="/showcase/alpenglow/" aria-current="page">Home</a></li>
+          <li><a href="/showcase/alpenglow/products/">Products</a></li>
+          <li><a href="/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/showcase/alpenglow/faq/">FAQ</a></li>
+          <li><a href="/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main id="main">
+
+    <!-- Hero -->
+    <layout-cover data-layout-min="70vh" class="hero-bg" style="text-align: center;">
+      <hgroup data-layout-principal class="centered">
+        <h1>Gear That Goes the Distance</h1>
+        <p>From alpine ridgelines to forest trails — equipment engineered for real adventures.</p>
+      </hgroup>
+      <layout-cluster data-layout-justify="center" data-layout-gap="m">
+        <a href="/showcase/alpenglow/products/" class="cta-primary">Shop All Gear</a>
+        <a href="/showcase/alpenglow/about/" class="cta-secondary">Our Story</a>
+      </layout-cluster>
+    </layout-cover>
+
+    <!-- Features Strip -->
+    <layout-center>
+      <section>
+        <layout-stack data-layout-gap="l">
+          <h2>Why Alpenglow?</h2>
+          <layout-grid data-layout-min="15rem">
+
+            <article>
+              <h3>Trail-Tested Durability</h3>
+              <p>Every product survives 500+ miles of field testing before it earns our name.</p>
+            </article>
+
+            <article>
+              <h3>Ultralight Engineering</h3>
+              <p>Shave ounces without sacrificing strength. Our designs use aerospace-grade materials.</p>
+            </article>
+
+            <article>
+              <h3>Lifetime Repair Promise</h3>
+              <p>If it breaks, we fix it. Free repairs for the life of every Alpenglow product.</p>
+            </article>
+
+          </layout-grid>
+        </layout-stack>
+      </section>
+    </layout-center>
+
+    <!-- Product Spotlights -->
+    <layout-center>
+      <section>
+        <layout-stack data-layout-gap="l">
+          <h2>Featured Gear</h2>
+          <layout-grid data-layout-min="18rem">
+
+            <!-- Product 1: Trail Runner Pack 32L -->
+            <layout-card>
+              <article>
+                <img src="images/product-pack.jpg"
+                     alt="Green hiking backpack resting against granite boulders by a river"
+                     class="product-img"
+                     width="800" height="600"
+                     loading="lazy" />
+                <div style="padding: var(--size-m, 1rem);">
+                  <h3>Trail Runner Pack 32L</h3>
+                  <p><data value="189">$189</data></p>
+                  <p>32 liters of waterproof, hydration-compatible carrying capacity at just 680 grams.</p>
+                  <footer style="margin-block-start: var(--size-s);">
+                    <a href="/showcase/alpenglow/products/trail-runner-pack/">View Details</a>
+                  </footer>
+                </div>
+              </article>
+            </layout-card>
+
+            <!-- Product 2: Summit Shelter 3P Tent -->
+            <layout-card>
+              <article>
+                <img src="images/product-tent.jpg"
+                     alt="Yellow and gray dome tent pitched in a mountain clearing at golden hour"
+                     class="product-img"
+                     width="800" height="600"
+                     loading="lazy" />
+                <div style="padding: var(--size-m, 1rem);">
+                  <h3>Summit Shelter 3P Tent</h3>
+                  <p><data value="449">$449</data></p>
+                  <p>Freestanding 4-season shelter for 3. Sets up in under 4 minutes.</p>
+                  <footer style="margin-block-start: var(--size-s);">
+                    <a href="/showcase/alpenglow/products/summit-shelter/">View Details</a>
+                  </footer>
+                </div>
+              </article>
+            </layout-card>
+
+            <!-- Product 3: Beacon Pro Headlamp 700L -->
+            <layout-card>
+              <article>
+                <img src="images/product-headlamp.jpg"
+                     alt="Hiker wearing a headlamp at sunset with mountain peaks in the background"
+                     class="product-img"
+                     width="800" height="600"
+                     loading="lazy" />
+                <div style="padding: var(--size-m, 1rem);">
+                  <h3>Beacon Pro Headlamp 700L</h3>
+                  <p><data value="89">$89</data></p>
+                  <p>700 lumens of USB-C rechargeable light with 45-hour runtime and red night mode.</p>
+                  <footer style="margin-block-start: var(--size-s);">
+                    <a href="/showcase/alpenglow/products/beacon-headlamp/">View Details</a>
+                  </footer>
+                </div>
+              </article>
+            </layout-card>
+
+          </layout-grid>
+        </layout-stack>
+      </section>
+    </layout-center>
+
+    <!-- Editorial Callout -->
+    <layout-center>
+      <section>
+        <blockquote>
+          <p>"The mountains don't care about your gear list. They care about your preparation. Every Alpenglow product is designed for the moment when preparation meets opportunity."</p>
+          <footer>— <cite>Jamie Chen, Alpenglow Founder</cite></footer>
+        </blockquote>
+      </section>
+    </layout-center>
+
+    <!-- Testimonials -->
+    <layout-center data-layout-max="wide">
+      <section data-layout="stack" data-layout-gap="l">
+        <header style="text-align: center;">
+          <h2>What Our Customers Say</h2>
+          <p style="color: var(--color-text-muted, #666);">Trusted by thru-hikers, mountaineers, and weekend adventurers.</p>
+        </header>
+        <carousel-wc item-width="auto" gap="l" loop>
+          <blockquote class="testimonial" data-layout="stack" data-layout-gap="m">
+            <span class="quote-icon"><icon-wc name="quote" size="xl"></icon-wc></span>
+            <p class="testimonial-quote">"Carried my Trail Runner through 200 miles of the PCT. Not a single seam failure. This pack is the real deal."</p>
+            <footer>
+              <div data-layout="cluster" data-layout-gap="s" data-layout-align="center">
+                <user-avatar data-size="xl"><img src="https://i.pravatar.cc/150?img=32" alt="" /></user-avatar>
+                <cite>
+                  <span class="author-name">Morgan Reeves</span>
+                  <span class="author-role">Thru-Hiker, Pacific Crest Trail</span>
+                </cite>
+              </div>
+            </footer>
+          </blockquote>
+          <blockquote class="testimonial" data-layout="stack" data-layout-gap="m">
+            <span class="quote-icon"><icon-wc name="quote" size="xl"></icon-wc></span>
+            <p class="testimonial-quote">"The Summit Shelter handled a surprise snowstorm at 12,000 feet. I slept warm and dry while others scrambled."</p>
+            <footer>
+              <div data-layout="cluster" data-layout-gap="s" data-layout-align="center">
+                <user-avatar data-size="xl"><img src="https://i.pravatar.cc/150?img=15" alt="" /></user-avatar>
+                <cite>
+                  <span class="author-name">Alex Trujillo</span>
+                  <span class="author-role">Mountaineer, Colorado 14ers</span>
+                </cite>
+              </div>
+            </footer>
+          </blockquote>
+          <blockquote class="testimonial" data-layout="stack" data-layout-gap="m">
+            <span class="quote-icon"><icon-wc name="quote" size="xl"></icon-wc></span>
+            <p class="testimonial-quote">"Best headlamp I've owned. The red mode saved my night vision on a 3am summit push. 45-hour runtime is no joke."</p>
+            <footer>
+              <div data-layout="cluster" data-layout-gap="s" data-layout-align="center">
+                <user-avatar data-size="xl"><img src="https://i.pravatar.cc/150?img=57" alt="" /></user-avatar>
+                <cite>
+                  <span class="author-name">Sam Kowalski</span>
+                  <span class="author-role">Alpine Climber, Cascades</span>
+                </cite>
+              </div>
+            </footer>
+          </blockquote>
+          <blockquote class="testimonial" data-layout="stack" data-layout-gap="m">
+            <span class="quote-icon"><icon-wc name="quote" size="xl"></icon-wc></span>
+            <p class="testimonial-quote">"The lifetime repair promise isn't marketing fluff. I sent in a 3-year-old pack with a torn zipper and got it back good as new in a week."</p>
+            <footer>
+              <div data-layout="cluster" data-layout-gap="s" data-layout-align="center">
+                <user-avatar data-size="xl"><img src="https://i.pravatar.cc/150?img=23" alt="" /></user-avatar>
+                <cite>
+                  <span class="author-name">Jamie Okonkwo</span>
+                  <span class="author-role">Trail Runner, Appalachian Trail</span>
+                </cite>
+              </div>
+            </footer>
+          </blockquote>
+        </carousel-wc>
+      </section>
+    </layout-center>
+
+    <!-- Newsletter CTA -->
+    <layout-center>
+      <section>
+        <layout-stack data-layout-gap="m">
+          <h2>Stay on the Trail</h2>
+          <p>Sign up for gear reviews, trail reports, and early access to new products.</p>
+          <form class="inline" action="#" method="post">
+            <label for="newsletter-email">Email address</label>
+            <input id="newsletter-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+            <button type="submit">Subscribe</button>
+          </form>
+        </layout-stack>
+      </section>
+    </layout-center>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site">
+    <layout-grid data-layout-min="12rem">
+
+      <nav aria-label="Shop">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="/showcase/alpenglow/products/">Products</a></li>
+          <li><a href="/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a></li>
+          <li><a href="/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a></li>
+          <li><a href="/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/showcase/alpenglow/faq/">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Support">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/showcase/alpenglow/order/">Order Status</a></li>
+          <li><a href="/showcase/alpenglow/faq/#shipping">Shipping &amp; Returns</a></li>
+          <li><a href="/showcase/alpenglow/faq/#warranty">Warranty</a></li>
+          <li><a href="/showcase/alpenglow/faq/#sizing">Size Guide</a></li>
+        </ul>
+      </nav>
+
+      <section aria-label="Newsletter">
+        <h3>Newsletter</h3>
+        <form class="inline" action="#" method="post">
+          <label for="footer-email">Email</label>
+          <input id="footer-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </section>
+
+    </layout-grid>
+
+    <p><small>&copy; <time datetime="2026">2026</time> Alpenglow Gear. All rights reserved.</small></p>
+  </footer>
+
+  <script src="/showcase/alpenglow/_theme-switcher.js"></script>
+</body>
+</html>

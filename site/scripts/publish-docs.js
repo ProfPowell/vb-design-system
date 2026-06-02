@@ -22,25 +22,27 @@ mkdirSync(to, { recursive: true });
 cpSync(from, to, { recursive: true });
 writeFileSync(join(to, '.nojekyll'), '');
 
-// Prefix root-absolute href/src (not protocol-relative //, not external http(s))
+// Under a project subpath, prefix root-absolute URLs:
+//  - HTML: every href/src (not protocol-relative // or external http(s))
+//  - JS: runtime fetches of /cdn/themes/ and /cdn/icons/ (theme-picker, icon-wc,
+//        the full VB bundle, the alpenglow theme-switcher) which can't be rewritten
+//        as HTML attributes.
 function walk(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) { walk(p); continue; }
-    if (extname(p) !== '.html') continue;
-    let html = readFileSync(p, 'utf8');
-    if (BASE) {
-      html = html.replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`);
+    const ext = extname(p);
+    if (!BASE) continue;
+    if (ext === '.html') {
+      writeFileSync(p, readFileSync(p, 'utf8').replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`));
+    } else if (ext === '.js') {
+      let js = readFileSync(p, 'utf8');
+      if (js.includes('/cdn/themes/') || js.includes('/cdn/icons/')) {
+        js = js.replaceAll('/cdn/themes/', BASE + '/cdn/themes/').replaceAll('/cdn/icons/', BASE + '/cdn/icons/');
+        writeFileSync(p, js);
+      }
     }
-    writeFileSync(p, html);
   }
-}
-// theme-picker hardcodes /cdn/themes/ — prefix it for the project subpath
-if (BASE) {
-  const tp = join(to, 'assets/vendor/vb-theme-picker.js');
-  if (existsSync(tp)) writeFileSync(tp, readFileSync(tp,'utf8').replaceAll('/cdn/themes/', BASE + '/cdn/themes/'));
-  const iw = join(to, 'assets/vendor/icon-wc.js');
-  if (existsSync(iw)) writeFileSync(iw, readFileSync(iw,'utf8').replaceAll('/cdn/icons/', BASE + '/cdn/icons/'));
 }
 walk(to);
 console.log(`Published ${from} -> ${to}${BASE ? ` (base ${BASE})` : ' (no base prefix)'}`);

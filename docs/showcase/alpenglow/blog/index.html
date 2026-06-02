@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog — Alpenglow Gear</title>
+  <meta name="description" content="Gear reviews, trail reports, and adventure stories from the Alpenglow Gear community.">
+  <link id="vb-css" rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css" disabled>
+  <style>
+    .nav-mobile { display: none; }
+    @media (max-width: 48rem) {
+      .nav-desktop { display: none; }
+      .nav-mobile { display: block; }
+    }
+
+    main > layout-center { padding-block: var(--size-xl, 2rem); }
+    main > layout-center + layout-center { border-block-start: 1px solid var(--color-border, #ddd); }
+
+    .blog-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: var(--radius-m, 0.5rem) var(--radius-m, 0.5rem) 0 0;
+    }
+
+    .blog-card-body { padding: var(--size-m, 1rem); }
+
+    .blog-meta {
+      font-size: var(--font-size-sm, 0.875rem);
+      color: var(--color-text-muted, #666);
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      font-size: var(--font-size-xs, 0.75rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--radius-s, 0.25rem);
+      background: var(--color-primary-subtle, oklch(90% 0.05 260));
+      color: var(--color-primary, oklch(50% 0.2 260));
+    }
+
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    @media (max-width: 40rem) { .featured-card { grid-template-columns: 1fr; } }
+
+    .featured-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 250px;
+    }
+
+    .featured-body {
+      padding: var(--size-xl, 2rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--size-s, 0.75rem);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10001;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to content</a>
+
+  <!-- SITE HEADER -->
+  <header class="site" data-sticky="">
+    <a class="active-parent" href="/vb-design-system/showcase/alpenglow/"><brand-mark>Alpenglow Gear</brand-mark></a>
+    <nav class="pills horizontal nav-desktop" aria-label="Main">
+      <ul>
+        <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/products/">Products</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+        <li><a class="active" href="/vb-design-system/showcase/alpenglow/blog/" aria-current="page">Blog</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+      </ul>
+    </nav>
+    <nav class="nav-mobile" aria-label="Mobile navigation">
+      <details>
+        <summary>Menu</summary>
+        <ul>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/">Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/blog/" aria-current="page">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <layout-center>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li aria-current="page">Blog</li>
+        </ol>
+      </nav>
+    </layout-center>
+
+    <layout-center>
+      <layout-stack data-layout-gap="s">
+        <h1>Trail Notes</h1>
+        <p style="color: var(--color-text-muted, #666); max-inline-size: 50ch;">Gear reviews, trail reports, and adventure stories from the Alpenglow community.</p>
+      </layout-stack>
+    </layout-center>
+
+    <!-- Featured Post -->
+    <layout-center>
+      <layout-card>
+        <article class="featured-card">
+          <img src="https://picsum.photos/seed/gear-care/800/500" alt="Outdoor gear laid out for maintenance" loading="lazy" width="800" height="500">
+          <div class="featured-body">
+            <span class="category-badge">Gear Care</span>
+            <h2 style="margin: 0;"><a href="/vb-design-system/showcase/alpenglow/blog/gear-care-guide/" style="text-decoration: none; color: inherit;">The Complete Gear Care Guide</a></h2>
+            <p>Your outdoor gear is an investment. Learn how to clean, waterproof, store, and repair your equipment so it lasts for decades.</p>
+            <p class="blog-meta">By Jamie Chen · <time datetime="2026-02-15">February 15, 2026</time> · 8 min read</p>
+          </div>
+        </article>
+      </layout-card>
+    </layout-center>
+
+    <!-- Recent Posts + Sidebar -->
+    <layout-center>
+      <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+
+        <!-- Sidebar (first child → gets sidebar width, appears on right via row-reverse) -->
+        <aside data-layout="stack" data-layout-gap="l">
+          <section data-layout="stack" data-layout-gap="s">
+            <h3>Categories</h3>
+            <nav aria-label="Blog categories">
+              <ul>
+                <li><a class="active" href="/vb-design-system/showcase/alpenglow/blog/">All <small>(6)</small></a></li>
+                <li><a href="/vb-design-system/showcase/alpenglow/blog/?cat=gear-care">Gear Care <small>(2)</small></a></li>
+                <li><a href="/vb-design-system/showcase/alpenglow/blog/?cat=skills">Skills <small>(1)</small></a></li>
+                <li><a href="/vb-design-system/showcase/alpenglow/blog/?cat=nutrition">Nutrition <small>(1)</small></a></li>
+                <li><a href="/vb-design-system/showcase/alpenglow/blog/?cat=guide">Guide <small>(1)</small></a></li>
+                <li><a href="/vb-design-system/showcase/alpenglow/blog/?cat=sustainability">Sustainability <small>(1)</small></a></li>
+              </ul>
+            </nav>
+          </section>
+
+          <section data-layout="stack" data-layout-gap="s">
+            <h3>Popular Tags</h3>
+            <layout-cluster data-layout-gap="xs">
+              <layout-badge>hiking</layout-badge>
+              <layout-badge>backpacking</layout-badge>
+              <layout-badge>gear-care</layout-badge>
+              <layout-badge>trail-running</layout-badge>
+              <layout-badge>camping</layout-badge>
+              <layout-badge>winter</layout-badge>
+              <layout-badge>nutrition</layout-badge>
+              <layout-badge>sustainability</layout-badge>
+            </layout-cluster>
+          </section>
+        </aside>
+
+        <!-- Main content (last child → gets content width, appears on left) -->
+        <section data-layout="stack" data-layout-gap="l">
+          <h2>Recent Posts</h2>
+          <layout-grid data-layout-min="16rem">
+
+            <layout-card>
+              <article>
+                <img src="https://picsum.photos/seed/knots/600/340" alt="Rope knots on a wooden surface" class="blog-img" loading="lazy" width="600" height="340">
+                <div class="blog-card-body" data-layout="stack" data-layout-gap="xs">
+                  <span class="category-badge">Skills</span>
+                  <h3 style="margin: 0;">5 Essential Knots Every Hiker Should Know</h3>
+                  <p class="blog-meta"><time datetime="2026-01-28">January 28, 2026</time> · 5 min read</p>
+                </div>
+              </article>
+            </layout-card>
+
+            <layout-card>
+              <article>
+                <img src="https://picsum.photos/seed/trail-food/600/340" alt="Trail snacks and water bottle in a meadow" class="blog-img" loading="lazy" width="600" height="340">
+                <div class="blog-card-body" data-layout="stack" data-layout-gap="xs">
+                  <span class="category-badge">Nutrition</span>
+                  <h3 style="margin: 0;">Trail Running Nutrition: What to Eat on the Move</h3>
+                  <p class="blog-meta"><time datetime="2026-01-12">January 12, 2026</time> · 6 min read</p>
+                </div>
+              </article>
+            </layout-card>
+
+            <layout-card>
+              <article>
+                <img src="https://picsum.photos/seed/winter-camp/600/340" alt="Winter camping scene with snow-covered tent" class="blog-img" loading="lazy" width="600" height="340">
+                <div class="blog-card-body" data-layout="stack" data-layout-gap="xs">
+                  <span class="category-badge">Guide</span>
+                  <h3 style="margin: 0;">Winter Camping 101: Your First Cold-Weather Overnight</h3>
+                  <p class="blog-meta"><time datetime="2025-12-20">December 20, 2025</time> · 10 min read</p>
+                </div>
+              </article>
+            </layout-card>
+
+            <layout-card>
+              <article>
+                <img src="https://picsum.photos/seed/sustainability/600/340" alt="Recycled materials and green foliage" class="blog-img" loading="lazy" width="600" height="340">
+                <div class="blog-card-body" data-layout="stack" data-layout-gap="xs">
+                  <span class="category-badge">Sustainability</span>
+                  <h3 style="margin: 0;">The Environmental Cost of Outdoor Gear</h3>
+                  <p class="blog-meta"><time datetime="2025-12-05">December 5, 2025</time> · 7 min read</p>
+                </div>
+              </article>
+            </layout-card>
+
+          </layout-grid>
+        </section>
+
+      </layout-sidebar>
+    </layout-center>
+
+    <!-- Pagination -->
+    <layout-center>
+      <nav class="pagination" aria-label="Blog pages">
+        <ul>
+          <li><a href="#" aria-disabled="true" tabindex="-1" data-prev="">Previous</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/blog/" aria-current="page">1</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/?page=2">2</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/?page=3">3</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/?page=2" data-next="">Next</a></li>
+        </ul>
+      </nav>
+    </layout-center>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <layout-grid data-layout-min="12rem">
+      <nav aria-label="Shop">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/">All Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Support">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/order/">Order Status</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#shipping">Shipping &amp; Returns</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#warranty">Warranty</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#sizing">Size Guide</a></li>
+        </ul>
+      </nav>
+      <section aria-label="Newsletter">
+        <h3>Newsletter</h3>
+        <form class="inline" action="#" method="post">
+          <label for="footer-email">Email</label>
+          <input id="footer-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Subscribe</button>
+        </form>
+      </section>
+    </layout-grid>
+    <p><small>© <time datetime="2026">2026</time> Alpenglow Gear. All rights reserved.</small></p>
+  </footer>
+
+  <script src="/vb-design-system/showcase/alpenglow/_theme-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us — Alpenglow Gear</title>
+  <meta name="description" content="Get in touch with Alpenglow Gear. Questions about products, orders, warranties, or partnerships — we're here to help.">
+  <link id="vb-css" rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css" disabled>
+  <style>
+    .nav-mobile { display: none; }
+    @media (max-width: 48rem) {
+      .nav-desktop { display: none; }
+      .nav-mobile { display: block; }
+    }
+    main > layout-center { padding-block: var(--size-xl, 2rem); }
+    main > layout-center + layout-center { border-block-start: 1px solid var(--color-border, #ddd); }
+
+    /* Contact info card */
+    .contact-info dt {
+      font-weight: 600;
+      color: var(--color-text, #222);
+      margin-block-start: var(--size-s, 0.75rem);
+    }
+    .contact-info dt:first-of-type { margin-block-start: 0; }
+    .contact-info dd { margin-inline-start: 0; }
+
+    /* Form actions */
+    .form-actions {
+      display: flex;
+      gap: var(--size-m, 1rem);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Map container */
+    geo-map {
+      border-radius: var(--radius-m, 0.5rem);
+      overflow: hidden;
+      border: 1px solid var(--color-border, #ddd);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10001;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to content</a>
+
+  <!-- SITE HEADER -->
+  <header class="site" data-sticky="">
+    <a class="active-parent" href="/vb-design-system/showcase/alpenglow/"><brand-mark>Alpenglow Gear</brand-mark></a>
+    <nav class="pills horizontal nav-desktop" aria-label="Main">
+      <ul>
+        <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/products/">Products</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        <li><a class="active" href="/vb-design-system/showcase/alpenglow/contact/" aria-current="page">Contact</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+      </ul>
+    </nav>
+    <nav class="nav-mobile" aria-label="Mobile navigation">
+      <details>
+        <summary>Menu</summary>
+        <ul>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/">Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/contact/" aria-current="page">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <layout-center>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li aria-current="page">Contact</li>
+        </ol>
+      </nav>
+    </layout-center>
+
+    <layout-center>
+      <layout-stack data-layout-gap="s">
+        <h1>Get in Touch</h1>
+        <p style="color: var(--color-text-muted, #666); max-inline-size: 55ch;">Whether you have a question about our gear, need help with an order, or want to explore a partnership, we'd love to hear from you.</p>
+      </layout-stack>
+    </layout-center>
+
+    <!-- Contact Form + Sidebar -->
+    <layout-center>
+      <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+
+        <!-- Sidebar: contact details + map (first child → right via row-reverse) -->
+        <aside data-layout="stack" data-layout-gap="l">
+
+          <section data-layout="stack" data-layout-gap="s">
+            <h2>Contact Details</h2>
+            <address style="font-style: normal;">
+              <strong>Alpenglow Gear — Flagship Store</strong><br>
+              1048 Pearl St<br>
+              Boulder, CO 80302
+            </address>
+
+            <dl class="contact-info">
+              <dt>Phone</dt>
+              <dd><a href="tel:+13035550142">(303)&#160;555‑0142</a></dd>
+
+              <dt>Email</dt>
+              <dd><a href="mailto:hello@alpenglowgear.example">hello@alpenglowgear.example</a></dd>
+
+              <dt>Hours</dt>
+              <dd>
+                Mon–Fri: 8 am – 6 pm MT<br>
+                Saturday: 9 am – 4 pm MT<br>
+                Sunday: Closed
+              </dd>
+            </dl>
+          </section>
+
+          <section data-layout="stack" data-layout-gap="s">
+            <h3>Find Us</h3>
+            <geo-map lat="40.0176" lng="-105.2797" zoom="16" marker="" marker-color="#c45a3e" style="height: 250px;">
+              <address>1048 Pearl St, Boulder, CO 80302</address>
+            </geo-map>
+          </section>
+
+        </aside>
+
+        <!-- Contact Form (last child → wide main column on the left) -->
+        <section data-layout="stack" data-layout-gap="l">
+          <h2>Send Us a Message</h2>
+
+          <form action="#" method="post" data-validate="" data-submit="event" data-layout="stack" data-layout-gap="m">
+
+            <!-- Error summary (hidden until submit with errors) -->
+            <div data-form-summary="" role="alert" tabindex="-1" hidden>
+              <h3>Please fix the following errors:</h3>
+              <ul data-summary-list=""></ul>
+            </div>
+
+            <div data-layout="grid" data-layout-min="14rem" data-layout-gap="m">
+              <form-field>
+                <label for="full-name">Full Name</label>
+                <input id="full-name" type="text" name="full_name" required autocomplete="name" minlength="2" aria-describedby="full-name-msg" data-message-valuemissing="Please enter your name" data-message-tooshort="Name must be at least 2 characters">
+                <output id="full-name-msg" class="error" for="full-name" aria-live="polite"></output>
+              </form-field>
+
+              <form-field>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-describedby="email-msg" data-message-valuemissing="Please enter your email address" data-message-typemismatch="Please enter a valid email address">
+                <output id="email-msg" class="error" for="email" aria-live="polite"></output>
+              </form-field>
+            </div>
+
+            <form-field>
+              <label for="phone">Phone <small>(optional)</small></label>
+              <input id="phone" type="tel" name="phone" autocomplete="tel" placeholder="(303) 555-0000" aria-describedby="phone-msg" pattern="[\d\s\-\+\(\)]{7,20}" data-message-patternmismatch="Please enter a valid phone number">
+              <output id="phone-msg" class="error" for="phone" aria-live="polite"></output>
+            </form-field>
+
+            <form-field>
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject" required aria-describedby="subject-msg" data-message-valuemissing="Please select a topic">
+                <option value="">Choose a topic…</option>
+                <option value="general">General Inquiry</option>
+                <option value="product">Product Question</option>
+                <option value="order">Order Support</option>
+                <option value="warranty">Warranty Claim</option>
+                <option value="partnership">Partnership</option>
+                <option value="press">Press / Media</option>
+              </select>
+              <output id="subject-msg" class="error" for="subject" aria-live="polite"></output>
+            </form-field>
+
+            <form-field>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required minlength="10" placeholder="Tell us how we can help…" aria-describedby="message-msg" data-message-valuemissing="Please enter a message" data-message-tooshort="Message must be at least 10 characters"></textarea>
+              <output id="message-msg" class="error" for="message" aria-live="polite"></output>
+            </form-field>
+
+            <form-field>
+              <label for="attachments">Attachments <small>(optional)</small></label>
+              <input id="attachments" type="file" name="attachments" accept="image/*,.pdf" multiple>
+              <small style="color: var(--color-text-muted, #666);">Images or PDFs, 10 MB max per file</small>
+            </form-field>
+
+            <!-- Honeypot field — hidden from real users, catches bots -->
+            <div aria-hidden="true" style="display:none">
+              <label for="website">Website</label>
+              <input id="website" type="text" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-actions">
+              <button type="submit">Send Message</button>
+              <button type="reset" class="secondary">Reset</button>
+            </div>
+
+            <output class="success" data-form-success="" role="status" aria-live="polite" hidden style="display:none">
+              Thanks for reaching out! We'll get back to you within 1 business day.
+            </output>
+
+          </form>
+        </section>
+
+      </layout-sidebar>
+    </layout-center>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <layout-grid data-layout-min="12rem">
+      <nav aria-label="Shop">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/">All Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Support">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/order/">Order Status</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#shipping">Shipping &amp; Returns</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#warranty">Warranty</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#sizing">Size Guide</a></li>
+        </ul>
+      </nav>
+      <section aria-label="Newsletter">
+        <h3>Newsletter</h3>
+        <form class="inline" action="#" method="post">
+          <label for="footer-email">Email</label>
+          <input id="footer-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Subscribe</button>
+        </form>
+      </section>
+    </layout-grid>
+    <p><small>© <time datetime="2026">2026</time> Alpenglow Gear. All rights reserved.</small></p>
+  </footer>
+
+  <script src="/vb-design-system/showcase/alpenglow/_theme-switcher.js"></script>
+  <script type="module">
+    // Handle form submission (demo — no real backend)
+    document.addEventListener('vb:submit', (e) => {
+      const form = e.target;
+      const success = form.querySelector('[data-form-success]');
+      if (success) {
+        success.hidden = false;
+        success.style.display = '';
+        success.focus();
+      }
+      form.reset();
+    });
+  </script>
+</body>
+</html>

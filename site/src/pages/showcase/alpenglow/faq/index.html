@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ — Alpenglow Gear</title>
+  <meta name="description" content="Frequently asked questions about Alpenglow Gear products, shipping, returns, care and maintenance, and our Lifetime Repair Promise warranty." />
+  <link id="vb-css" rel="stylesheet" href="/assets/vendor/vanilla-breeze.css" disabled />
+  <style>
+    .nav-mobile { display: none; }
+    @media (max-width: 48rem) {
+      .nav-desktop { display: none; }
+      .nav-mobile { display: block; }
+    }
+    main > layout-center { padding-block: var(--size-xl, 2rem); }
+    main > layout-center + layout-center { border-block-start: 1px solid var(--color-border, #ddd); }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--size-xs, 0.5rem) var(--size-l, 1.5rem);
+      background: var(--color-interactive, oklch(55% 0.2 260));
+      color: white !important;
+      text-decoration: none !important;
+      border-radius: var(--radius-m, 0.5rem);
+      font-weight: 600;
+      width: fit-content;
+      margin-inline: auto;
+    }
+    .cta-link:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10001;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to content</a>
+
+  <!-- SITE HEADER -->
+  <header class="site" data-sticky>
+    <a href="/showcase/alpenglow/"><brand-mark>Alpenglow Gear</brand-mark></a>
+    <nav class="pills horizontal nav-desktop" aria-label="Main">
+      <ul>
+        <li><a href="/showcase/alpenglow/">Home</a></li>
+        <li><a href="/showcase/alpenglow/products/">Products</a></li>
+        <li><a href="/showcase/alpenglow/about/">About</a></li>
+        <li><a href="/showcase/alpenglow/blog/">Blog</a></li>
+        <li><a href="/showcase/alpenglow/faq/" aria-current="page">FAQ</a></li>
+        <li><a href="/showcase/alpenglow/contact/">Contact</a></li>
+        <li><a href="/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+      </ul>
+    </nav>
+    <nav class="nav-mobile" aria-label="Mobile navigation">
+      <details>
+        <summary>Menu</summary>
+        <ul>
+          <li><a href="/showcase/alpenglow/">Home</a></li>
+          <li><a href="/showcase/alpenglow/products/">Products</a></li>
+          <li><a href="/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/showcase/alpenglow/faq/" aria-current="page">FAQ</a></li>
+          <li><a href="/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <layout-center>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/showcase/alpenglow/">Home</a></li>
+          <li aria-current="page">FAQ</li>
+        </ol>
+      </nav>
+    </layout-center>
+
+    <!-- Hero + Search -->
+    <layout-center>
+      <layout-stack data-layout-gap="m">
+        <h1>Frequently Asked Questions</h1>
+        <p style="color: var(--color-text-muted, #666); max-inline-size: 55ch;">Find answers to common questions about our products, shipping, returns, and more.</p>
+        <form role="search" style="max-inline-size: 30rem;">
+          <form-field>
+            <label for="faq-search">Search FAQ</label>
+            <input type="search" id="faq-search" placeholder="Search questions…" />
+          </form-field>
+        <button type="submit" hidden>Submit</button>
+</form>
+        <output id="faq-search-results" aria-live="polite"></output>
+      </layout-stack>
+    </layout-center>
+
+    <!-- Category Jump Nav -->
+    <layout-center>
+      <nav class="pills horizontal" aria-label="FAQ categories">
+        <ul>
+          <li><a href="#shipping">Shipping</a></li>
+          <li><a href="#returns">Returns</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#care">Care &amp; Maintenance</a></li>
+          <li><a href="#warranty">Warranty</a></li>
+        </ul>
+      </nav>
+    </layout-center>
+
+    <!-- Shipping -->
+    <layout-center>
+      <section id="shipping" data-layout="stack" data-layout-gap="m">
+        <h2>Shipping</h2>
+        <accordion-wc bordered>
+          <details id="shipping-how-long">
+            <summary>How long does shipping take?</summary>
+            <div><p>Standard shipping takes 5–7 business days within the continental US. Express delivers in 2–3 business days. Overnight arrives next business day for orders before 2pm MT. Alaska and Hawaii add 2–3 days. International orders typically arrive within 7–14 business days.</p></div>
+          </details>
+          <details id="shipping-cost">
+            <summary>How much does shipping cost?</summary>
+            <div><p>Free on orders over $75. Under $75: flat $7.95. Express: $12.99. Overnight: $24.99. International rates calculated at checkout.</p></div>
+          </details>
+          <details id="shipping-international">
+            <summary>Do you ship internationally?</summary>
+            <div><p>Yes — Canada, UK, EU, Australia, New Zealand, and Japan. International orders may be subject to local customs duties. Delivery typically takes 7–14 business days.</p></div>
+          </details>
+          <details id="shipping-tracking">
+            <summary>Can I track my order?</summary>
+            <div><p>Yes. You'll receive an email with a tracking number when your order ships. Check status anytime at our <a href="/showcase/alpenglow/order/">Order Status</a> page.</p></div>
+          </details>
+          <details id="shipping-pickup">
+            <summary>Do you offer in-store pickup?</summary>
+            <div><p>Yes — select "Store Pickup" at checkout for our Boulder flagship store. Orders are typically ready within 2 hours during business hours.</p></div>
+          </details>
+        </accordion-wc>
+      </section>
+    </layout-center>
+
+    <!-- Returns -->
+    <layout-center>
+      <section id="returns" data-layout="stack" data-layout-gap="m">
+        <h2>Returns &amp; Exchanges</h2>
+        <accordion-wc bordered>
+          <details id="returns-policy">
+            <summary>What is your return policy?</summary>
+            <div><p>60-day, no-questions-asked returns on unused gear in original condition. Used gear can be returned within 30 days if it doesn't meet expectations.</p></div>
+          </details>
+          <details id="returns-how-to">
+            <summary>How do I start a return?</summary>
+            <div><p>Contact us at <a href="mailto:returns@alpenglowgear.example">returns@alpenglowgear.example</a> or call <a href="tel:+13035550142">(303)&nbsp;555&#8209;0142</a>. We'll email a prepaid label. Refunds processed within 5 business days.</p></div>
+          </details>
+          <details id="returns-exchange">
+            <summary>Can I exchange instead of returning?</summary>
+            <div><p>Yes — mention the item you'd like when you contact us. Price differences are charged or refunded. Exchanges ship free.</p></div>
+          </details>
+          <details id="returns-damaged">
+            <summary>What if my item arrives damaged?</summary>
+            <div><p>Contact us immediately with photos. We'll ship a replacement at no cost and arrange free pickup of the damaged item.</p></div>
+          </details>
+        </accordion-wc>
+      </section>
+    </layout-center>
+
+    <!-- Products -->
+    <layout-center>
+      <section id="products" data-layout="stack" data-layout-gap="m">
+        <h2>Products</h2>
+        <accordion-wc bordered>
+          <details id="products-waterproof">
+            <summary>Are your products waterproof?</summary>
+            <div><p>It depends on the product. The <a href="/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a> and <a href="/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a> carry IPX4+ ratings. The <a href="/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a> is IPX8 (submersible to 2m). Check product specs for exact ratings.</p></div>
+          </details>
+          <details id="products-materials">
+            <summary>What materials do you use?</summary>
+            <div><p>High-tenacity ripstop nylon with silicone and PU coatings. Anodized aluminum hardware, YKK zippers, and DAC Featherlite NSL tent poles.</p></div>
+          </details>
+          <details id="products-sizing">
+            <summary>How do I find the right size?</summary>
+            <div><p>Each product page has a detailed sizing chart. For packs, measure your torso length (C7 vertebra to iliac crest). For tents, consider occupant count and heights.</p></div>
+          </details>
+          <details id="products-parts">
+            <summary>Do you sell replacement parts?</summary>
+            <div><p>Yes — zippers, buckles, poles, stakes, and more. <a href="/showcase/alpenglow/contact/">Contact us</a> with your product name and needed part. Often free under our <a href="#warranty">Lifetime Repair Promise</a>.</p></div>
+          </details>
+        </accordion-wc>
+      </section>
+    </layout-center>
+
+    <!-- Care -->
+    <layout-center>
+      <section id="care" data-layout="stack" data-layout-gap="m">
+        <h2>Care &amp; Maintenance</h2>
+        <accordion-wc bordered>
+          <details id="care-clean-backpack">
+            <summary>How do I clean my backpack?</summary>
+            <div><p>Empty all pockets and shake out debris. Spot clean with a damp cloth and mild soap. For deep cleaning, soak in lukewarm water with technical fabric wash, gently scrub, rinse, and air dry completely. Never machine wash a structured pack.</p></div>
+          </details>
+          <details id="care-rewaterproof">
+            <summary>How often should I re-waterproof my gear?</summary>
+            <div><p>Check your DWR regularly. If water stops beading and starts soaking in, reapply. Rain jackets: every 10–15 washes. Tents: start of each season. See our <a href="/showcase/alpenglow/blog/gear-care-guide/">Complete Gear Care Guide</a>.</p></div>
+          </details>
+          <details id="care-store-tent">
+            <summary>How should I store my tent?</summary>
+            <div><p>Never store compressed in a stuff sack. Loosely stuff into a breathable bag, store cool and dry away from sunlight. Ensure it's completely dry before storage.</p></div>
+          </details>
+          <details id="care-stuck-zipper">
+            <summary>What if a zipper gets stuck?</summary>
+            <div><p>Check for caught fabric. Apply zipper lubricant and run the slider back and forth. If the slider is worn, <a href="/showcase/alpenglow/contact/">contact us</a> for a free repair.</p></div>
+          </details>
+          <details id="care-repair-tear">
+            <summary>How do I repair a small tear?</summary>
+            <div><p>Tenacious Tape for field repairs — clean the area, cut a rounded-corner patch larger than the tear, press firmly. For permanent repairs, send to our repair center at no charge.</p></div>
+          </details>
+        </accordion-wc>
+      </section>
+    </layout-center>
+
+    <!-- Warranty -->
+    <layout-center>
+      <section id="warranty" data-layout="stack" data-layout-gap="m">
+        <h2>Warranty</h2>
+        <accordion-wc bordered>
+          <details id="warranty-coverage">
+            <summary>What does the Lifetime Repair Promise cover?</summary>
+            <div><p>All manufacturing defects and normal wear for the original purchaser — seam failures, zipper defects, delamination, buckle breakage, pole failures. Damage from misuse is repaired for a reasonable fee.</p></div>
+          </details>
+          <details id="warranty-period">
+            <summary>How long is the warranty period?</summary>
+            <div><p>The usable life of the product — no arbitrary time limit. If your pack's seam fails after 10 years of regular use, we'll fix it.</p></div>
+          </details>
+          <details id="warranty-claim">
+            <summary>How do I make a warranty claim?</summary>
+            <div><p>Email <a href="mailto:warranty@alpenglowgear.example">warranty@alpenglowgear.example</a> with product name, description and photos. We respond within 2 business days. Most repairs completed within 10 business days.</p></div>
+          </details>
+          <details id="warranty-transferable">
+            <summary>Is the warranty transferable?</summary>
+            <div><p>The Promise applies to the original purchaser. Second-hand owners get repairs at cost — we never turn away an Alpenglow product.</p></div>
+          </details>
+        </accordion-wc>
+      </section>
+    </layout-center>
+
+    <!-- CTA -->
+    <layout-center>
+      <section style="text-align: center;" data-layout="stack" data-layout-gap="m">
+        <h2>Still Have Questions?</h2>
+        <p style="color: var(--color-text-muted, #666); max-inline-size: 45ch; margin-inline: auto;">Our support team is here to help — product advice, order help, or just to chat about your next adventure.</p>
+        <a href="/showcase/alpenglow/contact/" class="cta-link">Contact Us</a>
+      </section>
+    </layout-center>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site">
+    <layout-grid data-layout-min="12rem">
+      <nav aria-label="Shop">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="/showcase/alpenglow/products/">All Products</a></li>
+          <li><a href="/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a></li>
+          <li><a href="/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a></li>
+          <li><a href="/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/showcase/alpenglow/faq/">FAQ</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Support">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/showcase/alpenglow/order/">Order Status</a></li>
+          <li><a href="/showcase/alpenglow/faq/#shipping">Shipping &amp; Returns</a></li>
+          <li><a href="/showcase/alpenglow/faq/#warranty">Warranty</a></li>
+          <li><a href="/showcase/alpenglow/faq/#sizing">Size Guide</a></li>
+        </ul>
+      </nav>
+      <section aria-label="Newsletter">
+        <h3>Newsletter</h3>
+        <form class="inline" action="#" method="post">
+          <label for="footer-email">Email</label>
+          <input id="footer-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+          <button type="submit">Subscribe</button>
+        </form>
+      </section>
+    </layout-grid>
+    <p><small>&copy; <time datetime="2026">2026</time> Alpenglow Gear. All rights reserved.</small></p>
+  </footer>
+
+  <!-- FAQ Search (progressive enhancement) -->
+  <script>
+    (function () {
+      var searchInput = document.getElementById('faq-search');
+      var resultsOutput = document.getElementById('faq-search-results');
+      if (!searchInput || !resultsOutput) return;
+
+      // Target details inside accordion-wc
+      var allDetails = document.querySelectorAll('accordion-wc details');
+
+      searchInput.addEventListener('input', function () {
+        var query = this.value.trim().toLowerCase();
+
+        if (!query) {
+          allDetails.forEach(function (el) { el.hidden = false; });
+          resultsOutput.textContent = '';
+          return;
+        }
+
+        var visible = 0;
+        allDetails.forEach(function (el) {
+          var text = el.textContent.toLowerCase();
+          if (text.includes(query)) {
+            el.hidden = false;
+            visible++;
+          } else {
+            el.hidden = true;
+            el.removeAttribute('open');
+          }
+        });
+
+        resultsOutput.textContent = visible === 0
+          ? 'No matching questions found.'
+          : visible === allDetails.length ? '' : visible + ' question' + (visible === 1 ? '' : 's') + ' found.';
+      });
+    })();
+  </script>
+  <script src="/showcase/alpenglow/_theme-switcher.js"></script>
+</body>
+</html>

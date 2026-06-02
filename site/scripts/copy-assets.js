@@ -33,6 +33,8 @@ function pkgMain(pkg) {
 
 console.log('Copying Vanilla Breeze assets…');
 cp(resolve(nm, 'vanilla-breeze/dist/cdn/vanilla-breeze.css'), resolve(vendor, 'vanilla-breeze.css'));
+// Full VB bundle for the alpenglow brand-replication demo (does not load the pack, so no conflict)
+cp(resolve(nm, 'vanilla-breeze/dist/cdn/vanilla-breeze.js'), resolve(vendor, 'vanilla-breeze.js'));
 // Real VB theme picker (standalone, conflict-free — defines only <theme-picker>)
 cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/theme-picker.js'), resolve(vendor, 'vb-theme-picker.js'));
 
@@ -50,10 +52,11 @@ cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/icon-wc.js'), resolve(vendor,
 mkdirSync(resolve(vendor, 'patterns'), { recursive: true });
 cp(resolve(repoRoot, 'src/patterns/do-dont.css'), resolve(vendor, 'patterns/do-dont.css'));
 cp(resolve(repoRoot, 'src/patterns/token-table.css'), resolve(vendor, 'patterns/token-table.css'));
-// Cherry-picked icon for the Meridian showcase (lucide set is 7.5MB — copy only what's used)
-const iconsTo = resolve(siteRoot, 'src/pages/cdn/icons/lucide');
-mkdirSync(iconsTo, { recursive: true });
-cp(resolve(nm, 'vanilla-breeze/dist/cdn/icons/lucide/mountain.svg'), resolve(iconsTo, 'mountain.svg'));
+// Full icon catalog (icon-wc fetches /cdn/icons/<set>/<name>.svg on demand)
+const iconsDest = resolve(siteRoot, 'src/pages/cdn/icons');
+mkdirSync(iconsDest, { recursive: true });
+cpSync(resolve(nm, 'vanilla-breeze/dist/cdn/icons'), iconsDest, { recursive: true });
+console.log('  ✓ src/pages/cdn/icons (' + readdirSync(iconsDest).length + ' sets)');
 
 console.log('Copying pack bundle…');
 cp(resolve(repoRoot, 'dist/vb-design-system.js'), resolve(packDir, 'vb-design-system.js'));

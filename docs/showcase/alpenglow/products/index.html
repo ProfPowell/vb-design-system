@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Products — Alpenglow Gear</title>
+  <link id="vb-css" rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css" disabled>
+  <style>
+    .nav-mobile { display: none; }
+    @media (max-width: 48rem) {
+      .nav-desktop { display: none; }
+      .nav-mobile { display: block; }
+    }
+
+    /* Section spacing */
+    main > layout-center {
+      padding-block: var(--size-xl, 2rem);
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--size-m, 1rem);
+      padding: var(--size-m, 1rem);
+      background: var(--color-surface-raised, #f5f5f5);
+      border-radius: var(--radius-m, 0.5rem);
+      border: 1px solid var(--color-border, #ddd);
+    }
+
+    .filter-bar legend {
+      font-weight: 600;
+      font-size: var(--font-size-sm, 0.875rem);
+      color: var(--color-text-muted, #666);
+      padding: 0;
+      margin-inline-end: var(--size-xs, 0.5rem);
+    }
+
+    .filter-bar label {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--size-2xs, 0.25rem) var(--size-m, 1rem);
+      border-radius: var(--radius-full, 999px);
+      font-size: var(--font-size-sm, 0.875rem);
+      cursor: pointer;
+      border: 1px solid var(--color-border, #ddd);
+      background: var(--color-surface, #fff);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .filter-bar label:hover {
+      border-color: var(--color-interactive, oklch(55% 0.2 260));
+      background: color-mix(in oklab, var(--color-interactive, oklch(55% 0.2 260)) 8%, transparent);
+    }
+
+    /* Active filter pill — use :has() to style labels based on checked state */
+    .filter-bar label:has(~ *):hover,
+    .filter-bar label:hover {
+      border-color: var(--color-interactive, oklch(55% 0.2 260));
+      background: color-mix(in oklab, var(--color-interactive, oklch(55% 0.2 260)) 8%, transparent);
+    }
+
+    #filter-all:checked ~ .filter-bar label[for="filter-all"],
+    #filter-packs:checked ~ .filter-bar label[for="filter-packs"],
+    #filter-shelter:checked ~ .filter-bar label[for="filter-shelter"],
+    #filter-lighting:checked ~ .filter-bar label[for="filter-lighting"] {
+      background: var(--color-interactive, oklch(55% 0.2 260));
+      color: white;
+      border-color: var(--color-interactive, oklch(55% 0.2 260));
+    }
+
+    /* Hidden radios for CSS-only filtering (siblings of the grid) */
+    input[name="category"] {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .sort-control {
+      margin-inline-start: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--size-xs, 0.5rem);
+      font-size: var(--font-size-sm, 0.875rem);
+    }
+
+    .sort-control label {
+      color: var(--color-text-muted, #666);
+      border: none;
+      padding: 0;
+      background: none;
+    }
+
+    .sort-control select {
+      padding: var(--size-2xs, 0.25rem) var(--size-xs, 0.5rem);
+      border: 1px solid var(--color-border, #ddd);
+      border-radius: var(--radius-s, 0.25rem);
+      background: var(--color-surface, #fff);
+      font: inherit;
+      font-size: var(--font-size-sm, 0.875rem);
+    }
+
+    /* CSS-only category filtering */
+    #filter-all:checked ~ .product-grid [data-category] { display: block; }
+    #filter-packs:checked ~ .product-grid [data-category]:not([data-category="packs"]) { display: none; }
+    #filter-shelter:checked ~ .product-grid [data-category]:not([data-category="shelter"]) { display: none; }
+    #filter-lighting:checked ~ .product-grid [data-category]:not([data-category="lighting"]) { display: none; }
+
+    /* Product images */
+    .product-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: var(--radius-m, 0.5rem) var(--radius-m, 0.5rem) 0 0;
+    }
+
+    /* Product card content */
+    .product-body {
+      padding: var(--size-m, 1rem);
+    }
+
+    .product-price {
+      font-size: var(--font-size-lg, 1.125rem);
+      font-weight: 700;
+      color: var(--color-text, #222);
+    }
+
+    .product-features {
+      padding-inline-start: var(--size-m, 1rem);
+      color: var(--color-text-muted, #666);
+      font-size: var(--font-size-sm, 0.875rem);
+    }
+
+    .product-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--size-xs, 0.5rem) var(--size-m, 1rem);
+      background: var(--color-interactive, oklch(55% 0.2 260));
+      color: white;
+      text-decoration: none;
+      border-radius: var(--radius-m, 0.5rem);
+      font-weight: 600;
+      font-size: var(--font-size-sm, 0.875rem);
+      transition: background 0.15s ease;
+    }
+
+    .product-cta:hover {
+      background: var(--color-interactive-hover, oklch(48% 0.2 260));
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      font-size: var(--font-size-xs, 0.75rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--radius-s, 0.25rem);
+      background: var(--color-primary-subtle, oklch(90% 0.05 260));
+      color: var(--color-primary, oklch(50% 0.2 260));
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10001;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to content</a>
+
+  <!-- SITE HEADER -->
+  <header class="site" data-sticky="">
+    <a class="active-parent" href="/vb-design-system/showcase/alpenglow/">
+      <brand-mark>Alpenglow Gear</brand-mark>
+    </a>
+    <nav class="pills horizontal nav-desktop" aria-label="Main">
+      <ul>
+        <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+        <li><a class="active" href="/vb-design-system/showcase/alpenglow/products/" aria-current="page">Products</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+        <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+      </ul>
+    </nav>
+    <nav class="nav-mobile" aria-label="Mobile navigation">
+      <details>
+        <summary>Menu</summary>
+        <ul>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/products/" aria-current="page">Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/kitchen-sink/">Kitchen Sink</a></li>
+        </ul>
+      </details>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main id="main">
+
+    <!-- Breadcrumb -->
+    <layout-center>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a class="active-parent" href="/vb-design-system/showcase/alpenglow/">Home</a></li>
+          <li aria-current="page">Products</li>
+        </ol>
+      </nav>
+    </layout-center>
+
+    <!-- Page header -->
+    <layout-center>
+      <layout-stack data-layout-gap="s">
+        <h1>Our Gear</h1>
+        <p style="color: var(--color-text-muted, #666); max-inline-size: 50ch;">Three categories. Zero compromises. Every product backed by our lifetime repair promise.</p>
+      </layout-stack>
+    </layout-center>
+
+    <!-- Filter + Product Grid -->
+    <layout-center>
+      <section aria-label="Product catalog" data-layout="stack" data-layout-gap="l">
+
+        <!-- Hidden radios for CSS-only filtering -->
+        <input type="radio" name="category" id="filter-all" checked>
+        <input type="radio" name="category" id="filter-packs">
+        <input type="radio" name="category" id="filter-shelter">
+        <input type="radio" name="category" id="filter-lighting">
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <span style="font-weight: 600; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-muted, #666);">Filter:</span>
+          <label for="filter-all">All</label>
+          <label for="filter-packs">Packs</label>
+          <label for="filter-shelter">Shelter</label>
+          <label for="filter-lighting">Lighting</label>
+          <div class="sort-control">
+            <label for="sort">Sort:</label>
+            <select id="sort">
+              <option>Featured</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Product grid -->
+        <layout-grid class="product-grid" data-layout-min="18rem">
+
+          <!-- Trail Runner Pack 32L -->
+          <layout-card data-category="packs">
+            <article>
+              <img src="/vb-design-system/showcase/alpenglow/images/product-pack.jpg" alt="Green hiking backpack resting against granite boulders by a river" class="product-img" width="800" height="600" loading="lazy">
+              <div class="product-body" data-layout="stack" data-layout-gap="s">
+                <span class="category-badge">Packs</span>
+                <h2 style="margin: 0;">Trail Runner Pack 32L</h2>
+                <p class="product-price">$189</p>
+                <ul class="product-features">
+                  <li>32L capacity, 680g ultralight</li>
+                  <li>Waterproof, hydration-compatible</li>
+                </ul>
+                <a href="/vb-design-system/showcase/alpenglow/products/trail-runner-pack/" class="product-cta">View Details</a>
+              </div>
+            </article>
+          </layout-card>
+
+          <!-- Summit Shelter 3P Tent -->
+          <layout-card data-category="shelter">
+            <article>
+              <img src="/vb-design-system/showcase/alpenglow/images/product-tent.jpg" alt="Yellow and gray dome tent pitched in a mountain clearing at golden hour" class="product-img" width="800" height="600" loading="lazy">
+              <div class="product-body" data-layout="stack" data-layout-gap="s">
+                <span class="category-badge">Shelter</span>
+                <h2 style="margin: 0;">Summit Shelter 3P Tent</h2>
+                <p class="product-price">$449</p>
+                <ul class="product-features">
+                  <li>3-person, freestanding design</li>
+                  <li>4-season rated, 3.2kg packed</li>
+                </ul>
+                <a href="/vb-design-system/showcase/alpenglow/products/summit-shelter/" class="product-cta">View Details</a>
+              </div>
+            </article>
+          </layout-card>
+
+          <!-- Beacon Pro Headlamp 700L -->
+          <layout-card data-category="lighting">
+            <article>
+              <img src="/vb-design-system/showcase/alpenglow/images/product-headlamp.jpg" alt="Hiker wearing a headlamp at sunset with mountain peaks in the background" class="product-img" width="800" height="600" loading="lazy">
+              <div class="product-body" data-layout="stack" data-layout-gap="s">
+                <span class="category-badge">Lighting</span>
+                <h2 style="margin: 0;">Beacon Pro Headlamp 700L</h2>
+                <p class="product-price">$89</p>
+                <ul class="product-features">
+                  <li>700 lumens, USB-C rechargeable</li>
+                  <li>Red night mode, 45hr runtime</li>
+                </ul>
+                <a href="/vb-design-system/showcase/alpenglow/products/beacon-headlamp/" class="product-cta">View Details</a>
+              </div>
+            </article>
+          </layout-card>
+
+        </layout-grid>
+
+      </section>
+    </layout-center>
+
+    <!-- Lifetime Promise CTA -->
+    <layout-center>
+      <section style="text-align: center; padding-block: var(--size-xl, 2rem);">
+        <layout-stack data-layout-gap="m">
+          <h2>Lifetime Repair Promise</h2>
+          <p style="color: var(--color-text-muted, #666); max-inline-size: 50ch; margin-inline: auto;">If it breaks, we fix it. Free repairs for the life of every Alpenglow product. No receipts needed, no questions asked.</p>
+        </layout-stack>
+      </section>
+    </layout-center>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site">
+    <layout-grid data-layout-min="12rem">
+      <nav aria-label="Shop">
+        <h3>Shop</h3>
+        <ul>
+          <li><a class="active" href="/vb-design-system/showcase/alpenglow/products/">All Products</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/trail-runner-pack/">Trail Runner Pack</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/summit-shelter/">Summit Shelter</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/products/beacon-headlamp/">Beacon Headlamp</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Company">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/about/">About</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/blog/">Blog</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/contact/">Contact</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/">FAQ</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Support">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="/vb-design-system/showcase/alpenglow/order/">Order Status</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#shipping">Shipping &amp; Returns</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#warranty">Warranty</a></li>
+          <li><a href="/vb-design-system/showcase/alpenglow/faq/#sizing">Size Guide</a></li>
+        </ul>
+      </nav>
+      <section aria-label="Newsletter">
+        <h3>Newsletter</h3>
+        <form class="inline" action="#" method="post">
+          <label for="footer-email">Email</label>
+          <input id="footer-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Subscribe</button>
+        </form>
+      </section>
+    </layout-grid>
+    <p><small>© <time datetime="2026">2026</time> Alpenglow Gear. All rights reserved.</small></p>
+  </footer>
+
+  <script src="/vb-design-system/showcase/alpenglow/_theme-switcher.js"></script>
+</body>
+</html>
