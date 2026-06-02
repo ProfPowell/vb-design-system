@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern" data-mode="light" data-fluid="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elements — VB Design System</title>
+  <meta name="description" content="All components in the VB Design System pack.">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css">
+  
+</head>
+<body>
+  <header data-layout="cluster" data-layout-justify="space-between" class="site-header">
+  <a href="/vb-design-system/" class="brand"><strong>VB Design System</strong></a>
+  <nav data-layout="cluster" aria-label="Primary">
+    <a href="/vb-design-system/">Home</a>
+    <a class="active" href="/vb-design-system/elements/">Elements</a>
+    <a href="https://github.com/ProfPowell/vb-design-system">GitHub</a>
+    <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze ↗</a>
+    <form data-theme-picker="" aria-label="Theme">
+      <label>Theme
+        <select data-theme-select="">
+          <option value="modern">Modern</option>
+          <option value="minimal">Minimal</option>
+          <option value="classic">Classic</option>
+          <option value="a11y-high-contrast">High contrast</option>
+        </select>
+      </label>
+      <button type="button" data-mode-toggle="" aria-pressed="false">🌙 Dark</button>
+    </form>
+  </nav>
+</header>
+
+
+  <main>
+    <article data-layout="stack" data-layout-gap="l">
+  <header data-layout="stack" data-layout-gap="s">
+    <h1>Elements</h1>
+    <p class="lead">Eight design-system documentation components. Each page has a live, themeable example and its full API.</p>
+  </header>
+  <ul class="element-grid">
+    <li><a href="/vb-design-system/elements/color-palette/"><code>&lt;color-palette&gt;</code><p>Color ramp swatches with copy.</p></a></li>
+    <li><a href="/vb-design-system/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code><p>Semantic color roles from tokens.</p></a></li>
+    <li><a href="/vb-design-system/elements/type-specimen/"><code>&lt;type-specimen&gt;</code><p>Typography scale specimen.</p></a></li>
+    <li><a href="/vb-design-system/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code><p>Spacing scale specimen.</p></a></li>
+    <li><a href="/vb-design-system/elements/token-specimen/"><code>&lt;token-specimen&gt;</code><p>Design-token table specimen.</p></a></li>
+    <li><a href="/vb-design-system/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code><p>Motion / easing specimen.</p></a></li>
+    <li><a href="/vb-design-system/elements/component-sampler/"><code>&lt;component-sampler&gt;</code><p>Render a component across variants.</p></a></li>
+    <li><a href="/vb-design-system/elements/theme-export/"><code>&lt;theme-export&gt;</code><p>Export the active theme (DTCG / CSS).</p></a></li>
+  </ul>
+</article>
+  </main>
+
+  <footer class="site-footer">
+  <p>VB Design System — part of the <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze</a> ecosystem. MIT licensed. · <a href="https://github.com/ProfPowell/vb-design-system">Source on GitHub</a></p>
+</footer>
+
+
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js"></script>
+  <script src="/vb-design-system/assets/theme-picker.js"></script>
+  
+</body>
+</html>

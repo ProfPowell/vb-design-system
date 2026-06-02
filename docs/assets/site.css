@@ -1,0 +1,28 @@
+/* Mini-site chrome (layers above Vanilla Breeze tokens). */
+.site-header {
+  padding: var(--size-s) var(--size-m);
+  border-block-end: var(--border-thin, 1px solid) var(--color-border, currentColor);
+  margin-block-end: var(--size-l);
+  align-items: center;
+}
+.site-header .brand { text-decoration: none; font-size: var(--font-size-lg, 1.25rem); }
+.site-header nav { align-items: center; gap: var(--size-m); }
+.site-footer {
+  margin-block-start: var(--size-2xl, 3rem);
+  padding: var(--size-l) var(--size-m);
+  border-block-start: var(--border-thin, 1px solid) var(--color-border, currentColor);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+main { padding-inline: var(--size-m); }
+[data-theme-picker] { display: inline-flex; gap: var(--size-s); align-items: center; }
+.element-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: var(--size-m); list-style: none; padding: 0; }
+.element-grid a { display: block; padding: var(--size-m); border: 1px solid var(--color-border, currentColor); border-radius: var(--radius-m, 0.5rem); text-decoration: none; }
+.element-grid code { font-size: var(--font-size-lg, 1.1rem); }
+
+/* Doc tables + breadcrumb (ported element pages use .props-table). */
+.props-table { width: 100%; border-collapse: collapse; margin-block: var(--size-m); font-size: var(--font-size-sm, 0.9rem); }
+.props-table th, .props-table td { text-align: start; padding: var(--size-xs, 0.4rem) var(--size-s, 0.6rem); border-block-end: 1px solid var(--color-border, #ddd); vertical-align: top; }
+.props-table thead th { border-block-end-width: 2px; }
+.breadcrumb ol { display: flex; flex-wrap: wrap; gap: var(--size-s); list-style: none; padding: 0; font-size: var(--font-size-sm, 0.9rem); }
+.breadcrumb li:not(:last-child)::after { content: "/"; margin-inline-start: var(--size-s); opacity: 0.5; }
+article section { margin-block: var(--size-l); }

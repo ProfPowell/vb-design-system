@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern" data-mode="light" data-fluid="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>theme-export — VB Design System</title>
+  <meta name="description" content="Collects VB custom property overrides from a scope and emits them as a theme.css block or JSON. The assembly glue for the Theme Composer.">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css">
+  
+</head>
+<body>
+  <header data-layout="cluster" data-layout-justify="space-between" class="site-header">
+  <a href="/vb-design-system/" class="brand"><strong>VB Design System</strong></a>
+  <nav data-layout="cluster" aria-label="Primary">
+    <a href="/vb-design-system/">Home</a>
+    <a class="active-parent" href="/vb-design-system/elements/">Elements</a>
+    <a href="https://github.com/ProfPowell/vb-design-system">GitHub</a>
+    <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze ↗</a>
+    <form data-theme-picker="" aria-label="Theme">
+      <label>Theme
+        <select data-theme-select="">
+          <option value="modern">Modern</option>
+          <option value="minimal">Minimal</option>
+          <option value="classic">Classic</option>
+          <option value="a11y-high-contrast">High contrast</option>
+        </select>
+      </label>
+      <button type="button" data-mode-toggle="" aria-pressed="false">🌙 Dark</button>
+    </form>
+  </nav>
+</header>
+
+
+  <main>
+    <article id="doc-article" data-layout="stack" data-layout-gap="l">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol data-layout="cluster" data-layout-gap="s">
+          <li><a href="/vb-design-system/">Home</a></li>
+          <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
+          <li><span aria-current="page">theme-export</span></li>
+        </ol>
+      </nav>
+      <header data-layout="stack" data-layout-gap="s">
+        <h1><code>&lt;theme-export&gt;</code></h1>
+        <p class="lead">Collects VB custom property overrides from a scope and emits them as a theme.css block or JSON. The assembly glue for the Theme Composer.</p>
+      </header>
+      <section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;theme-export&gt;</code> component turns a page full of editable specimens into a downloadable theme. It scans a scope (default <code>:root</code>) for VB custom property overrides and emits either a <code>:root { ... }</code> CSS block or a flat JSON object.</p>
+
+  <p>When paired with editable <a href="/vb-design-system/docs/elements/web-components/type-specimen/">type-specimen</a>, <a href="/vb-design-system/docs/elements/web-components/spacing-specimen/">spacing-specimen</a>, <a href="/vb-design-system/docs/elements/web-components/token-specimen/">token-specimen</a>, and <a href="/vb-design-system/docs/elements/web-components/semantic-palette/">semantic-palette</a> components, it forms the backbone of the Theme Composer: specimens write overrides, <code>theme-export</code> collects them.</p>
+
+  <div class="example">
+    <theme-export live="" label="Live Theme Output"></theme-export>
+    <p style="margin-block-start:1rem;font-size:0.875rem;color:var(--color-text-muted,#666)">Edit any token below to see it appear in the export above.</p>
+    <spacing-specimen editable="" tokens="xs,s,m,l" label="Spacing"></spacing-specimen>
+  </div>
+
+  <code-block language="html" data-ssr label="Live export with editable specimen" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Live export with editable specimen</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span> <span class="hljs-attr">live</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Live Theme Output&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;xs,s,m,l&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Spacing&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;theme-export live label=&quot;Live Theme Output&quot;&gt;&lt;/theme-export&gt;
+
+&lt;spacing-specimen editable tokens=&quot;xs,s,m,l&quot; label=&quot;Spacing&quot;&gt;&lt;/spacing-specimen&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>scope</code></td>
+        <td>string</td>
+        <td><code>:root</code></td>
+        <td>CSS selector for the element to read overrides from.</td>
+      </tr>
+      <tr>
+        <td><code>selector</code></td>
+        <td>string</td>
+        <td><code>:root</code></td>
+        <td>Selector written in the emitted CSS output.</td>
+      </tr>
+      <tr>
+        <td><code>include</code></td>
+        <td>string</td>
+        <td>All VB prefixes</td>
+        <td>Comma-separated prefixes to collect: <code>--color-,--hue-,--lightness-,--chroma-,--font-,--size-,--radius-,--shadow-,--border-width-,--ease-,--duration-</code>.</td>
+      </tr>
+      <tr>
+        <td><code>format</code></td>
+        <td>enum</td>
+        <td><code>css</code></td>
+        <td><code>css</code> or <code>json</code>.</td>
+      </tr>
+      <tr>
+        <td><code>label</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Optional heading label.</td>
+      </tr>
+      <tr>
+        <td><code>live</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Re-scan whenever an editable specimen on the page fires a <code>:change</code> event.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Scoping to a Subtree</h2>
+  <p>Pass <code>scope</code> and <code>selector</code> to collect overrides from a subtree and emit them targeting a different selector — useful for building theme stylesheets from a preview block.</p>
+
+  <code-block language="html" data-ssr label="Scoped collection" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Scoped collection</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span><span class="">10</span><span class="">11</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;preview&quot;</span> <span class="hljs-attr">data-theme</span>=<span class="hljs-string">&quot;custom&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;#preview&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;#preview&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;#preview&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">selector</span>=<span class="hljs-string">&quot;[data-theme=&#x27;custom&#x27;]&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">live</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Custom Theme CSS&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;div id=&quot;preview&quot; data-theme=&quot;custom&quot;&gt;
+  &lt;type-specimen editable target=&quot;#preview&quot;&gt;&lt;/type-specimen&gt;
+  &lt;spacing-specimen editable target=&quot;#preview&quot;&gt;&lt;/spacing-specimen&gt;
+&lt;/div&gt;
+
+&lt;theme-export
+  scope=&quot;#preview&quot;
+  selector=&quot;[data-theme=&#39;custom&#39;]&quot;
+  live
+  label=&quot;Custom Theme CSS&quot;&gt;
+&lt;/theme-export&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>JSON Format</h2>
+  <p>Switch to <code>format="json"</code> for a design tokens pipeline.</p>
+
+  <code-block language="html" data-ssr label="JSON output" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">JSON output</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span> <span class="hljs-attr">format</span>=<span class="hljs-string">&quot;json&quot;</span> <span class="hljs-attr">live</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;theme-export format=&quot;json&quot; live&gt;&lt;/theme-export&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>theme-export:change</code></td>
+        <td><code>{ output, format, tokens }</code></td>
+        <td>Fires whenever the output is regenerated.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+      <p><a class="active-parent" href="/vb-design-system/elements/">← All elements</a></p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <p>VB Design System — part of the <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze</a> ecosystem. MIT licensed. · <a href="https://github.com/ProfPowell/vb-design-system">Source on GitHub</a></p>
+</footer>
+
+
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js"></script>
+  <script src="/vb-design-system/assets/theme-picker.js"></script>
+  
+</body>
+</html>

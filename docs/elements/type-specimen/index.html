@@ -1,0 +1,3642 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern" data-mode="light" data-fluid="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>type-specimen — VB Design System</title>
+  <meta name="description" content="Typography specimen web component with character grid, weight scale, type scale, and editable sample text.">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css">
+  
+</head>
+<body>
+  <header data-layout="cluster" data-layout-justify="space-between" class="site-header">
+  <a href="/vb-design-system/" class="brand"><strong>VB Design System</strong></a>
+  <nav data-layout="cluster" aria-label="Primary">
+    <a href="/vb-design-system/">Home</a>
+    <a class="active-parent" href="/vb-design-system/elements/">Elements</a>
+    <a href="https://github.com/ProfPowell/vb-design-system">GitHub</a>
+    <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze ↗</a>
+    <form data-theme-picker="" aria-label="Theme">
+      <label>Theme
+        <select data-theme-select="">
+          <option value="modern">Modern</option>
+          <option value="minimal">Minimal</option>
+          <option value="classic">Classic</option>
+          <option value="a11y-high-contrast">High contrast</option>
+        </select>
+      </label>
+      <button type="button" data-mode-toggle="" aria-pressed="false">🌙 Dark</button>
+    </form>
+  </nav>
+</header>
+
+
+  <main>
+    <article id="doc-article" data-layout="stack" data-layout-gap="l">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol data-layout="cluster" data-layout-gap="s">
+          <li><a href="/vb-design-system/">Home</a></li>
+          <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
+          <li><span aria-current="page">type-specimen</span></li>
+        </ol>
+      </nav>
+      <header data-layout="stack" data-layout-gap="s">
+        <h1><code>&lt;type-specimen&gt;</code></h1>
+        <p class="lead">Typography specimen web component with character grid, weight scale, type scale, and editable sample text.</p>
+      </header>
+      <section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;type-specimen&gt;</code> component displays a font specimen for exploring typefaces. It renders an editable sample, a character grid, a weight scale, and the VB 9-step type scale.</p>
+
+  <div class="example">
+    <type-specimen font-family="Georgia" label="Georgia" show-characters="" show-weights=""></type-specimen>
+  </div>
+
+  <code-block language="html" data-ssr label="Basic specimen" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Basic specimen</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;type-specimen
+  font-family=&quot;Georgia&quot;
+  label=&quot;Georgia&quot;
+  show-characters
+  show-weights&gt;
+&lt;/type-specimen&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>font-family</code></td>
+        <td>string</td>
+        <td><code>system-ui</code></td>
+        <td>CSS <code>font-family</code> value.</td>
+      </tr>
+      <tr>
+        <td><code>label</code></td>
+        <td>string</td>
+        <td>Derived from font-family</td>
+        <td>Display name for the font.</td>
+      </tr>
+      <tr>
+        <td><code>sample</code></td>
+        <td>string</td>
+        <td>The quick brown fox…</td>
+        <td>Custom sample text.</td>
+      </tr>
+      <tr>
+        <td><code>show-scale</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Show VB type scale (xs–5xl).</td>
+      </tr>
+      <tr>
+        <td><code>show-weights</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Show weight scale with “Aa” samples.</td>
+      </tr>
+      <tr>
+        <td><code>show-characters</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Show uppercase, lowercase, digit, and punctuation grids.</td>
+      </tr>
+      <tr>
+        <td><code>weights</code></td>
+        <td>string</td>
+        <td><code>300,400,500,600,700</code></td>
+        <td>Comma-separated font weights to display in the weight scale.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Features</h2>
+
+  <h3>Character Grid</h3>
+  <p>Shows uppercase, lowercase, digits, and punctuation in the specified font.</p>
+
+  <h3>Weight Scale</h3>
+  <p>Renders “Aa” at each specified weight for quick comparison.</p>
+
+  <h3>VB Type Scale</h3>
+  <p>Displays the 9-step VB type scale from <code>xs</code> to <code>5xl</code>.</p>
+
+  <div class="example">
+    <type-specimen font-family="system-ui" label="System UI" show-scale=""></type-specimen>
+  </div>
+  <code-block language="html" data-ssr label="Type scale only" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Type scale only</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;system-ui&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;System UI&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;type-specimen
+  font-family=&quot;system-ui&quot;
+  label=&quot;System UI&quot;
+  show-scale&gt;
+&lt;/type-specimen&gt;</textarea></code-block>
+
+  <h3>Editable Sample</h3>
+  <p>The large sample text is <code>contenteditable</code> — click it and type your own text to preview the font.</p>
+</section>
+
+<section>
+  <h2>Full Specimen</h2>
+  <p>Enable all features at once for a comprehensive view.</p>
+
+  <div class="example">
+    <type-specimen font-family="system-ui" label="System UI" show-characters="" show-weights="" show-scale="" weights="300,400,500,600,700"></type-specimen>
+  </div>
+  <code-block language="html" data-ssr label="Full specimen" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Full specimen</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;system-ui&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;System UI&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">weights</span>=<span class="hljs-string">&quot;300,400,500,600,700&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;type-specimen
+  font-family=&quot;system-ui&quot;
+  label=&quot;System UI&quot;
+  show-characters
+  show-weights
+  show-scale
+  weights=&quot;300,400,500,600,700&quot;&gt;
+&lt;/type-specimen&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Custom Sample Text</h2>
+  <div class="example">
+    <type-specimen font-family="'Courier New', monospace" label="Courier New" sample="Pack my box with five dozen liquor jugs" show-characters="" weights="400,700"></type-specimen>
+  </div>
+  <code-block language="html" data-ssr label="Custom sample" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Custom sample</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;&#x27;Courier New&#x27;, monospace&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Courier New&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">sample</span>=<span class="hljs-string">&quot;Pack my box with five dozen liquor jugs&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">weights</span>=<span class="hljs-string">&quot;400,700&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;type-specimen
+  font-family=&quot;&#39;Courier New&#39;, monospace&quot;
+  label=&quot;Courier New&quot;
+  sample=&quot;Pack my box with five dozen liquor jugs&quot;
+  show-characters
+  weights=&quot;400,700&quot;&gt;
+&lt;/type-specimen&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Editable Mode</h2>
+  <p>Add the <code>editable</code> attribute to turn the font label into a live input with quick-pick chips. Changes write to a CSS custom property (default: <code>--font-family-base</code>) on the <code>target</code> selector (default: <code>:root</code>), so any element using that token updates immediately.</p>
+
+  <div class="example">
+    <type-specimen font-family="Georgia" editable="" show-characters="" show-weights=""></type-specimen>
+  </div>
+
+  <code-block language="html" data-ssr label="Live font editing" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Live font editing</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;type-specimen
+  font-family=&quot;Georgia&quot;
+  editable
+  show-characters
+  show-weights&gt;
+&lt;/type-specimen&gt;</textarea></code-block>
+
+  <p>Restrict overrides to a scoped subtree by pointing <code>target</code> at any selector:</p>
+
+  <code-block language="html" data-ssr label="Scoped target" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Scoped target</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span><span class="">10</span><span class="">11</span><span class="">12</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;preview-scope&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Preview<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Edits only affect this block.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;#preview-scope&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">token</span>=<span class="hljs-string">&quot;font-family-base&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;div id=&quot;preview-scope&quot;&gt;
+  &lt;h2&gt;Preview&lt;/h2&gt;
+  &lt;p&gt;Edits only affect this block.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;type-specimen
+  font-family=&quot;Georgia&quot;
+  editable
+  target=&quot;#preview-scope&quot;
+  token=&quot;font-family-base&quot;
+  show-scale&gt;
+&lt;/type-specimen&gt;</textarea></code-block>
+
+  <p>Listen for <code>type-specimen:change</code> events to collect the edits elsewhere:</p>
+  <code-block language="javascript" data-ssr label="Collecting edits" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Collecting edits</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
+        <pre><code class="language-javascript" tabindex="0"><span class="code-line"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;type-specimen&#x27;</span>)</span><span class="code-line">  .<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;type-specimen:change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {</span><span class="code-line">    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">detail</span>);</span><span class="code-line">    <span class="hljs-comment">// { fontFamily: &quot;Inter, sans-serif&quot;, token: &quot;font-family-base&quot;, target: &quot;:root&quot; }</span></span><span class="code-line">  });</span></code></pre>
+      </div>
+      </template><textarea style="display:none">document.querySelector(&#39;type-specimen&#39;)
+  .addEventListener(&#39;type-specimen:change&#39;, (e) =&gt; {
+    console.log(e.detail);
+    // { fontFamily: &quot;Inter, sans-serif&quot;, token: &quot;font-family-base&quot;, target: &quot;:root&quot; }
+  });</textarea></code-block>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>The sample text uses <code>contenteditable="plaintext-only"</code> with <code>spellcheck="false"</code> to avoid intrusive browser features.</li>
+    <li>All sections use semantic markup for screen reader navigation.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/vb-design-system/docs/fluid-scaling/">Fluid Scaling</a> — the VB type scale system</li>
+    <li><a href="/vb-design-system/docs/tools/">Tools</a> — Type Explorer font pairing tool (planned)</li>
+  </ul>
+</section>
+      <p><a class="active-parent" href="/vb-design-system/elements/">← All elements</a></p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <p>VB Design System — part of the <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze</a> ecosystem. MIT licensed. · <a href="https://github.com/ProfPowell/vb-design-system">Source on GitHub</a></p>
+</footer>
+
+
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js"></script>
+  <script src="/vb-design-system/assets/theme-picker.js"></script>
+  
+</body>
+</html>

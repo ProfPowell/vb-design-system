@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="modern" data-mode="light" data-fluid="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>semantic-palette — VB Design System</title>
+  <meta name="description" content="Preview a palette in use as VB semantic roles — button, link, badge, alert — each with its own WCAG contrast chip. Editing happens upstream in <color-palette editable> or <palette-generator>.">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css">
+  
+</head>
+<body>
+  <header data-layout="cluster" data-layout-justify="space-between" class="site-header">
+  <a href="/vb-design-system/" class="brand"><strong>VB Design System</strong></a>
+  <nav data-layout="cluster" aria-label="Primary">
+    <a href="/vb-design-system/">Home</a>
+    <a class="active-parent" href="/vb-design-system/elements/">Elements</a>
+    <a href="https://github.com/ProfPowell/vb-design-system">GitHub</a>
+    <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze ↗</a>
+    <form data-theme-picker="" aria-label="Theme">
+      <label>Theme
+        <select data-theme-select="">
+          <option value="modern">Modern</option>
+          <option value="minimal">Minimal</option>
+          <option value="classic">Classic</option>
+          <option value="a11y-high-contrast">High contrast</option>
+        </select>
+      </label>
+      <button type="button" data-mode-toggle="" aria-pressed="false">🌙 Dark</button>
+    </form>
+  </nav>
+</header>
+
+
+  <main>
+    <article id="doc-article" data-layout="stack" data-layout-gap="l">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol data-layout="cluster" data-layout-gap="s">
+          <li><a href="/vb-design-system/">Home</a></li>
+          <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
+          <li><span aria-current="page">semantic-palette</span></li>
+        </ol>
+      </nav>
+      <header data-layout="stack" data-layout-gap="s">
+        <h1><code>&lt;semantic-palette&gt;</code></h1>
+        <p class="lead">Preview a palette in use as VB semantic roles — button, link, badge, alert — each with its own WCAG contrast chip. Editing happens upstream in <color-palette editable=""> or <palette-generator>.</palette-generator></color-palette></p>
+      </header>
+      <section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;semantic-palette&gt;</code> component is a live preview. Give it a palette — either as a child <a href="/vb-design-system/docs/elements/web-components/color-palette/"><code>&lt;color-palette&gt;</code></a>, a child <a href="/vb-design-system/docs/elements/web-components/palette-generator/"><code>&lt;palette-generator&gt;</code></a>, or a <code>colors</code> attribute — and it renders one preview card per semantic role (primary, secondary, accent, and optional status roles). Each card shows the color <strong>in use</strong> (button, link, badge for brand roles; alert, solid badge, inline for status roles) with a per-pairing WCAG chip next to each sample.</p>
+  <p>There are no hex inputs, no OKLCh inputs, and no drag-to-reassign inside this component — editing happens upstream. To let users change a color, pair it with <code>&lt;color-palette editable&gt;</code>.</p>
+
+  <div class="example">
+    <semantic-palette show-export="">
+      <color-palette colors="#6366f1,#ec4899,#22c55e" editable=""></color-palette>
+    </semantic-palette>
+  </div>
+
+  <code-block language="html" data-ssr label="Editable palette + preview" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Editable palette + preview</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">semantic-palette</span> <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#6366f1,#ec4899,#22c55e&quot;</span> <span class="hljs-attr">editable</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">semantic-palette</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;semantic-palette show-export&gt;
+  &lt;color-palette colors=&quot;#6366f1,#ec4899,#22c55e&quot; editable&gt;&lt;/color-palette&gt;
+&lt;/semantic-palette&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>colors</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Comma-separated hex palette (fallback when no child <code>&lt;color-palette&gt;</code> or <code>&lt;palette-generator&gt;</code>).</td>
+      </tr>
+      <tr>
+        <td><code>roles</code></td>
+        <td>string</td>
+        <td><code>primary,secondary,accent</code></td>
+        <td>Comma-separated roles in assignment order (positional — <code>colors[0]</code> is assigned to <code>roles[0]</code>). Valid: <code>primary</code>, <code>secondary</code>, <code>accent</code>, <code>success</code>, <code>warning</code>, <code>error</code>, <code>info</code>.</td>
+      </tr>
+      <tr>
+        <td><code>show-export</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Show Copy Theme CSS / Copy JSON toolbar.</td>
+      </tr>
+      <tr>
+        <td><code>label</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Optional heading label above the previews.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Context over abstract numbers</h2>
+  <p>A contrast ratio only means something when you know <em>which pair</em> it measures. Each card shows three real samples and labels the ratio for each:</p>
+  <dl>
+    <dt>Brand roles (primary, secondary, accent)</dt>
+    <dd><strong>Button</strong> (role as background) · <strong>Link on surface</strong> (role as foreground) · <strong>Subtle badge</strong> (tinted pair).</dd>
+    <dt>Status roles (success, warning, error, info)</dt>
+    <dd><strong>Alert</strong> (role text on role subtle) · <strong>Solid badge</strong> (auto-picked foreground on role) · <strong>Inline status</strong> (role as text on surface).</dd>
+  </dl>
+  <p>If a combination fails WCAG, you see the failure where the user would actually encounter it — not as an abstract number in a column.</p>
+</section>
+
+<section>
+  <h2>All seven roles</h2>
+  <p>Pass all seven roles to produce a complete theme preview.</p>
+
+  <div class="example">
+    <semantic-palette roles="primary,secondary,accent,success,warning,error,info" show-export="">
+      <color-palette colors="#6366f1,#8b5cf6,#ec4899,#22c55e,#eab308,#ef4444,#3b82f6" editable=""></color-palette>
+    </semantic-palette>
+  </div>
+
+  <code-block language="html" data-ssr label="Brand + status roles" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Brand + status roles</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">semantic-palette</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">roles</span>=<span class="hljs-string">&quot;primary,secondary,accent,success,warning,error,info&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span></span></span><span class="code-line"><span class="hljs-tag">    <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#6366f1,#8b5cf6,#ec4899,#22c55e,#eab308,#ef4444,#3b82f6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">    <span class="hljs-attr">editable</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">semantic-palette</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;semantic-palette
+  roles=&quot;primary,secondary,accent,success,warning,error,info&quot;
+  show-export&gt;
+  &lt;color-palette
+    colors=&quot;#6366f1,#8b5cf6,#ec4899,#22c55e,#eab308,#ef4444,#3b82f6&quot;
+    editable&gt;&lt;/color-palette&gt;
+&lt;/semantic-palette&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Wire to palette-generator</h2>
+  <p>Nest a <code>&lt;palette-generator&gt;</code> inside to source colors algorithmically. The preview updates whenever the generator emits <code>palette-generator:generate</code>.</p>
+
+  <div class="example">
+    <semantic-palette show-export="">
+      <palette-generator seed="#6366f1" harmony="triadic" show-values="" show-names="">
+        <color-picker><input type="color" value="#6366f1"></color-picker>
+      </palette-generator>
+    </semantic-palette>
+  </div>
+
+  <code-block language="html" data-ssr label="Palette-generator source" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Palette-generator source</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">semantic-palette</span> <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">palette-generator</span> <span class="hljs-attr">seed</span>=<span class="hljs-string">&quot;#6366f1&quot;</span> <span class="hljs-attr">harmony</span>=<span class="hljs-string">&quot;triadic&quot;</span> <span class="hljs-attr">show-values</span> <span class="hljs-attr">show-names</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">color-picker</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;color&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;#6366f1&quot;</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">color-picker</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">palette-generator</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">semantic-palette</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;semantic-palette show-export&gt;
+  &lt;palette-generator seed=&quot;#6366f1&quot; harmony=&quot;triadic&quot; show-values show-names&gt;
+    &lt;color-picker&gt;&lt;input type=&quot;color&quot; value=&quot;#6366f1&quot; /&gt;&lt;/color-picker&gt;
+  &lt;/palette-generator&gt;
+&lt;/semantic-palette&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Export Format</h2>
+  <p>The <strong>Copy Theme CSS</strong> button emits a <code>:root</code> block ready to paste into a VB theme file. Brand roles write hue/lightness/chroma seeds (so all derived tokens like <code>-hover</code>, <code>-active</code>, <code>-subtle</code> follow); status roles write explicit <code>oklch()</code> values.</p>
+
+  <code-block language="css" data-ssr label="Example output" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Example output</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span><span class="">10</span><span class="">11</span><span class="">12</span><span class="">13</span><span class="">14</span><span class="">15</span><span class="">16</span><span class="">17</span><span class="">18</span></div>
+        <pre><code class="language-css" tabindex="0"><span class="code-line"><span class="hljs-selector-pseudo">:root</span> {</span><span class="code-line">  <span class="hljs-comment">/* Brand seeds */</span></span><span class="code-line">  <span class="hljs-attr">--hue-primary</span>: <span class="hljs-number">262.8</span>;</span><span class="code-line">  <span class="hljs-attr">--lightness-primary</span>: <span class="hljs-number">58.2%</span>;</span><span class="code-line">  <span class="hljs-attr">--chroma-primary</span>: <span class="hljs-number">0.209</span>;</span><span class="code-line"> </span><span class="code-line">  <span class="hljs-attr">--hue-secondary</span>: <span class="hljs-number">337.6</span>;</span><span class="code-line">  <span class="hljs-attr">--lightness-secondary</span>: <span class="hljs-number">64.3%</span>;</span><span class="code-line">  <span class="hljs-attr">--chroma-secondary</span>: <span class="hljs-number">0.226</span>;</span><span class="code-line"> </span><span class="code-line">  <span class="hljs-attr">--hue-accent</span>: <span class="hljs-number">150.2</span>;</span><span class="code-line">  <span class="hljs-attr">--lightness-accent</span>: <span class="hljs-number">74.8%</span>;</span><span class="code-line">  <span class="hljs-attr">--chroma-accent</span>: <span class="hljs-number">0.187</span>;</span><span class="code-line"> </span><span class="code-line">  <span class="hljs-comment">/* Status colors */</span></span><span class="code-line">  <span class="hljs-attr">--color-success</span>: <span class="hljs-built_in">oklch</span>(<span class="hljs-number">72.3%</span> <span class="hljs-number">0.198</span> <span class="hljs-number">150.2</span>);</span><span class="code-line">  <span class="hljs-attr">--color-error</span>: <span class="hljs-built_in">oklch</span>(<span class="hljs-number">64.1%</span> <span class="hljs-number">0.227</span> <span class="hljs-number">27.5</span>);</span><span class="code-line">}</span></code></pre>
+      </div>
+      </template><textarea style="display:none">:root {
+  /* Brand seeds */
+  --hue-primary: 262.8;
+  --lightness-primary: 58.2%;
+  --chroma-primary: 0.209;
+
+  --hue-secondary: 337.6;
+  --lightness-secondary: 64.3%;
+  --chroma-secondary: 0.226;
+
+  --hue-accent: 150.2;
+  --lightness-accent: 74.8%;
+  --chroma-accent: 0.187;
+
+  /* Status colors */
+  --color-success: oklch(72.3% 0.198 150.2);
+  --color-error: oklch(64.1% 0.227 27.5);
+}</textarea></code-block>
+
+  <p>The <strong>Copy JSON</strong> button emits a role → hex object, handy for design tokens pipelines.</p>
+</section>
+
+<section>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>semantic-palette:change</code></td>
+        <td><code>{ mapping, tokens, source }</code></td>
+        <td>Fires on initial render and whenever the upstream palette emits a change. <code>source</code> is one of <code>init</code>, <code>palette</code>, <code>attribute</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Each card is an <code>&lt;article&gt;</code> with an <code>aria-label</code> naming the role.</li>
+    <li>Sample buttons use <code>tabindex="-1"</code> — they're decorative previews, not interactive.</li>
+    <li>Contrast chips include text labels (AAA/AA/Fail) alongside color — never color-only communication.</li>
+    <li>Editing the palette is a responsibility of the upstream <code>&lt;color-palette editable&gt;</code> or <code>&lt;palette-generator&gt;</code>, which handle their own accessibility.</li>
+  </ul>
+</section>
+      <p><a class="active-parent" href="/vb-design-system/elements/">← All elements</a></p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+  <p>VB Design System — part of the <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze</a> ecosystem. MIT licensed. · <a href="https://github.com/ProfPowell/vb-design-system">Source on GitHub</a></p>
+</footer>
+
+
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js"></script>
+  <script src="/vb-design-system/assets/theme-picker.js"></script>
+  
+</body>
+</html>
