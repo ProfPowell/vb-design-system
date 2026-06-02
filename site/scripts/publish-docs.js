@@ -38,15 +38,14 @@ function walk(dir) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) { walk(p); continue; }
     const ext = extname(p);
-    if (!BASE) continue;
     if (ext === '.html') {
-      let html = readFileSync(p, 'utf8')
-        .replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`)
-        // cache-bust local js/css so a changed build is never served stale
-        .replace(/(href|src)="([^"]+\.(?:js|css))"/g, (m, attr, url) =>
-          /^https?:/.test(url) ? m : `${attr}="${url}${url.includes('?') ? '&' : '?'}v=${STAMP}"`);
+      let html = readFileSync(p, 'utf8').replaceAll('%BASE_PATH%', BASE);   // '' for local root
+      if (BASE) html = html.replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`);
+      // cache-bust local js/css so a changed build is never served stale
+      html = html.replace(/(href|src)="([^"]+\.(?:js|css))(\?[^"]*)?"/g, (m, attr, url, q) =>
+        /^https?:/.test(url) ? m : `${attr}="${url}${q ? q + '&' : '?'}v=${STAMP}"`);
       writeFileSync(p, html);
-    } else if (ext === '.js') {
+    } else if (BASE && ext === '.js') {
       let js = readFileSync(p, 'utf8');
       if (js.includes('/cdn/')) {
         js = js.replaceAll('/cdn/', BASE + '/cdn/');
