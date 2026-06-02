@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="${defaultTheme}" data-mode="light" data-fluid>
+<html lang="en" data-page="docs" data-theme="${defaultTheme}" data-mode="light" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,25 +7,42 @@
   <title>${title} — ${site.title}</title>
   <meta name="description" content="${description}">
   <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css">
+  <link rel="stylesheet" href="/assets/pack/${site.packCss}">
+  <link rel="stylesheet" href="/assets/docs.css">
   <link rel="stylesheet" href="/assets/site.css">
   ${slot:extraHead}
 </head>
-<body>
+<body style="overflow-x: clip;">
+
   <include-file src="/includes/header.html"></include-file>
 
-  <main>
-    <layout-center data-layout-max="wide">
-    <article id="doc-article" data-layout="stack" data-layout-gap="l">
-      ${content}
-    </article>
-  </layout-center>
+  <main data-pagefind-body style="overflow-x: clip;">
+    <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+      <aside data-layout-sticky data-pagefind-ignore>
+        <page-toc levels="h2,h3" scope="main article"></page-toc>
+        <page-tools data-orientation="horizontal">
+          <print-page></print-page>
+          <share-wc variant="icon" size="s"></share-wc>
+          <text-reader variant="icon" for="doc-article"></text-reader>
+        </page-tools>
+      </aside>
+      <article id="doc-article">
+        <heading-links levels="h2,h3">
+          ${content}
+        </heading-links>
+      </article>
+    </layout-sidebar>
   </main>
 
   <include-file src="/includes/footer.html"></include-file>
 
+  <fab-stack>
+    <settings-panel></settings-panel>
+    <a href="#" data-back-to-top aria-label="Back to top">&uarr;</a>
+  </fab-stack>
+
   <!-- Full Vanilla Breeze bundle: provides every component (specimens, theme
-       tools, brand-mark, icon-wc, status-message, theme-picker…). No pack here,
-       so nothing double-registers. -->
+       tools, brand-mark, icon-wc, page-toc, theme-picker, site-search…). -->
   <script type="module" src="/assets/vendor/vanilla-breeze.js"></script>
   <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
        that the full bundle omits; registerComponent is first-wins, so loading

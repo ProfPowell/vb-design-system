@@ -15,6 +15,7 @@
     "@profpowell/code-block": "^2.9.0",
     "cook-ssg": "^2.1.0",
     "linkedom": "^0.18.12",
+    "pagefind": "^1.1.1",
     "vanilla-breeze": "^0.1.0"
   }
 }

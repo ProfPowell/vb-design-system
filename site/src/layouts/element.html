@@ -1,47 +1,95 @@
 <!doctype html>
-<html lang="en" data-theme="${defaultTheme}" data-mode="light" data-fluid>
+<html lang="en" data-page="docs" data-theme="${defaultTheme}" data-mode="light" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
+       (%BASE_PATH% is replaced at publish; empty for local root). -->
   <script>window.__VB_THEME_BASE="%BASE_PATH%/cdn";document.documentElement.dataset.iconPath="%BASE_PATH%/cdn/icons";</script>
   <title>${elementName} — ${site.title}</title>
   <meta name="description" content="${description}">
   <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css">
   <link rel="stylesheet" href="/assets/pack/${site.packCss}">
+  <link rel="stylesheet" href="/assets/docs.css">
   <link rel="stylesheet" href="/assets/site.css">
   ${slot:extraHead}
 </head>
-<body>
+<body style="overflow-x: clip;">
+
   <include-file src="/includes/header.html"></include-file>
 
-  <main>
-    <layout-center data-layout-max="wide">
-    <article id="doc-article" data-layout="stack" data-layout-gap="l">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <ol data-layout="cluster" data-layout-gap="s">
-          <li><a href="/">Home</a></li>
-          <li><a href="/elements/">Elements</a></li>
-          <li><span aria-current="page">${elementName}</span></li>
-        </ol>
+  <main data-pagefind-body style="overflow-x: clip;">
+    <input type="checkbox" id="nav-drawer-toggle" class="nav-drawer-checkbox" data-pagefind-ignore>
+    <label for="nav-drawer-toggle" class="nav-drawer-toggle" data-pagefind-ignore>
+      <icon-wc name="list-tree" size="sm"></icon-wc>
+      Navigation
+    </label>
+    <label for="nav-drawer-toggle" class="nav-drawer-backdrop" data-pagefind-ignore></label>
+
+    <layout-sidebar data-layout-gap="xl" data-layout-sidebar-width="narrow" data-layout-content-min="60">
+      <nav class="tree" id="nav-drawer" data-layout-density="compact" data-layout-sticky aria-label="Elements navigation" data-pagefind-ignore>
+        <label for="nav-drawer-toggle" class="nav-drawer-close" aria-label="Close navigation">
+          <icon-wc name="x"></icon-wc>
+        </label>
+        <include-file src="/includes/sidebar-elements.html"></include-file>
       </nav>
-      <header data-layout="stack" data-layout-gap="s">
-        <h1><code>&lt;${elementName}&gt;</code></h1>
-        <p class="lead">${description}</p>
-      </header>
-      ${content}
-      <p><a href="/elements/">← All elements</a></p>
-    </article>
-  </layout-center>
+
+      <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+        <aside data-layout-sticky data-pagefind-ignore>
+          <page-toc levels="h2,h3" scope="main article"></page-toc>
+          <page-tools data-orientation="horizontal">
+            <print-page></print-page>
+            <share-wc variant="icon" size="s"></share-wc>
+            <text-reader variant="icon" for="doc-article"></text-reader>
+          </page-tools>
+        </aside>
+        <article id="doc-article">
+          <nav class="breadcrumb" aria-label="Breadcrumb" data-pagefind-ignore>
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/elements/">Elements</a></li>
+              <li><span aria-current="page">${elementName}</span></li>
+            </ol>
+          </nav>
+          <h1><code>&lt;${elementName}&gt;</code></h1>
+          <p class="lead">${description}</p>
+
+          <heading-links levels="h2,h3">
+            ${content}
+          </heading-links>
+        </article>
+      </layout-sidebar>
+    </layout-sidebar>
   </main>
 
   <include-file src="/includes/footer.html"></include-file>
 
+  <fab-stack>
+    <settings-panel></settings-panel>
+    <a href="#" data-back-to-top aria-label="Back to top">&uarr;</a>
+  </fab-stack>
+
+  <script>
+  // Mark the active sidebar link (matches the rewritten href under the Pages
+  // subpath via the anchor's resolved .pathname) and open its <details> chain.
+  (function () {
+    var here = location.pathname.replace(/\/+$/, '');
+    var links = document.querySelectorAll('.tree a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].pathname.replace(/\/+$/, '') === here) {
+        links[i].setAttribute('aria-current', 'page');
+        var el = links[i].closest('details');
+        while (el) { el.open = true; el = el.parentElement.closest('details'); }
+        break;
+      }
+    }
+  })();
+  </script>
+
+  <script type="module" src="/assets/vendor/vanilla-breeze.js"></script>
+  <script type="module" src="/assets/pack/${site.packJs}"></script>
   <script type="module" src="/assets/vendor/browser-window.js"></script>
   <script type="module" src="/assets/vendor/code-block.js"></script>
-  <script type="module" src="/assets/pack/${site.packJs}"></script>
-  <script type="module" src="/assets/vendor/icon-wc.js"></script>
-  <script type="module" src="/assets/vendor/brand-mark.js"></script>
-  <script type="module" src="/assets/vendor/vb-theme-picker.js"></script>
   ${slot:extraScripts}
 </body>
 </html>

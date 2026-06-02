@@ -1,51 +1,160 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="modern" data-mode="light" data-fluid="">
+<html lang="en" data-page="docs" data-theme="modern" data-mode="light" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
+       (/vb-design-system is replaced at publish; empty for local root). -->
   <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
   <title>motion-specimen — VB Design System</title>
   <meta name="description" content="Design token motion scale display. Shows easing curves with animated preview dots and/or durations as bars.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mpx3iulf">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mpx3iulf">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mpx3iulf">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mpx7qn75">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mpx7qn75">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mpx7qn75">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mpx7qn75">
   
 </head>
-<body>
-  <header class="site" data-sticky="">
-  <a href="/vb-design-system/" class="brand"><brand-mark>VB Design System</brand-mark></a>
-  <nav class="horizontal pills" aria-label="Primary">
-    <ul>
-      <li><a href="/vb-design-system/">Home</a></li>
-      <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
-      <li><a href="/vb-design-system/guides/">Guides</a></li>
-      <li><a href="/vb-design-system/tools/theme-composer/">Composer</a></li>
-      <li><a href="/vb-design-system/showcase/">Showcases</a></li>
-      <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
-    </ul>
-  </nav>
-  <theme-picker compact="">
-    <button type="button" data-trigger="" class="button ghost">Theme</button>
-  </theme-picker>
+<body style="overflow-x: clip;">
+
+  <header class="site" data-sticky="" data-vt="header">
+  <a href="/vb-design-system/"><brand-mark>VB Design System</brand-mark></a>
+  <nav-bar aria-label="Main navigation">
+    <nav class="horizontal pills">
+      <ul>
+        <li><a href="/vb-design-system/" data-nav-link="">Home</a></li>
+        <li><a class="active-parent" href="/vb-design-system/elements/" data-nav-link="">Elements</a></li>
+        <li><a href="/vb-design-system/guides/" data-nav-link="">Guides</a></li>
+        <li><a href="/vb-design-system/tools/theme-composer/" data-nav-link="">Composer</a></li>
+        <li><a href="/vb-design-system/showcase/" data-nav-link="">Showcases</a></li>
+        <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+      </ul>
+    </nav>
+  </nav-bar>
+  <site-tools>
+    <site-search>
+      <button type="button" data-trigger="" class="ghost">
+        <icon-wc name="search" size="sm"></icon-wc>
+        Search
+      </button>
+    </site-search>
+    <theme-picker compact="">
+      <button type="button" data-trigger="" class="ghost">
+        <icon-wc name="palette" size="sm"></icon-wc>
+        Theme
+      </button>
+    </theme-picker>
+  </site-tools>
+  <mobile-menu breakpoint="52rem">
+    <button type="button" data-trigger="" popovertarget="mobile-menu" aria-label="Menu">
+      <icon-wc name="menu"></icon-wc>
+    </button>
+    <nav popover="" id="mobile-menu" class="mobile-menu-panel">
+      <button type="button" class="mobile-menu-close" popovertarget="mobile-menu" popovertargetaction="hide" aria-label="Close menu">
+        <icon-wc name="x"></icon-wc>
+      </button>
+      <div class="mobile-menu-search">
+        <site-search>
+          <button type="button" data-trigger="" class="ghost" style="inline-size: 100%">
+            <icon-wc name="search" size="sm"></icon-wc>
+            Search
+          </button>
+        </site-search>
+      </div>
+      <ul>
+        <li class="mobile-section">
+          <strong class="mobile-section-title">Pages</strong>
+          <ul>
+            <li><a href="/vb-design-system/">Home</a></li>
+            <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
+            <li><a href="/vb-design-system/guides/">Guides</a></li>
+            <li><a href="/vb-design-system/tools/theme-composer/">Composer</a></li>
+            <li><a href="/vb-design-system/showcase/">Showcases</a></li>
+            <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="mobile-menu-theme">
+        <strong class="mobile-section-title">Theme</strong>
+        <theme-picker variant="inline" compact=""></theme-picker>
+      </div>
+    </nav>
+  </mobile-menu>
 </header>
 
 
-  <main>
-    <layout-center data-layout-max="wide">
-    <article id="doc-article" data-layout="stack" data-layout-gap="l">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <ol data-layout="cluster" data-layout-gap="s">
-          <li><a href="/vb-design-system/">Home</a></li>
-          <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
-          <li><span aria-current="page">motion-specimen</span></li>
-        </ol>
+  <main data-pagefind-body="" style="overflow-x: clip;">
+    <input type="checkbox" id="nav-drawer-toggle" class="nav-drawer-checkbox" data-pagefind-ignore="">
+    <label for="nav-drawer-toggle" class="nav-drawer-toggle" data-pagefind-ignore="">
+      <icon-wc name="list-tree" size="sm"></icon-wc>
+      Navigation
+    </label>
+    <label for="nav-drawer-toggle" class="nav-drawer-backdrop" data-pagefind-ignore=""></label>
+
+    <layout-sidebar data-layout-gap="xl" data-layout-sidebar-width="narrow" data-layout-content-min="60">
+      <nav class="tree" id="nav-drawer" data-layout-density="compact" data-layout-sticky="" aria-label="Elements navigation" data-pagefind-ignore="">
+        <label for="nav-drawer-toggle" class="nav-drawer-close" aria-label="Close navigation">
+          <icon-wc name="x"></icon-wc>
+        </label>
+        <p class="sidebar-title"><a class="active-parent" href="/vb-design-system/elements/">All elements</a></p>
+
+<details data-sidebar-group="Color" open>
+  <summary>Color</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/color-palette/">color-palette</a></li>
+    <li><a href="/vb-design-system/elements/semantic-palette/">semantic-palette</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Type & space" open>
+  <summary>Type &amp; space</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/type-specimen/">type-specimen</a></li>
+    <li><a href="/vb-design-system/elements/spacing-specimen/">spacing-specimen</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Tokens" open>
+  <summary>Tokens</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/token-specimen/">token-specimen</a></li>
+    <li><a href="/vb-design-system/elements/theme-export/">theme-export</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Motion & composition" open>
+  <summary>Motion &amp; composition</summary>
+  <ul>
+    <li><a class="active" href="/vb-design-system/elements/motion-specimen/">motion-specimen</a></li>
+    <li><a href="/vb-design-system/elements/component-sampler/">component-sampler</a></li>
+  </ul>
+</details>
+
       </nav>
-      <header data-layout="stack" data-layout-gap="s">
-        <h1><code>&lt;motion-specimen&gt;</code></h1>
-        <p class="lead">Design token motion scale display. Shows easing curves with animated preview dots and/or durations as bars.</p>
-      </header>
-      <section>
+
+      <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+        <aside data-layout-sticky="" data-pagefind-ignore="">
+          <page-toc levels="h2,h3" scope="main article"></page-toc>
+          <page-tools data-orientation="horizontal">
+            <print-page></print-page>
+            <share-wc variant="icon" size="s"></share-wc>
+            <text-reader variant="icon" for="doc-article"></text-reader>
+          </page-tools>
+        </aside>
+        <article id="doc-article">
+          <nav class="breadcrumb" aria-label="Breadcrumb" data-pagefind-ignore="">
+            <ol>
+              <li><a href="/vb-design-system/">Home</a></li>
+              <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
+              <li><span aria-current="page">motion-specimen</span></li>
+            </ol>
+          </nav>
+          <h1><code>&lt;motion-specimen&gt;</code></h1>
+          <p class="lead">Design token motion scale display. Shows easing curves with animated preview dots and/or durations as bars.</p>
+
+          <heading-links levels="h2,h3">
+            <section>
   <h2>Overview</h2>
   <p>The <code>&lt;motion-specimen&gt;</code> component completes the specimen family (alongside <a href="https://vanilla-breeze.com/docs/elements/web-components/type-specimen/"><code>type-specimen</code></a>, <a href="https://vanilla-breeze.com/docs/elements/web-components/spacing-specimen/"><code>spacing-specimen</code></a>, and <a href="https://vanilla-breeze.com/docs/elements/web-components/token-specimen/"><code>token-specimen</code></a>) by visualizing motion tokens — easing curves and duration scales — with live animated previews.</p>
 
@@ -2092,9 +2201,10 @@
     <li>Computed token values are visible as text (not color-only or motion-only communication).</li>
   </ul>
 </section>
-      <p><a class="active-parent" href="/vb-design-system/elements/">← All elements</a></p>
-    </article>
-  </layout-center>
+          </heading-links>
+        </article>
+      </layout-sidebar>
+    </layout-sidebar>
   </main>
 
   <footer>
@@ -2117,12 +2227,32 @@
 </footer>
 
 
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mpx3iulf"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mpx3iulf"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mpx3iulf"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/icon-wc.js?v=mpx3iulf"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/brand-mark.js?v=mpx3iulf"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/vb-theme-picker.js?v=mpx3iulf"></script>
+  <fab-stack>
+    <settings-panel></settings-panel>
+    <a href="#" data-back-to-top="" aria-label="Back to top">↑</a>
+  </fab-stack>
+
+  <script>
+  // Mark the active sidebar link (matches the rewritten href under the Pages
+  // subpath via the anchor's resolved .pathname) and open its <details> chain.
+  (function () {
+    var here = location.pathname.replace(/\/+$/, '');
+    var links = document.querySelectorAll('.tree a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].pathname.replace(/\/+$/, '') === here) {
+        links[i].setAttribute('aria-current', 'page');
+        var el = links[i].closest('details');
+        while (el) { el.open = true; el = el.parentElement.closest('details'); }
+        break;
+      }
+    }
+  })();
+  </script>
+
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mpx7qn75"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mpx7qn75"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mpx7qn75"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mpx7qn75"></script>
   
 </body>
 </html>

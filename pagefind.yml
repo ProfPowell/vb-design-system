@@ -1,0 +1,13 @@
+# Pagefind search index config for the published GitHub Pages output.
+# Only [data-pagefind-body] (set on <main>) is indexed; these selectors drop
+# the doc chrome that lives inside <main> (sidebar tree, TOC rail, breadcrumb).
+# NOTE: do NOT list [data-pagefind-ignore] here — pagefind handles that attribute
+# natively, and adding it as an exclude_selector paradoxically drops every page
+# that uses the attribute from the index (observed: 19 → 3 pages).
+exclude_selectors:
+  - "header"
+  - "footer"
+  - "nav"
+  - "page-toc"
+  - "page-tools"
+  - ".breadcrumb"

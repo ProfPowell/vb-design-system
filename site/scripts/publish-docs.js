@@ -9,6 +9,7 @@
 import { cpSync, rmSync, mkdirSync, writeFileSync, readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve, dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const siteRoot = resolve(here, '..');
@@ -47,12 +48,29 @@ function walk(dir) {
       writeFileSync(p, html);
     } else if (BASE && ext === '.js') {
       let js = readFileSync(p, 'utf8');
-      if (js.includes('/cdn/')) {
-        js = js.replaceAll('/cdn/', BASE + '/cdn/');
-        writeFileSync(p, js);
-      }
+      let changed = false;
+      if (js.includes('/cdn/')) { js = js.replaceAll('/cdn/', BASE + '/cdn/'); changed = true; }
+      // site-search dynamically imports '/pagefind/pagefind.js' (root-absolute) and
+      // calls pagefind.options({excerptLength:20}). Under the Pages subpath the import
+      // 404s and result URLs lack the base — prefix the import and inject baseUrl so
+      // both the bundle load and result navigation resolve correctly.
+      if (js.includes('/pagefind/')) { js = js.replaceAll('/pagefind/', BASE + '/pagefind/'); changed = true; }
+      if (js.includes('excerptLength:20')) { js = js.replaceAll('excerptLength:20', `excerptLength:20,baseUrl:"${BASE}"`); changed = true; }
+      if (changed) writeFileSync(p, js);
     }
   }
 }
 walk(to);
 console.log(`Published ${from} -> ${to}${BASE ? ` (base ${BASE})` : ' (no base prefix)'}`);
+
+// Build the Pagefind search index over the published output (powers <site-search>).
+// Runs AFTER the URL rewrites so indexed page URLs match what the browser requests.
+try {
+  const localBin = resolve(siteRoot, 'node_modules/.bin/pagefind');
+  const cmd = existsSync(localBin) ? localBin : 'npx';
+  const cmdArgs = existsSync(localBin) ? ['--site', to] : ['--yes', 'pagefind', '--site', to];
+  execFileSync(cmd, cmdArgs, { stdio: 'inherit', cwd: repoRoot });
+  console.log('Pagefind index built -> docs/pagefind/');
+} catch (e) {
+  console.warn('Pagefind indexing failed (search will degrade gracefully):', e.message);
+}

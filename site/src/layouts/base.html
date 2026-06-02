@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="${defaultTheme}" data-mode="light" data-fluid>
+<html lang="en" data-page="docs" data-theme="${defaultTheme}" data-mode="light" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,13 +11,15 @@
   <meta name="description" content="${description}">
   <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css">
   <link rel="stylesheet" href="/assets/pack/${site.packCss}">
+  <link rel="stylesheet" href="/assets/docs.css">
   <link rel="stylesheet" href="/assets/site.css">
   ${slot:extraHead}
 </head>
-<body>
+<body style="overflow-x: clip;">
+
   <include-file src="/includes/header.html"></include-file>
 
-  <main>
+  <main data-pagefind-body style="overflow-x: clip;">
     <layout-center data-layout-max="wide">
       ${content}
     </layout-center>
@@ -25,12 +27,15 @@
 
   <include-file src="/includes/footer.html"></include-file>
 
+  <fab-stack>
+    <settings-panel></settings-panel>
+    <a href="#" data-back-to-top aria-label="Back to top">&uarr;</a>
+  </fab-stack>
+
+  <script type="module" src="/assets/vendor/vanilla-breeze.js"></script>
+  <script type="module" src="/assets/pack/${site.packJs}"></script>
   <script type="module" src="/assets/vendor/browser-window.js"></script>
   <script type="module" src="/assets/vendor/code-block.js"></script>
-  <script type="module" src="/assets/pack/${site.packJs}"></script>
-  <script type="module" src="/assets/vendor/icon-wc.js"></script>
-  <script type="module" src="/assets/vendor/brand-mark.js"></script>
-  <script type="module" src="/assets/vendor/vb-theme-picker.js"></script>
   ${slot:extraScripts}
 </body>
 </html>
