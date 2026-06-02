@@ -1,0 +1,33 @@
+---
+layout: base
+title: Overview
+description: Design-system documentation components for Vanilla Breeze.
+---
+
+<article data-layout="stack" data-layout-gap="l">
+  <header data-layout="stack" data-layout-gap="s">
+    <h1>VB Design System</h1>
+    <p class="lead">Web Components for documenting brand guidelines, design tokens, and visual standards — built on <a href="${site.vbDocs}">Vanilla Breeze</a>. Install <code>@profpowell/vb-design-system</code>.</p>
+  </header>
+
+  <section data-layout="stack" data-layout-gap="m">
+    <h2>Elements</h2>
+    <ul class="element-grid">
+      <li><a href="/elements/color-palette/"><code>&lt;color-palette&gt;</code><p>Color ramp swatches with copy.</p></a></li>
+      <li><a href="/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code><p>Semantic color roles from tokens.</p></a></li>
+      <li><a href="/elements/type-specimen/"><code>&lt;type-specimen&gt;</code><p>Typography scale specimen.</p></a></li>
+      <li><a href="/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code><p>Spacing scale specimen.</p></a></li>
+      <li><a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code><p>Design-token table specimen.</p></a></li>
+      <li><a href="/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code><p>Motion / easing specimen.</p></a></li>
+      <li><a href="/elements/component-sampler/"><code>&lt;component-sampler&gt;</code><p>Render a component across variants.</p></a></li>
+      <li><a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code><p>Export the active theme (DTCG / CSS).</p></a></li>
+    </ul>
+  </section>
+
+  <section data-layout="stack" data-layout-gap="s">
+    <h2>Install</h2>
+    <code-block language="bash" data-escape>npm install @profpowell/vb-design-system</code-block>
+    <code-block language="js" data-escape>import '@profpowell/vb-design-system';
+import '@profpowell/vb-design-system/css';</code-block>
+  </section>
+</article>

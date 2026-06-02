@@ -1,0 +1,20 @@
+{
+  "name": "vb-design-system-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Documentation mini-site for @profpowell/vb-design-system (CookSSG, styled by Vanilla Breeze).",
+  "scripts": {
+    "prebuild": "node scripts/copy-assets.js",
+    "build": "npm run prebuild && MINIFY=false cook build",
+    "dev": "npm run prebuild && MINIFY=false cook dev",
+    "preview": "npm run build && npx http-server dist/pages -p 4321 -c-1"
+  },
+  "devDependencies": {
+    "@profpowell/browser-window": "^1.4.6",
+    "@profpowell/code-block": "^2.9.0",
+    "cook-ssg": "^2.1.0",
+    "linkedom": "^0.18.12",
+    "vanilla-breeze": "^0.1.0"
+  }
+}
