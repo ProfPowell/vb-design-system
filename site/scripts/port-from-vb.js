@@ -38,7 +38,7 @@ for (const c of COMPONENTS) {
   let html = readFileSync(srcFile, 'utf8');
   // collect referenced demos, then point them at /demos/
   for (const m of html.matchAll(/\/docs\/examples\/demos\/([^"']+)/g)) referencedDemos.add(m[1]);
-  html = html.replace(/\/docs\/examples\/demos\//g, '/demos/');
+  html = html.replace(/\/docs\/examples\/demos\/([^"'\s#?]+)\.html/g, '/demos/$1/').replace(/\/docs\/examples\/demos\//g, '/demos/');
   writeFileSync(resolve(siteRoot, `src/pages/elements/${c}.html`), html);
 }
 console.log(`✓ ${COMPONENTS.length} element pages (referenced demos: ${referencedDemos.size})`);
