@@ -6,7 +6,7 @@
  * Usage: node scripts/publish-docs.js /<repo>     (e.g. /vb-design-system)
  *        BASE_PATH=/<repo> node scripts/publish-docs.js
  */
-import { cpSync, rmSync, mkdirSync, writeFileSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { cpSync, rmSync, mkdirSync, writeFileSync, readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve, dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,6 +34,11 @@ function walk(dir) {
     }
     writeFileSync(p, html);
   }
+}
+// theme-picker hardcodes /cdn/themes/ — prefix it for the project subpath
+if (BASE) {
+  const tp = join(to, 'assets/vendor/vb-theme-picker.js');
+  if (existsSync(tp)) writeFileSync(tp, readFileSync(tp,'utf8').replaceAll('/cdn/themes/', BASE + '/cdn/themes/'));
 }
 walk(to);
 console.log(`Published ${from} -> ${to}${BASE ? ` (base ${BASE})` : ' (no base prefix)'}`);

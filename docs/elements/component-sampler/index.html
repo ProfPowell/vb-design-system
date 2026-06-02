@@ -11,25 +11,17 @@
   
 </head>
 <body>
-  <header data-layout="cluster" data-layout-justify="space-between" class="site-header">
-  <a href="/vb-design-system/" class="brand"><strong>VB Design System</strong></a>
-  <nav data-layout="cluster" aria-label="Primary">
+  <header class="site" data-sticky="" data-layout="cluster" data-layout-justify="between" data-layout-gap="m">
+  <a href="/vb-design-system/" class="brand">VB Design System</a>
+  <nav class="pills" aria-label="Primary" data-layout="cluster" data-layout-gap="2xs">
     <a href="/vb-design-system/">Home</a>
     <a class="active-parent" href="/vb-design-system/elements/">Elements</a>
-    <a href="https://github.com/ProfPowell/vb-design-system">GitHub</a>
-    <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze ↗</a>
-    <form data-theme-picker="" aria-label="Theme">
-      <label>Theme
-        <select data-theme-select="">
-          <option value="modern">Modern</option>
-          <option value="minimal">Minimal</option>
-          <option value="classic">Classic</option>
-          <option value="a11y-high-contrast">High contrast</option>
-        </select>
-      </label>
-      <button type="button" data-mode-toggle="" aria-pressed="false">🌙 Dark</button>
-    </form>
+    <a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a>
   </nav>
+  <theme-picker compact="">
+    <button type="button" data-trigger="" class="ghost">Theme</button>
+  </theme-picker>
 </header>
 
 
@@ -1566,7 +1558,7 @@
   <script type="module" src="/vb-design-system/assets/vendor/browser-window.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/code-block.js"></script>
   <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js"></script>
-  <script src="/vb-design-system/assets/theme-picker.js"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vb-theme-picker.js"></script>
   
 </body>
 </html>

@@ -11,35 +11,34 @@
   
 </head>
 <body>
-  <header data-layout="cluster" data-layout-justify="space-between" class="site-header">
-  <a href="/vb-design-system/" class="brand"><strong>VB Design System</strong></a>
-  <nav data-layout="cluster" aria-label="Primary">
+  <header class="site" data-sticky="" data-layout="cluster" data-layout-justify="between" data-layout-gap="m">
+  <a href="/vb-design-system/" class="brand">VB Design System</a>
+  <nav class="pills" aria-label="Primary" data-layout="cluster" data-layout-gap="2xs">
     <a href="/vb-design-system/">Home</a>
     <a href="/vb-design-system/elements/">Elements</a>
-    <a href="https://github.com/ProfPowell/vb-design-system">GitHub</a>
-    <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze ↗</a>
-    <form data-theme-picker="" aria-label="Theme">
-      <label>Theme
-        <select data-theme-select="">
-          <option value="modern">Modern</option>
-          <option value="minimal">Minimal</option>
-          <option value="classic">Classic</option>
-          <option value="a11y-high-contrast">High contrast</option>
-        </select>
-      </label>
-      <button type="button" data-mode-toggle="" aria-pressed="false">🌙 Dark</button>
-    </form>
+    <a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a>
   </nav>
+  <theme-picker compact="">
+    <button type="button" data-trigger="" class="ghost">Theme</button>
+  </theme-picker>
 </header>
 
 
   <main>
-    <article data-layout="stack" data-layout-gap="l">
-  <header data-layout="stack" data-layout-gap="s">
-    <h1>VB Design System</h1>
-    <p class="lead">Web Components for documenting brand guidelines, design tokens, and visual standards — built on <a href="https://vanilla-breeze.com/docs/">Vanilla Breeze</a>. Install <code>@profpowell/vb-design-system</code>.</p>
-  </header>
+    <section class="hero">
+  <h1>vb-design-system</h1>
+  <p class="tagline">Web Components for documenting brand guidelines, design tokens, and visual standards — built on Vanilla Breeze and driven entirely by its theme tokens.</p>
+  <div class="btn-group">
+    <a class="btn" href="/vb-design-system/elements/">Browse elements</a>
+    <a class="btn btn-secondary" href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <div style="margin-block-start: var(--size-l); width: min(100%, 40rem);">
+    <color-palette colors="#6366f1,#ec4899,#22c55e,#eab308,#06b6d4" names="Indigo,Pink,Green,Amber,Cyan" show-names=""></color-palette>
+  </div>
+</section>
 
+<article data-layout="stack" data-layout-gap="l">
   <section data-layout="stack" data-layout-gap="m">
     <h2>Elements</h2>
     <ul class="element-grid">
@@ -1029,6 +1028,7 @@
       </div>
       </template><textarea style="display:none">import &#39;@profpowell/vb-design-system&#39;;
 import &#39;@profpowell/vb-design-system/css&#39;;</textarea></code-block>
+    <p>Pair with Vanilla Breeze tokens/themes on the page — the components inherit the active theme automatically. Use the <strong>Theme</strong> picker above to preview.</p>
   </section>
 </article>
   </main>
@@ -1041,7 +1041,7 @@ import &#39;@profpowell/vb-design-system/css&#39;;</textarea></code-block>
   <script type="module" src="/vb-design-system/assets/vendor/browser-window.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/code-block.js"></script>
   <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js"></script>
-  <script src="/vb-design-system/assets/theme-picker.js"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vb-theme-picker.js"></script>
   
 </body>
 </html>

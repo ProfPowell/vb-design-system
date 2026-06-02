@@ -4,12 +4,19 @@ title: Overview
 description: Design-system documentation components for Vanilla Breeze.
 ---
 
-<article data-layout="stack" data-layout-gap="l">
-  <header data-layout="stack" data-layout-gap="s">
-    <h1>VB Design System</h1>
-    <p class="lead">Web Components for documenting brand guidelines, design tokens, and visual standards — built on <a href="${site.vbDocs}">Vanilla Breeze</a>. Install <code>@profpowell/vb-design-system</code>.</p>
-  </header>
+<section class="hero">
+  <h1>vb-design-system</h1>
+  <p class="tagline">Web Components for documenting brand guidelines, design tokens, and visual standards — built on Vanilla Breeze and driven entirely by its theme tokens.</p>
+  <div class="btn-group">
+    <a class="btn" href="/elements/">Browse elements</a>
+    <a class="btn btn-secondary" href="${site.repo}" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <div style="margin-block-start: var(--size-l); width: min(100%, 40rem);">
+    <color-palette colors="#6366f1,#ec4899,#22c55e,#eab308,#06b6d4" names="Indigo,Pink,Green,Amber,Cyan" show-names></color-palette>
+  </div>
+</section>
 
+<article data-layout="stack" data-layout-gap="l">
   <section data-layout="stack" data-layout-gap="m">
     <h2>Elements</h2>
     <ul class="element-grid">
@@ -29,5 +36,6 @@ description: Design-system documentation components for Vanilla Breeze.
     <code-block language="bash" data-escape>npm install @profpowell/vb-design-system</code-block>
     <code-block language="js" data-escape>import '@profpowell/vb-design-system';
 import '@profpowell/vb-design-system/css';</code-block>
+    <p>Pair with Vanilla Breeze tokens/themes on the page — the components inherit the active theme automatically. Use the <strong>Theme</strong> picker above to preview.</p>
   </section>
 </article>
