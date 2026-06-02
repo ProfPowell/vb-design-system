@@ -6,29 +6,32 @@
   <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
   <title>Building Design Systems — VB Design System</title>
   <meta name="description" content="A design system is a theme with documentation. Learn how to go from brand values to a living design system using Vanilla Breeze.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mpx26oxk">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mpx26oxk">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mpx2y35g">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mpx2y35g">
   
 </head>
 <body>
-  <header class="site" data-sticky="" data-layout="cluster" data-layout-justify="between" data-layout-gap="m">
+  <header class="site" data-sticky="">
   <a href="/vb-design-system/" class="brand">VB Design System</a>
-  <nav class="pills" aria-label="Primary" data-layout="cluster" data-layout-gap="2xs">
-    <a href="/vb-design-system/">Home</a>
-    <a href="/vb-design-system/elements/">Elements</a>
-    <a class="active-parent" href="/vb-design-system/guides/">Guides</a>
-    <a href="/vb-design-system/tools/theme-composer/">Composer</a>
-    <a href="/vb-design-system/showcase/">Showcases</a>
-    <a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a>
+  <nav class="horizontal pills" aria-label="Primary">
+    <ul>
+      <li><a href="/vb-design-system/">Home</a></li>
+      <li><a href="/vb-design-system/elements/">Elements</a></li>
+      <li><a class="active-parent" href="/vb-design-system/guides/">Guides</a></li>
+      <li><a href="/vb-design-system/tools/theme-composer/">Composer</a></li>
+      <li><a href="/vb-design-system/showcase/">Showcases</a></li>
+      <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+    </ul>
   </nav>
   <theme-picker compact="">
-    <button type="button" data-trigger="" class="ghost">Theme</button>
+    <button type="button" data-trigger="" class="button ghost">Theme</button>
   </theme-picker>
 </header>
 
 
   <main>
+    <layout-center data-layout-max="wide">
     <article id="doc-article" data-layout="stack" data-layout-gap="l">
       <header data-layout="stack" data-layout-gap="s">
   <h1>Building Design Systems</h1>
@@ -1727,6 +1730,7 @@
     </ul>
   </section>
     </article>
+  </layout-center>
   </main>
 
   <footer class="site-footer">
@@ -1737,14 +1741,14 @@
   <!-- Full Vanilla Breeze bundle: provides every component (specimens, theme
        tools, brand-mark, icon-wc, status-message, theme-picker…). No pack here,
        so nothing double-registers. -->
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mpx26oxk"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mpx2y35g"></script>
   <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
        that the full bundle omits; registerComponent is first-wins, so loading
        both is safe (no double-registration). -->
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mpx26oxk"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mpx26oxk"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mpx26oxk"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/color-picker.js?v=mpx26oxk"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mpx2y35g"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mpx2y35g"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mpx2y35g"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/color-picker.js?v=mpx2y35g"></script>
   
 </body>
 </html>

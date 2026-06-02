@@ -1,15 +1,17 @@
-<header class="site" data-sticky data-layout="cluster" data-layout-justify="between" data-layout-gap="m">
+<header class="site" data-sticky>
   <a href="/" class="brand">${site.title}</a>
-  <nav class="pills" aria-label="Primary" data-layout="cluster" data-layout-gap="2xs">
-    <a href="/">Home</a>
-    <a href="/elements/">Elements</a>
-    <a href="/guides/">Guides</a>
-    <a href="/tools/theme-composer/">Composer</a>
-    <a href="/showcase/">Showcases</a>
-    <a href="${site.repo}" target="_blank" rel="noopener">GitHub</a>
-    <a href="${site.vbDocs}" target="_blank" rel="noopener">Vanilla Breeze ↗</a>
+  <nav class="horizontal pills" aria-label="Primary">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/elements/">Elements</a></li>
+      <li><a href="/guides/">Guides</a></li>
+      <li><a href="/tools/theme-composer/">Composer</a></li>
+      <li><a href="/showcase/">Showcases</a></li>
+      <li><a href="${site.repo}" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="${site.vbDocs}" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+    </ul>
   </nav>
   <theme-picker compact>
-    <button type="button" data-trigger class="ghost">Theme</button>
+    <button type="button" data-trigger class="button ghost">Theme</button>
   </theme-picker>
 </header>

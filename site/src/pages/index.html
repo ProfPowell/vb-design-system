@@ -4,41 +4,37 @@ title: Overview
 description: Design-system documentation components for Vanilla Breeze.
 ---
 
-<section class="hero">
-  <h1>vb-design-system</h1>
-  <p class="tagline">Web Components for documenting brand guidelines, design tokens, and visual standards — built on Vanilla Breeze and driven entirely by its theme tokens.</p>
-  <div class="btn-group">
-    <a class="btn" href="/showcase/meridian/">See the Meridian showcase</a>
-    <a class="btn btn-secondary" href="/elements/">Browse elements</a>
-  </div>
-  <div style="margin-block-start: var(--size-l); width: min(100%, 40rem);">
+  <section data-layout="stack" data-layout-gap="m" style="text-align: center; padding-block: var(--size-2xl);">
+    <h1>vb-design-system</h1>
+    <p class="lead" style="margin-inline: auto;">Web Components for documenting brand guidelines, design tokens, and visual standards — built on Vanilla Breeze and driven entirely by its theme tokens.</p>
+    <nav data-layout="cluster" data-layout-justify="center" data-layout-gap="s">
+      <a class="button" href="/showcase/meridian/">See the Meridian showcase</a>
+      <a class="button secondary" href="/elements/">Browse elements</a>
+    </nav>
     <color-palette colors="#6366f1,#ec4899,#22c55e,#eab308,#06b6d4" names="Indigo,Pink,Green,Amber,Cyan" show-names></color-palette>
-  </div>
-</section>
-
-<article data-layout="stack" data-layout-gap="l">
+  </section>
 
   <section data-layout="stack" data-layout-gap="m">
     <h2>Showcases</h2>
-    <ul class="element-grid">
-      <li><a href="/showcase/meridian/"><code>Meridian Labs</code><p>A complete example design system — identity, tokens, type, components.</p></a></li>
-      <li><a href="/showcase/mobile/"><code>Mobile demos</code><p>Nuvaris biosite + Luminary landing — mobile design systems in device frames.</p></a></li>
-      <li><a href="/showcase/alpenglow/"><code>Alpenglow Gear</code><p>One site, four brand looks (Starbucks, IBM, Anthropic, McDonald’s) — VB replicating brands via themes.</p></a></li>
-    </ul>
+    <layout-grid data-layout-min="18rem">
+      <layout-card><a href="/showcase/meridian/"><strong>Meridian Labs</strong></a><p>A complete example design system — identity, tokens, type, components, voice.</p></layout-card>
+      <layout-card><a href="/showcase/alpenglow/"><strong>Alpenglow Gear</strong></a><p>One site, four brand looks (Starbucks, IBM, Anthropic, McDonald’s) — VB replicating brands via themes.</p></layout-card>
+      <layout-card><a href="/showcase/mobile/"><strong>Mobile demos</strong></a><p>Nuvaris biosite + Luminary landing — mobile design systems in device frames.</p></layout-card>
+    </layout-grid>
   </section>
 
   <section data-layout="stack" data-layout-gap="m">
     <h2>Elements</h2>
-    <ul class="element-grid">
-      <li><a href="/elements/color-palette/"><code>&lt;color-palette&gt;</code><p>Color ramp swatches with copy.</p></a></li>
-      <li><a href="/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code><p>Semantic color roles from tokens.</p></a></li>
-      <li><a href="/elements/type-specimen/"><code>&lt;type-specimen&gt;</code><p>Typography scale specimen.</p></a></li>
-      <li><a href="/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code><p>Spacing scale specimen.</p></a></li>
-      <li><a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code><p>Design-token table specimen.</p></a></li>
-      <li><a href="/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code><p>Motion / easing specimen.</p></a></li>
-      <li><a href="/elements/component-sampler/"><code>&lt;component-sampler&gt;</code><p>Render a component across variants.</p></a></li>
-      <li><a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code><p>Export the active theme (DTCG / CSS).</p></a></li>
-    </ul>
+    <layout-grid data-layout-min="16rem">
+      <layout-card><a href="/elements/color-palette/"><code>&lt;color-palette&gt;</code></a><p>Color ramp swatches with copy.</p></layout-card>
+      <layout-card><a href="/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code></a><p>Semantic color roles from tokens.</p></layout-card>
+      <layout-card><a href="/elements/type-specimen/"><code>&lt;type-specimen&gt;</code></a><p>Typography scale specimen.</p></layout-card>
+      <layout-card><a href="/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code></a><p>Spacing scale specimen.</p></layout-card>
+      <layout-card><a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a><p>Design-token table specimen.</p></layout-card>
+      <layout-card><a href="/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code></a><p>Motion / easing specimen.</p></layout-card>
+      <layout-card><a href="/elements/component-sampler/"><code>&lt;component-sampler&gt;</code></a><p>Render a component across variants.</p></layout-card>
+      <layout-card><a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a><p>Export the active theme (DTCG / CSS).</p></layout-card>
+    </layout-grid>
   </section>
 
   <section data-layout="stack" data-layout-gap="s">
@@ -46,6 +42,5 @@ description: Design-system documentation components for Vanilla Breeze.
     <code-block language="bash" data-escape>npm install @profpowell/vb-design-system</code-block>
     <code-block language="js" data-escape>import '@profpowell/vb-design-system';
 import '@profpowell/vb-design-system/css';</code-block>
-    <p>Pair with Vanilla Breeze tokens/themes on the page — the components inherit the active theme automatically. Use the <strong>Theme</strong> picker above to preview.</p>
+    <p>Pair with Vanilla Breeze tokens/themes on the page — components inherit the active theme automatically. Try the <strong>Theme</strong> picker above.</p>
   </section>
-</article>
