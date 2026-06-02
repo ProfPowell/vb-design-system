@@ -14,6 +14,11 @@ const here = dirname(fileURLToPath(import.meta.url));
 const siteRoot = resolve(here, '..');
 const repoRoot = resolve(siteRoot, '..');
 const BASE = (process.argv[2] || process.env.BASE_PATH || '').replace(/\/$/, '');
+// Per-publish cache-buster. theme-picker hardcodes /cdn/themes/ (no configurable
+// base), so its path is patched in the JS at publish time; without a changing URL
+// browsers serve a stale cached copy (cache-control: max-age=600) and fetch the
+// old, unprefixed path. Stamping local asset URLs forces a fresh fetch each deploy.
+const STAMP = Date.now().toString(36);
 
 const from = resolve(siteRoot, 'dist/pages');
 const to = resolve(repoRoot, 'docs');
@@ -35,7 +40,12 @@ function walk(dir) {
     const ext = extname(p);
     if (!BASE) continue;
     if (ext === '.html') {
-      writeFileSync(p, readFileSync(p, 'utf8').replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`));
+      let html = readFileSync(p, 'utf8')
+        .replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`)
+        // cache-bust local js/css so a changed build is never served stale
+        .replace(/(href|src)="([^"]+\.(?:js|css))"/g, (m, attr, url) =>
+          /^https?:/.test(url) ? m : `${attr}="${url}${url.includes('?') ? '&' : '?'}v=${STAMP}"`);
+      writeFileSync(p, html);
     } else if (ext === '.js') {
       let js = readFileSync(p, 'utf8');
       if (js.includes('/cdn/')) {
