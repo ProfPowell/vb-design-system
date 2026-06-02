@@ -24,9 +24,10 @@ writeFileSync(join(to, '.nojekyll'), '');
 
 // Under a project subpath, prefix root-absolute URLs:
 //  - HTML: every href/src (not protocol-relative // or external http(s))
-//  - JS: runtime fetches of /cdn/themes/ and /cdn/icons/ (theme-picker, icon-wc,
-//        the full VB bundle, the alpenglow theme-switcher) which can't be rewritten
-//        as HTML attributes.
+//  - JS: runtime fetches of /cdn/* (themes, icons, packs, sw) by theme-picker,
+//        icon-wc, the full VB bundle, and the alpenglow switcher. icon-wc builds
+//        its path from "/cdn/icons" (no trailing slash), so prefix any "/cdn/".
+//        (jsdelivr/cartocdn use "cdn." not "/cdn/", so they're unaffected.)
 function walk(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
@@ -37,8 +38,8 @@ function walk(dir) {
       writeFileSync(p, readFileSync(p, 'utf8').replace(/(href|src)="\/(?!\/)/g, `$1="${BASE}/`));
     } else if (ext === '.js') {
       let js = readFileSync(p, 'utf8');
-      if (js.includes('/cdn/themes/') || js.includes('/cdn/icons/')) {
-        js = js.replaceAll('/cdn/themes/', BASE + '/cdn/themes/').replaceAll('/cdn/icons/', BASE + '/cdn/icons/');
+      if (js.includes('/cdn/')) {
+        js = js.replaceAll('/cdn/', BASE + '/cdn/');
         writeFileSync(p, js);
       }
     }
