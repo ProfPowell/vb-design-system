@@ -48,6 +48,8 @@ console.log('  ✓ src/pages/cdn/themes (' + readdirSync(themesTo).length + ' fi
 // Core elements the Meridian showcase uses (standalone, conflict-free)
 cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/brand-mark.js'), resolve(vendor, 'brand-mark.js'));
 cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/icon-wc.js'), resolve(vendor, 'icon-wc.js'));
+// Extra components used by guides/theme-composer but not in the main bundle
+cp(resolve(nm, 'vanilla-breeze/dist/cdn/components/color-picker.js'), resolve(vendor, 'color-picker.js'));
 // design-system CSS patterns (do-dont, token-table) shipped by the package
 mkdirSync(resolve(vendor, 'patterns'), { recursive: true });
 cp(resolve(repoRoot, 'src/patterns/do-dont.css'), resolve(vendor, 'patterns/do-dont.css'));

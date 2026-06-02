@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mobile showcases — VB Design System</title>
-  <meta name="description" content="Mobile design demos built with Vanilla Breeze — a Nuvaris biosite and the Luminary landing page.">
+  <title>Guides — VB Design System</title>
+  <meta name="description" content="Concepts and how-tos for building design systems with Vanilla Breeze.">
   <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css">
   <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css">
   <link rel="stylesheet" href="/vb-design-system/assets/site.css">
@@ -16,9 +16,9 @@
   <nav class="pills" aria-label="Primary" data-layout="cluster" data-layout-gap="2xs">
     <a href="/vb-design-system/">Home</a>
     <a href="/vb-design-system/elements/">Elements</a>
-    <a href="/vb-design-system/guides/">Guides</a>
+    <a class="active" href="/vb-design-system/guides/">Guides</a>
     <a href="/vb-design-system/tools/theme-composer/">Composer</a>
-    <a class="active-parent" href="/vb-design-system/showcase/">Showcases</a>
+    <a href="/vb-design-system/showcase/">Showcases</a>
     <a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a>
     <a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a>
   </nav>
@@ -31,24 +31,15 @@
   <main>
     <article data-layout="stack" data-layout-gap="l">
   <header data-layout="stack" data-layout-gap="s">
-    <p class="breadcrumb"><a href="/vb-design-system/">Home</a> · Showcase</p>
-    <h1>Mobile showcases</h1>
-    <p class="lead">Two mobile-first sites built entirely with Vanilla Breeze — a design system in action. Tap into either full-screen demo, or use the <strong>Theme</strong> picker above to re-theme the page chrome.</p>
+    <h1>Guides</h1>
+    <p class="lead">How to go from brand values to a living design system with Vanilla Breeze.</p>
   </header>
-
-  <section data-layout="stack" data-layout-gap="m">
-    <h2>Nuvaris Therapeutics — biosite</h2>
-    <p>A polished single-page biosite: hero, science, pipeline, and contact, tuned for a phone.</p>
-    <p><a class="btn" href="/vb-design-system/showcase/mobile/biosite/" target="_blank" rel="noopener">Open full-screen ↗</a></p>
-    <browser-window device="iphone-16-pro-max" device-color="natural" src="/vb-design-system/showcase/mobile/biosite/" title="Nuvaris Therapeutics"></browser-window>
-  </section>
-
-  <section data-layout="stack" data-layout-gap="m">
-    <h2>Luminary — landing page</h2>
-    <p>A SaaS marketing landing page ("Ship faster. Together.") rendered on a phone.</p>
-    <p><a class="btn" href="/vb-design-system/showcase/mobile/luminary/" target="_blank" rel="noopener">Open full-screen ↗</a></p>
-    <browser-window device="pixel-9" device-color="obsidian" src="/vb-design-system/showcase/mobile/luminary/" title="Luminary"></browser-window>
-  </section>
+  <ul class="element-grid">
+    <li><a href="/vb-design-system/guides/design-systems/"><code>Building Design Systems</code><p>From brand values to a documented, living design system.</p></a></li>
+    <li><a href="/vb-design-system/guides/dtcg/"><code>DTCG Tokens</code><p>The Design Tokens Community Group format and round-tripping themes.</p></a></li>
+    <li><a href="/vb-design-system/guides/pack/"><code>Design System Pack</code><p>What the pack includes and how to load it.</p></a></li>
+    <li><a href="/vb-design-system/tools/theme-composer/"><code>Theme Composer</code><p>Assemble and export a complete theme from live specimens.</p></a></li>
+  </ul>
 </article>
   </main>
 
