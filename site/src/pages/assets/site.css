@@ -6,5 +6,6 @@
 .props-table th, .props-table td { text-align: start; padding: var(--size-2xs, 0.4rem) var(--size-s, 0.6rem); border-block-end: 1px solid var(--color-border, currentColor); vertical-align: top; }
 .props-table thead th { border-block-end-width: 2px; }
 
-/* Footer separation (chrome spacing; token-based so it stays theme-safe). */
-footer { border-block-start: 1px solid var(--color-border, currentColor); margin-block-start: var(--size-2xl, 3rem); padding-block: var(--size-l, 1.5rem); }
+/* Footer chrome comes entirely from vanilla-breeze's footer.minimal recipe
+   (see bg-wc docs/superpowers/specs/2026-06-10-vb-site-footer-pattern-design.md).
+   No unlayered footer rules here — they would override VB's layered styles. */
