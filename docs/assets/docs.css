@@ -30,11 +30,8 @@
       padding-inline: var(--size-l);
     }
 
-    /* Footer content centered within canvas width */
-    & > footer {
-      inline-size: 100%;
-      padding-inline: max(var(--size-l), calc(50% - var(--canvas-width, 72rem) / 2));
-    }
+    /* Footer chrome/centering comes from VB's footer.minimal recipe — no
+       unlayered footer rules (they would override VB's layered styles). */
   }
 
   body > header.site {
@@ -156,30 +153,9 @@
     }
   }
 
-  footer.minimal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--size-xs);
-    padding-block: var(--size-xl);
-    border-block-start: var(--border-width-thin) solid var(--color-border);
-
-    & > nav {
-      display: flex;
-      align-items: center;
-      gap: var(--size-m);
-    }
-
-    & a:not(.button) {
-      color: var(--color-text-muted);
-      text-decoration: none;
-    }
-
-    & a:not(.button):hover {
-      color: var(--color-interactive);
-      text-decoration: underline;
-    }
-  }
+  /* Footer chrome comes entirely from vanilla-breeze's footer.minimal recipe
+     (bg-wc docs/superpowers/specs/2026-06-10-vb-site-footer-pattern-design.md);
+     unlayered footer rules here would override VB's layered styles. */
 
   pre {
     max-inline-size: 100%;
@@ -285,9 +261,9 @@
    (Outside @scope — :root selectors need document-level matching)
    =========================================== */
 
-/* Alignment: center header/footer to match centered main */
-:root[data-page="docs"][data-backdrop] > body > header,
-:root[data-page="docs"][data-backdrop] > body > footer {
+/* Alignment: center header to match centered main (footer is VB's
+   footer.minimal recipe — centered content, no unlayered footer rules) */
+:root[data-page="docs"][data-backdrop] > body > header {
   max-inline-size: var(--canvas-width, 72rem);
   justify-self: center;
 }

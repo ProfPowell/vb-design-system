@@ -1,0 +1,76 @@
+<!-- Theme boot — prevents the flash of the wrong theme (FOUC).
+
+     Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
+     hardcode data-theme on <html>; the deferred vanilla-breeze.js ThemeManager
+     then read the saved prefs from VBStore and re-applied them after first
+     paint, producing a visible flash from the default theme to the stored one.
+
+     This inline, render-blocking script reads the same VBStore envelopes
+     (localStorage key "vb:{namespace}:{key}" -> { data, timestamp }) and applies
+     the saved theme/mode to <html> BEFORE first paint, so ThemeManager.init()
+     later re-applies identical prefs with nothing to change.
+
+     NOTE: written with string concatenation (no `${ }` template literals) so the
+     cook templating engine does not treat the JS as template variables. The brand
+     theme href is built from window.__VB_THEME_BASE (set just above) so this needs
+     no publish-time path rewrite. -->
+<style>
+  /* Keep paint suppressed until a boot-loaded brand theme stylesheet resolves,
+     so a returning visitor's brand theme never flashes through the default. */
+  html:has(link[data-vb-theme-state="loading"]) body { visibility: hidden; }
+</style>
+<script>
+  try {
+    var vbRead = function (ns, key) {
+      try {
+        var raw = localStorage.getItem('vb:' + ns + ':' + key);
+        if (!raw) return null;
+        var env = JSON.parse(raw);
+        return env && typeof env === 'object' && 'data' in env ? env.data : null;
+      } catch (e) { return null; }
+    };
+
+    var stored = vbRead('theme', 'current') || {};
+    var mode = stored.mode || 'auto';
+    var brand = stored.brand || 'default';
+    var coreThemes = {
+      'default': 1, 'a11y-high-contrast': 1, 'a11y-large-text': 1,
+      'a11y-dyslexia': 1, 'modern': 1, 'minimal': 1, 'classic': 1
+    };
+
+    if (mode !== 'auto') {
+      document.documentElement.dataset.mode = mode;
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.dataset.mode = 'dark';
+    }
+
+    var a11y = vbRead('settings', 'a11y');
+    var parts = [];
+    if (brand && brand !== 'default') parts.push(brand);
+    if (Array.isArray(a11y)) parts = parts.concat(a11y);
+    if (parts.length) document.documentElement.dataset.theme = parts.join(' ');
+
+    var safeBrand = /^[a-z0-9-]+$/.test(brand) ? brand : 'default';
+    if (safeBrand && !coreThemes[safeBrand] &&
+        !document.querySelector('link[data-vb-theme="' + safeBrand + '"]')) {
+      var base = window.__VB_THEME_BASE || '';
+      var href = base + '/themes/' + safeBrand + '.css';
+      document.write(
+        '<link rel="stylesheet" href="' + href + '"' +
+        ' data-vb-theme="' + safeBrand + '"' +
+        ' data-vb-theme-state="loading" data-vb-theme-boot=""' +
+        ' onload="this.setAttribute(\'data-vb-theme-state\',\'ready\')"' +
+        ' onerror="this.setAttribute(\'data-vb-theme-state\',\'error\')">'
+      );
+      // Safety fallback: if neither onload nor onerror fires (slow net, broken
+      // cache), flip state anyway so the :has(loading) guard never leaves the
+      // page invisible.
+      setTimeout(function () {
+        var link = document.querySelector('link[data-vb-theme-boot]');
+        if (link && link.getAttribute('data-vb-theme-state') === 'loading') {
+          link.setAttribute('data-vb-theme-state', 'timeout');
+        }
+      }, 1500);
+    }
+  } catch (e) {}
+</script>

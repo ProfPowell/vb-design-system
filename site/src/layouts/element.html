@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-theme="${defaultTheme}" data-mode="light" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
+<html lang="en" data-page="docs" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
        (%BASE_PATH% is replaced at publish; empty for local root). -->
   <script>window.__VB_THEME_BASE="%BASE_PATH%/cdn";document.documentElement.dataset.iconPath="%BASE_PATH%/cdn/icons";</script>
+  <include-file src="/includes/theme-boot.html"></include-file>
   <title>${elementName} — ${site.title}</title>
   <meta name="description" content="${description}">
   <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css">

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-theme="${defaultTheme}" data-mode="light" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
+<html lang="en" data-page="docs" data-fluid data-sticky data-icon-path="%BASE_PATH%/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
        (%BASE_PATH% is replaced at publish; empty for local root). Runtime config
        beats patching minified paths. -->
   <script>window.__VB_THEME_BASE="%BASE_PATH%/cdn";document.documentElement.dataset.iconPath="%BASE_PATH%/cdn/icons";</script>
+  <include-file src="/includes/theme-boot.html"></include-file>
   <title>${title} — ${site.title}</title>
   <meta name="description" content="${description}">
   <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css">
