@@ -1,0 +1,154 @@
+---
+layout: element
+title: "font-pairer"
+description: "Interactive font pairing tool — pick heading, body, code, and display fonts from a curated Google Fonts list, preview them in context, edit sample text live, and export as CSS custom properties."
+elementName: font-pairer
+category: component
+currentPath: /docs/elements/web-components/font-pairer/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;font-pairer&gt;</code> component is an authoring tool for exploring font pairings. Pick up to four font roles &mdash; heading, body, code, and display &mdash; from a curated Google Fonts list, preview them across several real-world contexts (combined, article, card UI, hero), and edit the sample text inline to see how each pairing holds up against your own copy. When you land on a pairing you like, export it as CSS custom properties or a Google Fonts <code>@import</code> statement.</p>
+
+  <div class="example">
+    <font-pairer heading-font="Playfair Display" body-font="Inter" show-export show-suggestions></font-pairer>
+  </div>
+
+  <code-block language="html" show-lines label="Font pairing tool" data-escape><font-pairer heading-font="Playfair Display" body-font="Inter" show-export show-suggestions></font-pairer></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>heading-font</code></td>
+        <td>string</td>
+        <td><code>Playfair Display</code></td>
+        <td>Initial Google Fonts family name for the heading role.</td>
+      </tr>
+      <tr>
+        <td><code>body-font</code></td>
+        <td>string</td>
+        <td><code>Inter</code></td>
+        <td>Initial Google Fonts family name for the body role.</td>
+      </tr>
+      <tr>
+        <td><code>code-font</code></td>
+        <td>string</td>
+        <td><code>JetBrains Mono</code></td>
+        <td>Initial Google Fonts family name for the code/monospace role.</td>
+      </tr>
+      <tr>
+        <td><code>display-font</code></td>
+        <td>string</td>
+        <td>same as <code>heading-font</code></td>
+        <td>Initial Google Fonts family name for the display/decorative role.</td>
+      </tr>
+      <tr>
+        <td><code>sample</code></td>
+        <td>string</td>
+        <td>&mdash;</td>
+        <td>Custom sample heading text.</td>
+      </tr>
+      <tr>
+        <td><code>preview</code></td>
+        <td>string</td>
+        <td><code>combined</code></td>
+        <td>Preview mode: <code>combined</code>, <code>article</code>, <code>long-article</code>, <code>card</code>, or <code>hero</code>.</td>
+      </tr>
+      <tr>
+        <td><code>show-export</code></td>
+        <td>boolean</td>
+        <td>&mdash;</td>
+        <td>Show the Copy CSS / Copy @import toolbar.</td>
+      </tr>
+      <tr>
+        <td><code>show-suggestions</code></td>
+        <td>boolean</td>
+        <td>&mdash;</td>
+        <td>Show curated pairing suggestions in a sidebar.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Editable previews</h2>
+  <p>Every sample line in the preview is <code>contenteditable</code>. Click into a heading, body paragraph, or code block and type your own content &mdash; the pairing renders live against whatever you write, so you can judge a pairing against real copy instead of generic placeholder text.</p>
+
+  <div class="example">
+    <font-pairer heading-font="Fraunces" body-font="Source Sans 3" preview="article"></font-pairer>
+  </div>
+
+  <code-block language="html" show-lines label="Article preview" data-escape><font-pairer heading-font="Fraunces" body-font="Source Sans 3" preview="article"></font-pairer></code-block>
+</section>
+
+<section>
+  <h2>Curated suggestions</h2>
+  <p>Set <code>show-suggestions</code> to surface a sidebar of pre-vetted heading/body pairings. Selecting one updates the heading, body, and display roles together.</p>
+
+  <div class="example">
+    <font-pairer heading-font="Libre Baskerville" body-font="Nunito Sans" show-suggestions></font-pairer>
+  </div>
+
+  <code-block language="html" show-lines label="With suggestions" data-escape><font-pairer heading-font="Libre Baskerville" body-font="Nunito Sans" show-suggestions></font-pairer></code-block>
+</section>
+
+<section>
+  <h2>Export Format</h2>
+  <p>Set <code>show-export</code> to reveal a <strong>Code</strong> panel with two copy actions:</p>
+  <dl>
+    <dt>Copy CSS</dt>
+    <dd>Emits <code>--font-heading</code>, <code>--font-body</code>, <code>--font-code</code>, and <code>--font-display</code> custom properties with the correct generic fallback (serif, sans-serif, monospace) for each role.</dd>
+    <dt>Copy @import</dt>
+    <dd>Emits the Google Fonts <code>@import url(...)</code> statement(s) needed to load every selected family and weight.</dd>
+  </dl>
+
+  <code-block language="css" show-lines label="Example output" data-escape>--font-heading: "Fraunces", serif;
+--font-body: "Source Sans 3", sans-serif;
+--font-code: "JetBrains Mono", monospace;
+--font-display: "Fraunces", serif;</code-block>
+</section>
+
+<section>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>font-pairer:change</code></td>
+        <td><code>{ heading, body, code, display }</code></td>
+        <td>Fires whenever a font role changes &mdash; via the role selects or a suggestion pill.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Font role selects are native <code>&lt;select&gt;</code> elements grouped by category (serif, sans-serif, display, monospace) via <code>&lt;optgroup&gt;</code>.</li>
+    <li>Preview mode tabs and suggestion pills are real <code>&lt;button type="button"&gt;</code> elements, reachable and activatable by keyboard.</li>
+    <li>Editable sample text uses <code>contenteditable="plaintext-only"</code> so pasted content can't smuggle in rich markup.</li>
+    <li>Google Fonts are loaded on demand per selection; no network request fires until a font is actually chosen.</li>
+  </ul>
+</section>

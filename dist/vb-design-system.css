@@ -721,6 +721,15 @@ layout-specimen .ls-chip {
   font-size: 0.85em;
 }
 
+/* src/web-components/font-pairer/styles.css */
+font-pairer {
+  display: block;
+  max-inline-size: 56rem;
+}
+font-pairer:not(:defined) {
+  display: none;
+}
+
 /* src/patterns/do-dont.css */
 [data-list=do-dont],
 [data-list=pro-con] {

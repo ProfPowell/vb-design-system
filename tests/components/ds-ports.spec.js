@@ -28,3 +28,10 @@ test('layout-specimen registers and renders', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => !!customElements.get('layout-specimen'))).toBe(true);
   await expect(page.locator('layout-specimen').first()).toBeVisible();
 });
+
+test('font-pairer registers and renders', async ({ page }) => {
+  await page.goto('elements/font-pairer/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('font-pairer'))).toBe(true);
+  await expect(page.locator('font-pairer').first()).toBeVisible();
+  await expect(page.locator('font-pairer button, font-pairer select').first()).toBeVisible();
+});

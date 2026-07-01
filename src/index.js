@@ -15,3 +15,4 @@ import './web-components/theme-export/logic.js';
 import './web-components/accessibility-specimen/logic.js';
 import './web-components/breakpoint-specimen/logic.js';
 import './web-components/layout-specimen/logic.js';
+import './web-components/font-pairer/logic.js';

@@ -10,6 +10,7 @@
 @import "./web-components/accessibility-specimen/styles.css";
 @import "./web-components/breakpoint-specimen/styles.css";
 @import "./web-components/layout-specimen/styles.css";
+@import "./web-components/font-pairer/styles.css";
 
 /* design-system authoring patterns */
 @import "./patterns/do-dont.css";

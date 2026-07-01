@@ -83,8 +83,8 @@
   } catch (e) {}
 </script>
 
-  <title>spacing-specimen — VB Design System</title>
-  <meta name="description" content="Spacing scale specimen web component that reads VB design tokens and renders a visual bar chart with computed values.">
+  <title>font-pairer — VB Design System</title>
+  <meta name="description" content="Interactive font pairing tool — pick heading, body, code, and display fonts from a curated Google Fonts list, preview them in context, edit sample text live, and export as CSS custom properties.">
   <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr2dnaj5">
   <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr2dnaj5">
   <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr2dnaj5">
@@ -189,7 +189,7 @@
   <summary>Type &amp; space</summary>
   <ul>
     <li><a href="/vb-design-system/elements/type-specimen/">type-specimen</a></li>
-    <li><a class="active" href="/vb-design-system/elements/spacing-specimen/">spacing-specimen</a></li>
+    <li><a href="/vb-design-system/elements/spacing-specimen/">spacing-specimen</a></li>
     <li><a href="/vb-design-system/elements/breakpoint-specimen/">breakpoint-specimen</a></li>
     <li><a href="/vb-design-system/elements/layout-specimen/">layout-specimen</a></li>
   </ul>
@@ -221,7 +221,7 @@
 <details data-sidebar-group="Tools" open>
   <summary>Tools</summary>
   <ul>
-    <li><a href="/vb-design-system/elements/font-pairer/">font-pairer</a></li>
+    <li><a class="active" href="/vb-design-system/elements/font-pairer/">font-pairer</a></li>
   </ul>
 </details>
 
@@ -241,22 +241,22 @@
             <ol>
               <li><a href="/vb-design-system/">Home</a></li>
               <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
-              <li><span aria-current="page">spacing-specimen</span></li>
+              <li><span aria-current="page">font-pairer</span></li>
             </ol>
           </nav>
-          <h1><code>&lt;spacing-specimen&gt;</code></h1>
-          <p class="lead">Spacing scale specimen web component that reads VB design tokens and renders a visual bar chart with computed values.</p>
+          <h1><code>&lt;font-pairer&gt;</code></h1>
+          <p class="lead">Interactive font pairing tool — pick heading, body, code, and display fonts from a curated Google Fonts list, preview them in context, edit sample text live, and export as CSS custom properties.</p>
 
           <heading-links levels="h2,h3">
             <section>
   <h2>Overview</h2>
-  <p>The <code>&lt;spacing-specimen&gt;</code> component reads VB spacing tokens from computed styles and renders a visual bar chart with token names and computed pixel values. It auto-adapts to the current theme.</p>
+  <p>The <code>&lt;font-pairer&gt;</code> component is an authoring tool for exploring font pairings. Pick up to four font roles — heading, body, code, and display — from a curated Google Fonts list, preview them across several real-world contexts (combined, article, card UI, hero), and edit the sample text inline to see how each pairing holds up against your own copy. When you land on a pairing you like, export it as CSS custom properties or a Google Fonts <code>@import</code> statement.</p>
 
   <div class="example">
-    <spacing-specimen></spacing-specimen>
+    <font-pairer heading-font="Playfair Display" body-font="Inter" show-export="" show-suggestions=""></font-pairer>
   </div>
 
-  <code-block language="html" data-ssr label="Basic specimen" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Font pairing tool" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -734,14 +734,14 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Basic specimen</span></div>
+        <div class="label-container" id="code-label"><span class="label">Font pairing tool</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
         <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">font-pairer</span> <span class="hljs-attr">heading-font</span>=<span class="hljs-string">&quot;Playfair Display&quot;</span> <span class="hljs-attr">body-font</span>=<span class="hljs-string">&quot;Inter&quot;</span> <span class="hljs-attr">show-export</span> <span class="hljs-attr">show-suggestions</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">font-pairer</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;spacing-specimen&gt;&lt;/spacing-specimen&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;font-pairer heading-font=&quot;Playfair Display&quot; body-font=&quot;Inter&quot; show-export show-suggestions&gt;&lt;/font-pairer&gt;</textarea></code-block>
 </section>
 
 <section>
@@ -757,48 +757,66 @@
     </thead>
     <tbody>
       <tr>
-        <td><code>tokens</code></td>
+        <td><code>heading-font</code></td>
         <td>string</td>
-        <td><code>3xs,2xs,xs,s,m,l,xl,2xl,3xl</code></td>
-        <td>Comma-separated token names to display</td>
+        <td><code>Playfair Display</code></td>
+        <td>Initial Google Fonts family name for the heading role.</td>
       </tr>
       <tr>
-        <td><code>prefix</code></td>
+        <td><code>body-font</code></td>
         <td>string</td>
-        <td><code>--size-</code></td>
-        <td>CSS custom property prefix for token lookup</td>
+        <td><code>Inter</code></td>
+        <td>Initial Google Fonts family name for the body role.</td>
       </tr>
       <tr>
-        <td><code>show-values</code></td>
+        <td><code>code-font</code></td>
+        <td>string</td>
+        <td><code>JetBrains Mono</code></td>
+        <td>Initial Google Fonts family name for the code/monospace role.</td>
+      </tr>
+      <tr>
+        <td><code>display-font</code></td>
+        <td>string</td>
+        <td>same as <code>heading-font</code></td>
+        <td>Initial Google Fonts family name for the display/decorative role.</td>
+      </tr>
+      <tr>
+        <td><code>sample</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Custom sample heading text.</td>
+      </tr>
+      <tr>
+        <td><code>preview</code></td>
+        <td>string</td>
+        <td><code>combined</code></td>
+        <td>Preview mode: <code>combined</code>, <code>article</code>, <code>long-article</code>, <code>card</code>, or <code>hero</code>.</td>
+      </tr>
+      <tr>
+        <td><code>show-export</code></td>
         <td>boolean</td>
-        <td><code>true</code></td>
-        <td>Show computed pixel values (set to "false" to hide)</td>
+        <td>—</td>
+        <td>Show the Copy CSS / Copy @import toolbar.</td>
       </tr>
       <tr>
-        <td><code>label</code></td>
-        <td>string</td>
-        <td>-</td>
-        <td>Optional heading label above the scale</td>
-      </tr>
-      <tr>
-        <td><code>max</code></td>
-        <td>string</td>
-        <td><code>40</code></td>
-        <td>Maximum bar width in ch units</td>
+        <td><code>show-suggestions</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Show curated pairing suggestions in a sidebar.</td>
       </tr>
     </tbody>
   </table>
 </section>
 
 <section>
-  <h2>Custom Subset</h2>
-  <p>Show only the tokens you need.</p>
+  <h2>Editable previews</h2>
+  <p>Every sample line in the preview is <code>contenteditable</code>. Click into a heading, body paragraph, or code block and type your own content — the pairing renders live against whatever you write, so you can judge a pairing against real copy instead of generic placeholder text.</p>
 
   <div class="example">
-    <spacing-specimen tokens="xs,s,m,l,xl" label="Core Scale"></spacing-specimen>
+    <font-pairer heading-font="Fraunces" body-font="Source Sans 3" preview="article"></font-pairer>
   </div>
 
-  <code-block language="html" data-ssr label="Custom subset" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Article preview" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1276,1513 +1294,1041 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Custom subset</span></div>
+        <div class="label-container" id="code-label"><span class="label">Article preview</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">font-pairer</span> <span class="hljs-attr">heading-font</span>=<span class="hljs-string">&quot;Fraunces&quot;</span> <span class="hljs-attr">body-font</span>=<span class="hljs-string">&quot;Source Sans 3&quot;</span> <span class="hljs-attr">preview</span>=<span class="hljs-string">&quot;article&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">font-pairer</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;font-pairer heading-font=&quot;Fraunces&quot; body-font=&quot;Source Sans 3&quot; preview=&quot;article&quot;&gt;&lt;/font-pairer&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Curated suggestions</h2>
+  <p>Set <code>show-suggestions</code> to surface a sidebar of pre-vetted heading/body pairings. Selecting one updates the heading, body, and display roles together.</p>
+
+  <div class="example">
+    <font-pairer heading-font="Libre Baskerville" body-font="Nunito Sans" show-suggestions=""></font-pairer>
+  </div>
+
+  <code-block language="html" data-ssr label="With suggestions" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">With suggestions</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">font-pairer</span> <span class="hljs-attr">heading-font</span>=<span class="hljs-string">&quot;Libre Baskerville&quot;</span> <span class="hljs-attr">body-font</span>=<span class="hljs-string">&quot;Nunito Sans&quot;</span> <span class="hljs-attr">show-suggestions</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">font-pairer</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;font-pairer heading-font=&quot;Libre Baskerville&quot; body-font=&quot;Nunito Sans&quot; show-suggestions&gt;&lt;/font-pairer&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Export Format</h2>
+  <p>Set <code>show-export</code> to reveal a <strong>Code</strong> panel with two copy actions:</p>
+  <dl>
+    <dt>Copy CSS</dt>
+    <dd>Emits <code>--font-heading</code>, <code>--font-body</code>, <code>--font-code</code>, and <code>--font-display</code> custom properties with the correct generic fallback (serif, sans-serif, monospace) for each role.</dd>
+    <dt>Copy @import</dt>
+    <dd>Emits the Google Fonts <code>@import url(...)</code> statement(s) needed to load every selected family and weight.</dd>
+  </dl>
+
+  <code-block language="css" data-ssr label="Example output" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Example output</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
         <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;xs,s,m,l,xl&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Core Scale&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-css" tabindex="0"><span class="code-line"><span class="hljs-attr">--font-heading</span>: <span class="hljs-string">&quot;Fraunces&quot;</span>, serif;</span><span class="code-line"><span class="hljs-attr">--font-body</span>: <span class="hljs-string">&quot;Source Sans 3&quot;</span>, sans-serif;</span><span class="code-line"><span class="hljs-attr">--font-code</span>: <span class="hljs-string">&quot;JetBrains Mono&quot;</span>, monospace;</span><span class="code-line"><span class="hljs-attr">--font-display</span>: <span class="hljs-string">&quot;Fraunces&quot;</span>, serif;</span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;spacing-specimen
-  tokens=&quot;xs,s,m,l,xl&quot;
-  label=&quot;Core Scale&quot;&gt;
-&lt;/spacing-specimen&gt;</textarea></code-block>
+      </template><textarea style="display:none">--font-heading: &quot;Fraunces&quot;, serif;
+--font-body: &quot;Source Sans 3&quot;, sans-serif;
+--font-code: &quot;JetBrains Mono&quot;, monospace;
+--font-display: &quot;Fraunces&quot;, serif;</textarea></code-block>
 </section>
 
 <section>
-  <h2>Progressive Enhancement</h2>
-  <p>Without JavaScript, the fallback content (e.g., a <code>&lt;dl&gt;</code> listing token names) is shown. When JS loads, the component reads computed CSS values and renders the visual scale.</p>
-
-  <code-block language="html" data-ssr label="With fallback content" show-lines><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">With fallback content</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">dl</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>xs<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>var(--size-xs)<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>m<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>var(--size-m)<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>xl<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>var(--size-xl)<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">dl</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
-      </div>
-      </template><textarea style="display:none">&lt;spacing-specimen&gt;
-  &lt;dl&gt;
-    &lt;dt&gt;xs&lt;/dt&gt;&lt;dd&gt;var(--size-xs)&lt;/dd&gt;
-    &lt;dt&gt;m&lt;/dt&gt;&lt;dd&gt;var(--size-m)&lt;/dd&gt;
-    &lt;dt&gt;xl&lt;/dt&gt;&lt;dd&gt;var(--size-xl)&lt;/dd&gt;
-  &lt;/dl&gt;
-&lt;/spacing-specimen&gt;</textarea></code-block>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>font-pairer:change</code></td>
+        <td><code>{ heading, body, code, display }</code></td>
+        <td>Fires whenever a font role changes — via the role selects or a suggestion pill.</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <section>
-  <h2>Editable Mode</h2>
-  <p>Add the <code>editable</code> attribute to replace the value cell with a text input per row. Editing a value writes that token as a CSS custom property on <code>target</code> (default <code>:root</code>), so the rest of the page updates live.</p>
-
-  <div class="example">
-    <spacing-specimen editable="" tokens="xs,s,m,l,xl" label="Try It"></spacing-specimen>
-  </div>
-
-  <code-block language="html" data-ssr label="Live spacing editing" show-lines><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Live spacing editing</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;xs,s,m,l,xl&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Try It&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
-      </div>
-      </template><textarea style="display:none">&lt;spacing-specimen
-  editable
-  tokens=&quot;xs,s,m,l,xl&quot;
-  label=&quot;Try It&quot;&gt;
-&lt;/spacing-specimen&gt;</textarea></code-block>
-
-  <p>Listen for edits via the <code>spacing-specimen:change</code> event — useful for collecting token overrides into a theme export.</p>
-
-  <code-block language="javascript" data-ssr label="Listening to edits" show-lines><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Listening to edits</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-javascript" tabindex="0"><span class="code-line"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;spacing-specimen&#x27;</span>)</span><span class="code-line">  .<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;spacing-specimen:change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {</span><span class="code-line">    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">detail</span>);</span><span class="code-line">    <span class="hljs-comment">// { name: &#x27;m&#x27;, value: &#x27;1.25rem&#x27;, token: &#x27;--size-m&#x27;, target: &#x27;:root&#x27; }</span></span><span class="code-line">  });</span></code></pre>
-      </div>
-      </template><textarea style="display:none">document.querySelector(&#39;spacing-specimen&#39;)
-  .addEventListener(&#39;spacing-specimen:change&#39;, (e) =&gt; {
-    console.log(e.detail);
-    // { name: &#39;m&#39;, value: &#39;1.25rem&#39;, token: &#39;--size-m&#39;, target: &#39;:root&#39; }
-  });</textarea></code-block>
-</section>
-
-<section>
-  <h2>Theme-Aware</h2>
-  <p>The component reads live computed values, so when themes change spacing tokens (e.g., 8bit uses larger spacing), the bars update automatically. Pair with <code>&lt;type-specimen&gt;</code> and <code>&lt;color-palette&gt;</code> for complete design system documentation pages.</p>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Font role selects are native <code>&lt;select&gt;</code> elements grouped by category (serif, sans-serif, display, monospace) via <code>&lt;optgroup&gt;</code>.</li>
+    <li>Preview mode tabs and suggestion pills are real <code>&lt;button type="button"&gt;</code> elements, reachable and activatable by keyboard.</li>
+    <li>Editable sample text uses <code>contenteditable="plaintext-only"</code> so pasted content can't smuggle in rich markup.</li>
+    <li>Google Fonts are loaded on demand per selection; no network request fires until a font is actually chosen.</li>
+  </ul>
 </section>
           </heading-links>
         </article>
