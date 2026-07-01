@@ -16,3 +16,9 @@ test('accessibility-specimen registers and renders', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => !!customElements.get('accessibility-specimen'))).toBe(true);
   await expect(page.locator('accessibility-specimen').first()).toBeVisible();
 });
+
+test('breakpoint-specimen registers and renders', async ({ page }) => {
+  await page.goto('elements/breakpoint-specimen/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('breakpoint-specimen'))).toBe(true);
+  await expect(page.locator('breakpoint-specimen').first()).toBeVisible();
+});

@@ -1,0 +1,109 @@
+---
+layout: element
+title: "breakpoint-specimen"
+description: "Responsive breakpoint visualization web component. Renders a ruler of viewport breakpoints with a live width readout and a moving cursor for the active breakpoint."
+elementName: breakpoint-specimen
+category: component
+currentPath: /docs/elements/web-components/breakpoint-specimen/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;breakpoint-specimen&gt;</code> component reads <code>--bp-*</code> breakpoint tokens from computed styles and renders a ruler of viewport breakpoints, a live numeric width readout, and a moving cursor marking the current position. The active breakpoint is called out both on the ruler and in the readout.</p>
+
+  <div class="example">
+    <breakpoint-specimen></breakpoint-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Basic specimen" data-escape><breakpoint-specimen></breakpoint-specimen></code-block>
+
+  <p>Resize the browser window to see the width readout, cursor, and active-breakpoint highlight update live.</p>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>tokens</code></td>
+        <td>string</td>
+        <td><code>sm,md,lg,xl</code></td>
+        <td>Comma-separated breakpoint names to display</td>
+      </tr>
+      <tr>
+        <td><code>prefix</code></td>
+        <td>string</td>
+        <td><code>--bp-</code></td>
+        <td>CSS custom property prefix for token lookup</td>
+      </tr>
+      <tr>
+        <td><code>label</code></td>
+        <td>string</td>
+        <td>-</td>
+        <td>Optional heading label above the ruler</td>
+      </tr>
+      <tr>
+        <td><code>data-observe</code></td>
+        <td>string</td>
+        <td>-</td>
+        <td>CSS selector of a container to track instead of the viewport (container-query mode, JS-only)</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Custom Subset</h2>
+  <p>Show only the breakpoints you need, and add a heading label.</p>
+
+  <div class="example">
+    <breakpoint-specimen tokens="sm,md,lg" label="Core breakpoints"></breakpoint-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Custom subset" data-escape><breakpoint-specimen
+  tokens="sm,md,lg"
+  label="Core breakpoints">
+</breakpoint-specimen></code-block>
+</section>
+
+<section>
+  <h2>Container Mode</h2>
+  <p>Set <code>data-observe</code> to a CSS selector to track a specific element's width (via <code>ResizeObserver</code>) instead of the viewport &mdash; useful for documenting a breakpoint scheme that applies to a resizable panel or preview frame rather than the whole window.</p>
+
+  <code-block language="html" show-lines label="Tracking a container" data-escape><breakpoint-specimen data-observe="#preview-frame"></breakpoint-specimen></code-block>
+</section>
+
+<section>
+  <h2>Progressive Enhancement</h2>
+  <p>The component follows three layers of enhancement:</p>
+  <ol>
+    <li><strong>HTML</strong> &mdash; a semantic <code>&lt;dl&gt;</code> of breakpoint name &rarr; value remains readable without JS or CSS.</li>
+    <li><strong>CSS</strong> &mdash; pure-CSS active-row highlighting via <code>@media</code> rules pulls the matching token into a callout, no JS required for the "which breakpoint is active" cue (viewport mode only).</li>
+    <li><strong>JS</strong> &mdash; adds the live numeric width readout and the moving cursor on the ruler, plus container-query mode (<code>data-observe</code>).</li>
+  </ol>
+
+  <code-block language="html" show-lines label="With fallback content">&lt;breakpoint-specimen&gt;
+  &lt;dl&gt;
+    &lt;dt&gt;sm&lt;/dt&gt;&lt;dd&gt;37.5rem (600px) and up&lt;/dd&gt;
+    &lt;dt&gt;md&lt;/dt&gt;&lt;dd&gt;48rem (768px) and up&lt;/dd&gt;
+    &lt;dt&gt;lg&lt;/dt&gt;&lt;dd&gt;64rem (1024px) and up&lt;/dd&gt;
+    &lt;dt&gt;xl&lt;/dt&gt;&lt;dd&gt;87.5rem (1400px) and up&lt;/dd&gt;
+  &lt;/dl&gt;
+&lt;/breakpoint-specimen&gt;</code-block>
+</section>
+
+<section>
+  <h2>Theme-Aware</h2>
+  <p>The component reads live computed <code>--bp-*</code> values, so a theme that redefines breakpoint tokens updates the ruler automatically. Pair with <code>&lt;spacing-specimen&gt;</code> and <code>&lt;type-specimen&gt;</code> for complete design system documentation pages.</p>
+</section>

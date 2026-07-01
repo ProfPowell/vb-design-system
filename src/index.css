@@ -8,6 +8,7 @@
 @import "./web-components/semantic-palette/styles.css";
 @import "./web-components/motion-specimen/styles.css";
 @import "./web-components/accessibility-specimen/styles.css";
+@import "./web-components/breakpoint-specimen/styles.css";
 
 /* design-system authoring patterns */
 @import "./patterns/do-dont.css";

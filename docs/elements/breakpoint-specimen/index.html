@@ -83,8 +83,8 @@
   } catch (e) {}
 </script>
 
-  <title>color-palette — VB Design System</title>
-  <meta name="description" content="Interactive color swatch display web component with click-to-copy and multiple layout modes.">
+  <title>breakpoint-specimen — VB Design System</title>
+  <meta name="description" content="Responsive breakpoint visualization web component. Renders a ruler of viewport breakpoints with a live width readout and a moving cursor for the active breakpoint.">
   <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr2cktj7">
   <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr2cktj7">
   <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr2cktj7">
@@ -179,7 +179,7 @@
 <details data-sidebar-group="Color" open>
   <summary>Color</summary>
   <ul>
-    <li><a class="active" href="/vb-design-system/elements/color-palette/">color-palette</a></li>
+    <li><a href="/vb-design-system/elements/color-palette/">color-palette</a></li>
     <li><a href="/vb-design-system/elements/palette-generator/">palette-generator</a></li>
     <li><a href="/vb-design-system/elements/semantic-palette/">semantic-palette</a></li>
   </ul>
@@ -190,7 +190,7 @@
   <ul>
     <li><a href="/vb-design-system/elements/type-specimen/">type-specimen</a></li>
     <li><a href="/vb-design-system/elements/spacing-specimen/">spacing-specimen</a></li>
-    <li><a href="/vb-design-system/elements/breakpoint-specimen/">breakpoint-specimen</a></li>
+    <li><a class="active" href="/vb-design-system/elements/breakpoint-specimen/">breakpoint-specimen</a></li>
   </ul>
 </details>
 
@@ -233,22 +233,22 @@
             <ol>
               <li><a href="/vb-design-system/">Home</a></li>
               <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
-              <li><span aria-current="page">color-palette</span></li>
+              <li><span aria-current="page">breakpoint-specimen</span></li>
             </ol>
           </nav>
-          <h1><code>&lt;color-palette&gt;</code></h1>
-          <p class="lead">Interactive color swatch display web component with click-to-copy and multiple layout modes.</p>
+          <h1><code>&lt;breakpoint-specimen&gt;</code></h1>
+          <p class="lead">Responsive breakpoint visualization web component. Renders a ruler of viewport breakpoints with a live width readout and a moving cursor for the active breakpoint.</p>
 
           <heading-links levels="h2,h3">
             <section>
   <h2>Overview</h2>
-  <p>The <code>&lt;color-palette&gt;</code> component renders interactive color swatches from a comma-separated list. Click any swatch to copy its value to the clipboard. Supports hex, rgb, hsl, and oklch color formats.</p>
+  <p>The <code>&lt;breakpoint-specimen&gt;</code> component reads <code>--bp-*</code> breakpoint tokens from computed styles and renders a ruler of viewport breakpoints, a live numeric width readout, and a moving cursor marking the current position. The active breakpoint is called out both on the ruler and in the readout.</p>
 
   <div class="example">
-    <color-palette colors="#ff6b6b,#4ecdc4,#45b7d1,#f7dc6f,#bb8fce" names="Red,Teal,Sky,Gold,Purple" show-names=""></color-palette>
+    <breakpoint-specimen></breakpoint-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Basic palette" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Basic specimen" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -726,18 +726,16 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Basic palette</span></div>
+        <div class="label-container" id="code-label"><span class="label">Basic specimen</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#ff6b6b,#4ecdc4,#45b7d1,#f7dc6f,#bb8fce&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;Red,Teal,Sky,Gold,Purple&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-names</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span></code></pre>
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">breakpoint-specimen</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">breakpoint-specimen</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;color-palette
-  colors=&quot;#ff6b6b,#4ecdc4,#45b7d1,#f7dc6f,#bb8fce&quot;
-  names=&quot;Red,Teal,Sky,Gold,Purple&quot;
-  show-names&gt;
-&lt;/color-palette&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;breakpoint-specimen&gt;&lt;/breakpoint-specimen&gt;</textarea></code-block>
+
+  <p>Resize the browser window to see the width readout, cursor, and active-breakpoint highlight update live.</p>
 </section>
 
 <section>
@@ -753,60 +751,42 @@
     </thead>
     <tbody>
       <tr>
-        <td><code>colors</code></td>
+        <td><code>tokens</code></td>
         <td>string</td>
-        <td>—</td>
-        <td>Comma-separated color values (hex, rgb, oklch, etc.).</td>
+        <td><code>sm,md,lg,xl</code></td>
+        <td>Comma-separated breakpoint names to display</td>
       </tr>
       <tr>
-        <td><code>names</code></td>
+        <td><code>prefix</code></td>
         <td>string</td>
-        <td>—</td>
-        <td>Comma-separated swatch labels.</td>
+        <td><code>--bp-</code></td>
+        <td>CSS custom property prefix for token lookup</td>
       </tr>
       <tr>
-        <td><code>layout</code></td>
+        <td><code>label</code></td>
         <td>string</td>
-        <td><code>inline</code></td>
-        <td>Display mode: <code>inline</code>, <code>grid</code>, or <code>list</code>.</td>
+        <td>-</td>
+        <td>Optional heading label above the ruler</td>
       </tr>
       <tr>
-        <td><code>show-values</code></td>
-        <td>boolean</td>
-        <td>—</td>
-        <td>Show color value text on each swatch.</td>
-      </tr>
-      <tr>
-        <td><code>show-names</code></td>
-        <td>boolean</td>
-        <td>—</td>
-        <td>Show name labels on each swatch.</td>
-      </tr>
-      <tr>
-        <td><code>size</code></td>
+        <td><code>data-observe</code></td>
         <td>string</td>
-        <td><code>md</code></td>
-        <td>Swatch size: <code>sm</code> (32px), <code>md</code> (48px), or <code>lg</code> (72px).</td>
-      </tr>
-      <tr>
-        <td><code>editable</code></td>
-        <td>boolean</td>
-        <td>—</td>
-        <td>Click a swatch to edit its color via the native OS picker. Updates the <code>colors</code> attribute and fires <code>color-palette:change</code>.</td>
+        <td>-</td>
+        <td>CSS selector of a container to track instead of the viewport (container-query mode, JS-only)</td>
       </tr>
     </tbody>
   </table>
 </section>
 
 <section>
-  <h2>Editable mode</h2>
-  <p>Add the <code>editable</code> attribute and each swatch becomes a click-to-edit target. Clicking opens the native OS color picker; changes update the swatch and fire <code>color-palette:change</code> with the full updated colors array.</p>
+  <h2>Custom Subset</h2>
+  <p>Show only the breakpoints you need, and add a heading label.</p>
 
   <div class="example">
-    <color-palette colors="#6366f1,#ec4899,#22c55e,#eab308" editable="" size="lg" show-values=""></color-palette>
+    <breakpoint-specimen tokens="sm,md,lg" label="Core breakpoints"></breakpoint-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Editable palette" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Custom subset" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1284,30 +1264,24 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Editable palette</span></div>
+        <div class="label-container" id="code-label"><span class="label">Custom subset</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#6366f1,#ec4899,#22c55e,#eab308&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;lg&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-values</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span></code></pre>
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">breakpoint-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;sm,md,lg&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Core breakpoints&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">breakpoint-specimen</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;color-palette
-  colors=&quot;#6366f1,#ec4899,#22c55e,#eab308&quot;
-  editable
-  size=&quot;lg&quot;
-  show-values&gt;
-&lt;/color-palette&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;breakpoint-specimen
+  tokens=&quot;sm,md,lg&quot;
+  label=&quot;Core breakpoints&quot;&gt;
+&lt;/breakpoint-specimen&gt;</textarea></code-block>
 </section>
 
 <section>
-  <h2>Layout Modes</h2>
+  <h2>Container Mode</h2>
+  <p>Set <code>data-observe</code> to a CSS selector to track a specific element's width (via <code>ResizeObserver</code>) instead of the viewport — useful for documenting a breakpoint scheme that applies to a resizable panel or preview frame rather than the whole window.</p>
 
-  <h3>Grid</h3>
-  <p>Auto-filling grid that wraps responsively.</p>
-  <div class="example">
-    <color-palette colors="#2d3436,#636e72,#b2bec3,#dfe6e9,#ffffff" names="Dark,Gray,Silver,Light,White" layout="grid" size="lg" show-values="" show-names=""></color-palette>
-  </div>
-  <code-block language="html" data-ssr label="Grid layout" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Tracking a container" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1785,1544 +1759,523 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Grid layout</span></div>
+        <div class="label-container" id="code-label"><span class="label">Tracking a container</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">breakpoint-specimen</span> <span class="hljs-attr">data-observe</span>=<span class="hljs-string">&quot;#preview-frame&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">breakpoint-specimen</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;breakpoint-specimen data-observe=&quot;#preview-frame&quot;&gt;&lt;/breakpoint-specimen&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Progressive Enhancement</h2>
+  <p>The component follows three layers of enhancement:</p>
+  <ol>
+    <li><strong>HTML</strong> — a semantic <code>&lt;dl&gt;</code> of breakpoint name → value remains readable without JS or CSS.</li>
+    <li><strong>CSS</strong> — pure-CSS active-row highlighting via <code>@media</code> rules pulls the matching token into a callout, no JS required for the "which breakpoint is active" cue (viewport mode only).</li>
+    <li><strong>JS</strong> — adds the live numeric width readout and the moving cursor on the ruler, plus container-query mode (<code>data-observe</code>).</li>
+  </ol>
+
+  <code-block language="html" data-ssr label="With fallback content" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">With fallback content</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
         <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#2d3436,#636e72,#b2bec3,#dfe6e9,#ffffff&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;Dark,Gray,Silver,Light,White&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">layout</span>=<span class="hljs-string">&quot;grid&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;lg&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-values</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-names</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">breakpoint-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">dl</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>sm<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>37.5rem (600px) and up<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>md<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>48rem (768px) and up<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>lg<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>64rem (1024px) and up<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">dt</span>&gt;</span>xl<span class="hljs-tag">&lt;/<span class="hljs-name">dt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">dd</span>&gt;</span>87.5rem (1400px) and up<span class="hljs-tag">&lt;/<span class="hljs-name">dd</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">dl</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">breakpoint-specimen</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;color-palette
-  colors=&quot;#2d3436,#636e72,#b2bec3,#dfe6e9,#ffffff&quot;
-  names=&quot;Dark,Gray,Silver,Light,White&quot;
-  layout=&quot;grid&quot;
-  size=&quot;lg&quot;
-  show-values
-  show-names&gt;
-&lt;/color-palette&gt;</textarea></code-block>
-
-  <h3>List</h3>
-  <p>Vertical list with color values alongside.</p>
-  <div class="example">
-    <color-palette colors="#1a5276,#2e86c1,#85c1e9" names="Navy,Blue,Sky" layout="list" show-values="" show-names=""></color-palette>
-  </div>
-  <code-block language="html" data-ssr label="List layout" show-lines><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">List layout</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#1a5276,#2e86c1,#85c1e9&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;Navy,Blue,Sky&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">layout</span>=<span class="hljs-string">&quot;list&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-values</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-names</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span></code></pre>
-      </div>
-      </template><textarea style="display:none">&lt;color-palette
-  colors=&quot;#1a5276,#2e86c1,#85c1e9&quot;
-  names=&quot;Navy,Blue,Sky&quot;
-  layout=&quot;list&quot;
-  show-values
-  show-names&gt;
-&lt;/color-palette&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;breakpoint-specimen&gt;
+  &lt;dl&gt;
+    &lt;dt&gt;sm&lt;/dt&gt;&lt;dd&gt;37.5rem (600px) and up&lt;/dd&gt;
+    &lt;dt&gt;md&lt;/dt&gt;&lt;dd&gt;48rem (768px) and up&lt;/dd&gt;
+    &lt;dt&gt;lg&lt;/dt&gt;&lt;dd&gt;64rem (1024px) and up&lt;/dd&gt;
+    &lt;dt&gt;xl&lt;/dt&gt;&lt;dd&gt;87.5rem (1400px) and up&lt;/dd&gt;
+  &lt;/dl&gt;
+&lt;/breakpoint-specimen&gt;</textarea></code-block>
 </section>
 
 <section>
-  <h2>oklch Colors</h2>
-  <p>The parser handles functional color notation that contains commas, such as <code>oklch()</code>.</p>
-
-  <div class="example">
-    <color-palette colors="oklch(50% 0.2 260),oklch(65% 0.18 30),oklch(75% 0.15 140),oklch(85% 0.12 80)" names="Indigo,Orange,Green,Gold" show-values="" show-names=""></color-palette>
-  </div>
-  <code-block language="html" data-ssr label="oklch colors" show-lines><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">oklch colors</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;oklch(50% 0.2 260),oklch(65% 0.18 30),oklch(75% 0.15 140),oklch(85% 0.12 80)&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;Indigo,Orange,Green,Gold&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-values</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-names</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span></code></pre>
-      </div>
-      </template><textarea style="display:none">&lt;color-palette
-  colors=&quot;oklch(50% 0.2 260),oklch(65% 0.18 30),oklch(75% 0.15 140),oklch(85% 0.12 80)&quot;
-  names=&quot;Indigo,Orange,Green,Gold&quot;
-  show-values
-  show-names&gt;
-&lt;/color-palette&gt;</textarea></code-block>
-</section>
-
-<section>
-  <h2>Events</h2>
-  <table class="props-table">
-    <thead>
-      <tr>
-        <th>Event</th>
-        <th>Detail</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>color-palette:select</code></td>
-        <td><code>{ color, name, index }</code></td>
-        <td>Fired when a swatch is clicked (non-editable mode). The color value is also copied to the clipboard.</td>
-      </tr>
-      <tr>
-        <td><code>color-palette:change</code></td>
-        <td><code>{ color, name, index, colors }</code></td>
-        <td>Fired when an editable swatch changes. Includes the full updated <code>colors</code> array.</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <code-block language="javascript" data-ssr label="Listening for selections" show-lines><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Listening for selections</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-javascript" tabindex="0"><span class="code-line"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;color-palette&#x27;</span>)</span><span class="code-line">  .<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;color-palette:select&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {</span><span class="code-line">    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">detail</span>);</span><span class="code-line">    <span class="hljs-comment">// { color: &#x27;#ff6b6b&#x27;, name: &#x27;Red&#x27;, index: 0 }</span></span><span class="code-line">  });</span></code></pre>
-      </div>
-      </template><textarea style="display:none">document.querySelector(&#39;color-palette&#39;)
-  .addEventListener(&#39;color-palette:select&#39;, (e) =&gt; {
-    console.log(e.detail);
-    // { color: &#39;#ff6b6b&#39;, name: &#39;Red&#39;, index: 0 }
-  });</textarea></code-block>
-</section>
-
-<section>
-  <h2>Accessibility</h2>
-  <ul>
-    <li>The palette uses <code>role="group"</code> with <code>aria-label="Color palette"</code>.</li>
-    <li>Each swatch is a <code>&lt;button&gt;</code> with an <code>aria-label</code> including the color name and value.</li>
-    <li>Full keyboard navigation — Tab between swatches, Enter/Space to copy.</li>
-  </ul>
+  <h2>Theme-Aware</h2>
+  <p>The component reads live computed <code>--bp-*</code> values, so a theme that redefines breakpoint tokens updates the ruler automatically. Pair with <code>&lt;spacing-specimen&gt;</code> and <code>&lt;type-specimen&gt;</code> for complete design system documentation pages.</p>
 </section>
           </heading-links>
         </article>

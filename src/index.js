@@ -13,3 +13,4 @@ import './web-components/semantic-palette/logic.js';
 import './web-components/motion-specimen/logic.js';
 import './web-components/theme-export/logic.js';
 import './web-components/accessibility-specimen/logic.js';
+import './web-components/breakpoint-specimen/logic.js';
