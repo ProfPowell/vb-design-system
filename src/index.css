@@ -1,5 +1,6 @@
 /* @profpowell/vb-design-system — component styles (light DOM). */
 @import "./web-components/color-palette/styles.css";
+@import "./web-components/palette-generator/styles.css";
 @import "./web-components/type-specimen/styles.css";
 @import "./web-components/spacing-specimen/styles.css";
 @import "./web-components/token-specimen/styles.css";
