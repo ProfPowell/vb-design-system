@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schemas/api.schema.json",
+  "element": "brand-specimen",
+  "type": "web-component",
+  "description": "Brand mark specimen: shows a <brand-mark> on light/dark surfaces, a size scale, and a clear-space box",
+  "htmlvalidate": {
+    "flow": true,
+    "permittedContent": [
+      "@flow"
+    ]
+  },
+  "attributes": [
+    {
+      "name": "src",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Logo image URL, passed through to each <brand-mark src>"
+    },
+    {
+      "name": "name",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Brand name, passed through to each <brand-mark wordmark> (default: \"Brand\")"
+    },
+    {
+      "name": "data-sizes",
+      "kind": "data",
+      "purpose": "config",
+      "type": "string",
+      "description": "Space-separated <brand-mark data-size> values for the scale row (default: \"s m l xl\")"
+    }
+  ],
+  "childAttributes": [],
+  "structure": []
+}

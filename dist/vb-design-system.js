@@ -4305,3 +4305,33 @@ function escapeAttr(s) {
   return escapeHTML2(s);
 }
 registerComponent("theme-catalog", ThemeCatalog);
+
+// src/web-components/brand-specimen/logic.js
+var BrandSpecimen = class extends VBElement {
+  static observedAttributes = ["src", "name", "data-sizes"];
+  setup() {
+    this.#render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) this.#render();
+  }
+  #render() {
+    const src = this.getAttribute("src") || "";
+    const name = this.getAttribute("name") || "Brand";
+    const sizes = (this.getAttribute("data-sizes") || "s m l xl").trim().split(/\s+/);
+    const mark = (size) => `<brand-mark${src ? ` src="${src}"` : ""} wordmark="${name}"${size ? ` data-size="${size}"` : ""}></brand-mark>`;
+    this.innerHTML = `
+      <section class="brand-specimen">
+        <div class="bs-surfaces">
+          <figure data-surface="light">${mark("l")}<figcaption>On light</figcaption></figure>
+          <figure data-surface="dark">${mark("l")}<figcaption>On dark</figcaption></figure>
+        </div>
+        <div class="bs-scale" data-scale>
+          ${sizes.map((s) => `<span>${mark(s)}<small>${s}</small></span>`).join("")}
+        </div>
+        <div class="bs-clearspace"><span class="bs-clear-box">${mark("l")}</span>
+          <figcaption>Clear space</figcaption></div>
+      </section>`;
+  }
+};
+registerComponent("brand-specimen", BrandSpecimen);

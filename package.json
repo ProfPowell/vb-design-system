@@ -51,6 +51,7 @@
     "./gradient-builder": "./src/web-components/gradient-builder/logic.js",
     "./theme-import": "./src/web-components/theme-import/logic.js",
     "./theme-catalog": "./src/web-components/theme-catalog/logic.js",
+    "./brand-specimen": "./src/web-components/brand-specimen/logic.js",
     "./package.json": "./package.json"
   },
   "scripts": {

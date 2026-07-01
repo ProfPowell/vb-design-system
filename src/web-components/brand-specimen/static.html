@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brand Specimen (Static Fallback)</title>
+  <style>
+    /*
+     * Static fallback for <brand-specimen>.
+     *
+     * Upgrade relationship:
+     * When JavaScript loads and the <brand-specimen> custom element is
+     * defined, it renders a <brand-mark> on light and dark surface
+     * panels, a size scale, and a clear-space box.
+     *
+     * Without JS, this static page presents the same information as
+     * plain semantic HTML: a labeled logo image and a list of the
+     * size-scale names, providing equivalent content through markup
+     * alone.
+     */
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 2rem;
+      color: #1a1a1a;
+      background: #f8f8f8;
+    }
+
+    h1 { margin-block-end: 1rem; }
+
+    .surfaces {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      max-width: 30rem;
+      margin-block-end: 1.5rem;
+    }
+
+    figure {
+      margin: 0;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      text-align: center;
+    }
+
+    figure img { max-height: 3rem; }
+
+    .surfaces figure:first-child { background: #fff; color: #111; }
+    .surfaces figure:last-child { background: #111; color: #fff; }
+
+    figcaption { font-size: 0.875rem; margin-block-start: 0.5rem; }
+
+    ul { font-family: ui-monospace, monospace; font-size: 0.875rem; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Brand Mark</h1>
+  <p>These panels show the brand mark on light and dark surfaces. With JavaScript enabled, this becomes an interactive specimen with a size scale and clear-space guide.</p>
+
+  <div class="surfaces">
+    <figure><img src="" alt="" width="0" height="0"><figcaption>On light</figcaption></figure>
+    <figure><img src="" alt="" width="0" height="0"><figcaption>On dark</figcaption></figure>
+  </div>
+
+  <p>Size scale:</p>
+  <ul>
+    <li>s</li>
+    <li>m</li>
+    <li>l</li>
+    <li>xl</li>
+  </ul>
+</body>
+</html>

@@ -1,0 +1,81 @@
+---
+layout: element
+title: "brand-specimen"
+description: "Brand mark specimen web component that shows a brand-mark on light/dark surfaces, a size scale, and a clear-space box."
+elementName: brand-specimen
+category: component
+currentPath: /docs/elements/web-components/brand-specimen/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;brand-specimen&gt;</code> component documents a brand mark for design-system guideline pages. It renders VB core's <code>&lt;brand-mark&gt;</code> on light and dark surface panels, across a size scale, and inside a clear-space box &mdash; all from a single <code>src</code> + <code>name</code> pair.</p>
+
+  <div class="example">
+    <brand-specimen src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%236366f1'/%3E%3Ctext x='32' y='43' font-size='34' text-anchor='middle' fill='white' font-family='system-ui,sans-serif'%3EA%3C/text%3E%3C/svg%3E" name="Acme"></brand-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Basic specimen" data-escape><brand-specimen src="/assets/logo.svg" name="Acme"></brand-specimen></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src</code></td>
+        <td>string</td>
+        <td>-</td>
+        <td>Logo image URL, passed through to each <code>&lt;brand-mark src&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td>string</td>
+        <td><code>Brand</code></td>
+        <td>Brand name, passed through to each <code>&lt;brand-mark wordmark&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>data-sizes</code></td>
+        <td>string</td>
+        <td><code>s m l xl</code></td>
+        <td>Space-separated <code>&lt;brand-mark data-size&gt;</code> values for the scale row</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Custom Size Scale</h2>
+  <p>Pass <code>data-sizes</code> to show a different set of sizes in the scale row.</p>
+
+  <div class="example">
+    <brand-specimen src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%236366f1'/%3E%3Ctext x='32' y='43' font-size='34' text-anchor='middle' fill='white' font-family='system-ui,sans-serif'%3EA%3C/text%3E%3C/svg%3E" name="Acme" data-sizes="xs s m l xl 2xl"></brand-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Custom size scale" data-escape><brand-specimen
+  src="/assets/logo.svg"
+  name="Acme"
+  data-sizes="xs s m l xl 2xl">
+</brand-specimen></code-block>
+</section>
+
+<section>
+  <h2>Light &amp; Dark Surfaces</h2>
+  <p>The two surface panels (<code>[data-surface="light"]</code> and <code>[data-surface="dark"]</code>) let reviewers check contrast and legibility before a mark ships on a real dark-mode surface. Each panel renders its own <code>&lt;brand-mark&gt;</code> instance.</p>
+</section>
+
+<section>
+  <h2>Clear Space</h2>
+  <p>The clear-space box (<code>.bs-clear-box</code>) shows the mark with a dashed outline padding guide, useful for documenting minimum clearance around the logo in guideline pages.</p>
+</section>

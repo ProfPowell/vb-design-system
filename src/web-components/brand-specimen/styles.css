@@ -1,0 +1,10 @@
+.brand-specimen { display: grid; gap: var(--size-l, 1.5rem); }
+.bs-surfaces { display: grid; grid-template-columns: 1fr 1fr; gap: var(--size-m, 1rem); }
+.bs-surfaces figure { margin: 0; padding: var(--size-l, 1.5rem); border-radius: var(--radius-m, 0.5rem);
+  display: grid; place-items: center; gap: var(--size-s, 0.75rem); }
+.bs-surfaces [data-surface="light"] { background: #fff; color: #111; }
+.bs-surfaces [data-surface="dark"]  { background: #111; color: #fff; }
+.bs-scale { display: flex; align-items: end; gap: var(--size-l, 1.5rem); flex-wrap: wrap; }
+.bs-scale span { display: grid; justify-items: center; gap: var(--size-2xs, 0.25rem); }
+.bs-clear-box { display: inline-block; padding: 1em; outline: 1px dashed var(--color-border, #d4d4d8);
+  outline-offset: 0.25em; }
