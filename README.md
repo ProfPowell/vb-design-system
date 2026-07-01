@@ -65,6 +65,18 @@ These components are **token-driven**: they read Vanilla Breeze CSS custom prope
 
 This package was decomposed out of `vanilla-breeze` core so the framework stays focused on general site-building primitives while design-system tooling versions independently. General components that used to ship here (e.g. `icon-wc`, `brand-mark`) remain in VB core.
 
+## Runtime peers
+
+The following components are provided by **Vanilla Breeze** (VB core) and are used at runtime by DS components but are NOT bundled with this package:
+
+- `<color-picker>` — Used by color-tool components (`semantic-palette`, `palette-generator`, `gradient-builder`). These tools degrade gracefully without it.
+- `<drag-surface>` — Interactive drag patterns.
+- `<icon-wc>` — Icon system.
+- `<brand-mark>` — Brand mark component.
+- `<theme-picker>` — Theme switcher.
+
+These are declared as optional peer dependencies in `package.json`. Load `vanilla-breeze` and its token/theme CSS on the page for full functionality.
+
 ## Development
 
 ```bash
