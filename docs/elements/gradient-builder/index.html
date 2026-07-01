@@ -83,8 +83,8 @@
   } catch (e) {}
 </script>
 
-  <title>layout-specimen — VB Design System</title>
-  <meta name="description" content="Visual specimen web component for VB layout primitives. Renders each layout-* element with a labeled mini-example and the canonical HTML snippet.">
+  <title>gradient-builder — VB Design System</title>
+  <meta name="description" content="Interactive CSS gradient builder with color stops, angle control, interpolation space selection, and one-click CSS export.">
   <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr2dzd30">
   <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr2dzd30">
   <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr2dzd30">
@@ -191,7 +191,7 @@
     <li><a href="/vb-design-system/elements/type-specimen/">type-specimen</a></li>
     <li><a href="/vb-design-system/elements/spacing-specimen/">spacing-specimen</a></li>
     <li><a href="/vb-design-system/elements/breakpoint-specimen/">breakpoint-specimen</a></li>
-    <li><a class="active" href="/vb-design-system/elements/layout-specimen/">layout-specimen</a></li>
+    <li><a href="/vb-design-system/elements/layout-specimen/">layout-specimen</a></li>
   </ul>
 </details>
 
@@ -222,7 +222,7 @@
   <summary>Tools</summary>
   <ul>
     <li><a href="/vb-design-system/elements/font-pairer/">font-pairer</a></li>
-    <li><a href="/vb-design-system/elements/gradient-builder/">gradient-builder</a></li>
+    <li><a class="active" href="/vb-design-system/elements/gradient-builder/">gradient-builder</a></li>
   </ul>
 </details>
 
@@ -242,22 +242,22 @@
             <ol>
               <li><a href="/vb-design-system/">Home</a></li>
               <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
-              <li><span aria-current="page">layout-specimen</span></li>
+              <li><span aria-current="page">gradient-builder</span></li>
             </ol>
           </nav>
-          <h1><code>&lt;layout-specimen&gt;</code></h1>
-          <p class="lead">Visual specimen web component for VB layout primitives. Renders each layout-* element with a labeled mini-example and the canonical HTML snippet.</p>
+          <h1><code>&lt;gradient-builder&gt;</code></h1>
+          <p class="lead">Interactive CSS gradient builder with color stops, angle control, interpolation space selection, and one-click CSS export.</p>
 
           <heading-links levels="h2,h3">
             <section>
   <h2>Overview</h2>
-  <p>The <code>&lt;layout-specimen&gt;</code> component documents Vanilla Breeze's <strong>layout primitives</strong> — <code>&lt;layout-stack&gt;</code>, <code>&lt;layout-cluster&gt;</code>, <code>&lt;layout-grid&gt;</code>, and eleven more — by rendering each one as a labeled live example next to its canonical HTML snippet. The primitives themselves are VB core elements; this component only visualizes them for docs pages, so it has no dependency beyond what <code>vanilla-breeze</code> already provides.</p>
+  <p>The <code>&lt;gradient-builder&gt;</code> component creates interactive CSS gradients with a live preview strip, color stop management, angle and type controls, and color space selection. Export the result as a CSS <code>linear-gradient()</code> or <code>radial-gradient()</code> value. Companion to <a href="/vb-design-system/elements/palette-generator/"><code>&lt;palette-generator&gt;</code></a> for exploring color relationships.</p>
 
   <div class="example">
-    <layout-specimen data-only="stack,cluster,grid"></layout-specimen>
+    <gradient-builder colors="#6366f1,#ec4899" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="Basic specimen" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Basic usage" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -735,14 +735,14 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Basic specimen</span></div>
+        <div class="label-container" id="code-label"><span class="label">Basic usage</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
         <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">layout-specimen</span> <span class="hljs-attr">data-only</span>=<span class="hljs-string">&quot;stack,cluster,grid&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">layout-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#6366f1,#ec4899&quot;</span> <span class="hljs-attr">show-export</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;layout-specimen data-only=&quot;stack,cluster,grid&quot;&gt;&lt;/layout-specimen&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;gradient-builder colors=&quot;#6366f1,#ec4899&quot; show-export&gt;&lt;/gradient-builder&gt;</textarea></code-block>
 </section>
 
 <section>
@@ -758,24 +758,63 @@
     </thead>
     <tbody>
       <tr>
-        <td><code>data-only</code></td>
+        <td><code>colors</code></td>
         <td>string</td>
-        <td>-</td>
-        <td>Comma-separated subset of primitive names to render (e.g. <code>"cluster,grid,stack"</code>; with or without the <code>layout-</code> prefix). Defaults to all 14 primitives.</td>
+        <td><code>#6366f1,#ec4899</code></td>
+        <td>Comma-separated initial stop colors.</td>
+      </tr>
+      <tr>
+        <td><code>type</code></td>
+        <td>string</td>
+        <td><code>linear</code></td>
+        <td><code>linear</code> or <code>radial</code>.</td>
+      </tr>
+      <tr>
+        <td><code>angle</code></td>
+        <td>number</td>
+        <td><code>90</code></td>
+        <td>Gradient angle in degrees (linear only).</td>
+      </tr>
+      <tr>
+        <td><code>interpolation</code></td>
+        <td>string</td>
+        <td><code>oklab</code></td>
+        <td>Color space: <code>oklab</code>, <code>oklch</code>, <code>srgb</code>.</td>
+      </tr>
+      <tr>
+        <td><code>show-export</code></td>
+        <td>boolean</td>
+        <td>—</td>
+        <td>Show the Copy CSS toolbar.</td>
+      </tr>
+      <tr>
+        <td><code>show-controls</code></td>
+        <td>boolean</td>
+        <td><code>true</code></td>
+        <td>Show type, angle, and color space controls.</td>
       </tr>
     </tbody>
   </table>
 </section>
 
 <section>
-  <h2>All Primitives</h2>
-  <p>Omit <code>data-only</code> to render every VB layout primitive: stack, cluster, grid, center, cover, imposter, columns, card, canvas, badge, reel, sidebar, switcher, and text.</p>
+  <h2>Color spaces</h2>
+  <p>The interpolation dropdown controls which color space the browser uses to blend between stops:</p>
+  <ul>
+    <li><strong>oklab</strong> (default) — perceptually uniform, avoids muddy mid-tones. Best for most gradients.</li>
+    <li><strong>oklch</strong> — perceptually uniform in polar coordinates, produces vibrant hue shifts.</li>
+    <li><strong>sRGB</strong> — traditional browser interpolation. Can produce desaturated mid-tones.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Examples</h2>
 
   <div class="example">
-    <layout-specimen></layout-specimen>
+    <gradient-builder colors="#f59e0b,#ef4444,#8b5cf6" angle="135" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="Every primitive" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Three-stop sunset gradient" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1253,25 +1292,24 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Every primitive</span></div>
+        <div class="label-container" id="code-label"><span class="label">Three-stop sunset gradient</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">layout-specimen</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">layout-specimen</span>&gt;</span></span></code></pre>
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#f59e0b,#ef4444,#8b5cf6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">angle</span>=<span class="hljs-string">&quot;135&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;layout-specimen&gt;&lt;/layout-specimen&gt;</textarea></code-block>
-</section>
-
-<section>
-  <h2>Custom Subset</h2>
-  <p>Pick just the primitives relevant to the page you're documenting.</p>
+      </template><textarea style="display:none">&lt;gradient-builder
+  colors=&quot;#f59e0b,#ef4444,#8b5cf6&quot;
+  angle=&quot;135&quot;
+  show-export&gt;
+&lt;/gradient-builder&gt;</textarea></code-block>
 
   <div class="example">
-    <layout-specimen data-only="center,cover,sidebar"></layout-specimen>
+    <gradient-builder colors="#06b6d4,#3b82f6,#8b5cf6" type="radial" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="Custom subset" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr label="Radial gradient" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1749,19 +1787,554 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Custom subset</span></div>
+        <div class="label-container" id="code-label"><span class="label">Radial gradient</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">layout-specimen</span> <span class="hljs-attr">data-only</span>=<span class="hljs-string">&quot;center,cover,sidebar&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">layout-specimen</span>&gt;</span></span></code></pre>
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#06b6d4,#3b82f6,#8b5cf6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radial&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;layout-specimen data-only=&quot;center,cover,sidebar&quot;&gt;&lt;/layout-specimen&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;gradient-builder
+  colors=&quot;#06b6d4,#3b82f6,#8b5cf6&quot;
+  type=&quot;radial&quot;
+  show-export&gt;
+&lt;/gradient-builder&gt;</textarea></code-block>
+
+  <div class="example">
+    <gradient-builder colors="#ef4444,#3b82f6" interpolation="oklch" show-export=""></gradient-builder>
+  </div>
+
+  <code-block language="html" data-ssr label="OKLCH interpolation for vivid hue shift" show-lines><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">OKLCH interpolation for vivid hue shift</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#ef4444,#3b82f6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">interpolation</span>=<span class="hljs-string">&quot;oklch&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;gradient-builder
+  colors=&quot;#ef4444,#3b82f6&quot;
+  interpolation=&quot;oklch&quot;
+  show-export&gt;
+&lt;/gradient-builder&gt;</textarea></code-block>
 </section>
 
 <section>
-  <h2>Theme-Aware</h2>
-  <p>Each mini-example is built from the real <code>layout-*</code> custom elements, so it inherits whatever theme is active on the page — spacing tokens, surface colors, and radii all update live. Pair with <code>&lt;spacing-specimen&gt;</code> and <code>&lt;breakpoint-specimen&gt;</code> for complete design-system documentation pages.</p>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>gradient-builder:change</code></td>
+        <td><code>{ css, stops, type, angle, interpolation }</code></td>
+        <td>Fires whenever a control changes — type, angle, color space, or any color stop.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Design system workflow</h2>
+  <p>Use the gradient builder alongside <a href="/vb-design-system/elements/palette-generator/"><code>&lt;palette-generator&gt;</code></a> to explore color relationships:</p>
+  <ol>
+    <li>Generate a palette from a seed color.</li>
+    <li>Use palette colors as gradient stops.</li>
+    <li>Adjust the angle and color space for the desired effect.</li>
+    <li>Copy the CSS and paste into your theme or component styles.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Angle and color-stop position controls are native <code>&lt;input type="range"&gt;</code> elements, keyboard-adjustable via arrow keys.</li>
+    <li>Type and color-space controls are native <code>&lt;select&gt;</code> elements.</li>
+    <li>Add / remove stop and copy actions are real <code>&lt;button type="button"&gt;</code> elements.</li>
+    <li>The current angle and stop position are echoed as text next to each slider — not conveyed by position alone.</li>
+  </ul>
 </section>
           </heading-links>
         </article>

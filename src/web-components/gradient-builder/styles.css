@@ -1,0 +1,10 @@
+/* gradient-builder: Interactive CSS gradient tool */
+
+gradient-builder {
+  display: block;
+  max-inline-size: 32rem;
+}
+
+gradient-builder:not(:defined) {
+  display: none;
+}

@@ -730,6 +730,15 @@ font-pairer:not(:defined) {
   display: none;
 }
 
+/* src/web-components/gradient-builder/styles.css */
+gradient-builder {
+  display: block;
+  max-inline-size: 32rem;
+}
+gradient-builder:not(:defined) {
+  display: none;
+}
+
 /* src/patterns/do-dont.css */
 [data-list=do-dont],
 [data-list=pro-con] {

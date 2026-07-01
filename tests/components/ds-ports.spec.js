@@ -35,3 +35,9 @@ test('font-pairer registers and renders', async ({ page }) => {
   await expect(page.locator('font-pairer').first()).toBeVisible();
   await expect(page.locator('font-pairer button, font-pairer select').first()).toBeVisible();
 });
+
+test('gradient-builder registers and renders', async ({ page }) => {
+  await page.goto('elements/gradient-builder/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('gradient-builder'))).toBe(true);
+  await expect(page.locator('gradient-builder').first()).toBeVisible();
+});
