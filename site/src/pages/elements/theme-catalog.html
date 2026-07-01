@@ -1,0 +1,107 @@
+---
+layout: element
+title: "theme-catalog"
+description: "Browse and apply curated public design-system token sets — Material, IBM Carbon, Salesforce Lightning, GOV.UK, Atlassian, Tailwind, Bootstrap, Catppuccin Mocha — to a preview scope."
+elementName: theme-catalog
+category: component
+currentPath: /docs/elements/web-components/theme-catalog/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;theme-catalog&gt;</code> component renders a tile grid of curated public design-system token sets &mdash; Material, IBM Carbon, Salesforce Lightning, GOV.UK, Atlassian, Tailwind, Bootstrap, and Catppuccin Mocha. Clicking a tile fetches that entry's DTCG <code>tokens.json</code>, runs it through the same deserializer <a href="/elements/theme-import/"><code>&lt;theme-import&gt;</code></a> uses, and applies the resulting custom properties to a target preview scope.</p>
+
+  <p>It is the curated quick-start companion to <code>theme-import</code>: <code>theme-import</code> handles ad-hoc paste/file/URL imports, while <code>theme-catalog</code> gives visitors a one-click way to try a known system. Tokens land on the host's preview scope (default <code>#preview</code>), never on <code>:root</code>, so trying a catalog entry never leaks into the live site.</p>
+
+  <div class="example">
+    <theme-catalog target="#preview"></theme-catalog>
+    <section id="preview" style="margin-block-start:1rem;padding:1rem;border:1px dashed var(--color-border,#ccc)">
+      <p>Preview scope &mdash; applied catalog tokens land here as inline custom properties.</p>
+    </section>
+  </div>
+
+  <code-block language="html" show-lines label="Basic usage" data-escape><theme-catalog target="#preview"></theme-catalog>
+
+<section id="preview">
+  <p>Preview scope.</p>
+</section></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>target</code></td>
+        <td>string</td>
+        <td><code>#preview</code></td>
+        <td>CSS selector for the scope to apply tokens to. Tokens are written as inline custom properties on this element.</td>
+      </tr>
+      <tr>
+        <td><code>catalog-base</code></td>
+        <td>string</td>
+        <td><code>/cdn/themes/catalog</code></td>
+        <td>Base URL for the catalog files (<code>manifest.json</code> + entry <code>*.tokens.json</code>). Override for hosted contexts where the catalog is served from a different path.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <p>On connect, <code>theme-catalog</code> fetches <code>manifest.json</code> from its catalog base and renders one tile per entry, showing the system name, summary, license, and tags. Clicking a tile's <strong>Apply</strong> button fetches that entry's <code>.tokens.json</code>, deserializes it, and writes each resulting custom property onto the target element. The result panel reports how many tokens were applied, shows the entry's attribution line, and lists any ignored tokens in a collapsible details panel.</p>
+</section>
+
+<section>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>theme-catalog:applied</code></td>
+        <td><code>{ id, applied, ignored, tokens, source }</code></td>
+        <td>Fires after a catalog entry is applied. <code>source</code> is always <code>catalog</code>.</td>
+      </tr>
+      <tr>
+        <td><code>theme-catalog:error</code></td>
+        <td><code>{ id, error, phase }</code></td>
+        <td>Fires when fetching, parsing, or applying a catalog entry fails.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Design system workflow</h2>
+  <p>Use <code>theme-catalog</code> alongside <a href="/elements/theme-import/"><code>&lt;theme-import&gt;</code></a> and <a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a>:</p>
+  <ol>
+    <li>Start from a known system with <code>theme-catalog</code> to see how a curated set of tokens looks against your components.</li>
+    <li>Refine further with <code>theme-import</code> if you have a custom or edited <code>tokens.json</code>.</li>
+    <li>Export the result with <code>theme-export</code> once you've settled on a direction.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Each catalog tile is an <code>&lt;article&gt;</code> inside a <code>role="list"</code> grid, with a labelled <code>&lt;button&gt;</code> (<code>aria-label="Apply &lt;name&gt; tokens"</code>).</li>
+    <li>Apply results, attribution, and ignored-token counts are announced via an <code>&lt;output&gt;</code> element.</li>
+  </ul>
+</section>

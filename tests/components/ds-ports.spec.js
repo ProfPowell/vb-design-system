@@ -47,3 +47,12 @@ test('theme-import registers and renders', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => !!customElements.get('theme-import'))).toBe(true);
   await expect(page.locator('theme-import').first()).toBeVisible();
 });
+
+test('theme-catalog registers and loads catalog entries', async ({ page }) => {
+  await page.goto('elements/theme-catalog/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('theme-catalog'))).toBe(true);
+  const cat = page.locator('theme-catalog').first();
+  await expect(cat).toBeVisible();
+  // catalog tiles load from /cdn/themes/catalog/manifest.json — assert at least one entry rendered
+  await expect(cat.locator('article[data-id], button.tc-apply').first()).toBeVisible({ timeout: 10000 });
+});

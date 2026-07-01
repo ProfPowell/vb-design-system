@@ -50,6 +50,7 @@
     "./font-pairer": "./src/web-components/font-pairer/logic.js",
     "./gradient-builder": "./src/web-components/gradient-builder/logic.js",
     "./theme-import": "./src/web-components/theme-import/logic.js",
+    "./theme-catalog": "./src/web-components/theme-catalog/logic.js",
     "./package.json": "./package.json"
   },
   "scripts": {
