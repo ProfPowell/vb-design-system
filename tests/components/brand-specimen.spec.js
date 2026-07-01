@@ -9,4 +9,7 @@ test('brand-specimen renders the mark on light and dark panels + a size scale', 
   await expect(el.locator('[data-surface="light"] brand-mark')).toHaveCount(1);
   await expect(el.locator('[data-surface="dark"] brand-mark')).toHaveCount(1);
   await expect(el.locator('[data-scale] brand-mark')).toHaveCount(4); // default s m l xl
+  // the `name` attribute must actually reach the rendered brand name text,
+  // not just a boolean `wordmark` presence attribute with empty content
+  await expect(el.locator('[data-surface="light"] brand-mark').first()).toContainText('Acme');
 });

@@ -10,7 +10,7 @@
  * theme-aware light/dark logo swap.
  *
  * @attr {string} src        - Logo image URL, passed through to `<brand-mark src>`
- * @attr {string} name       - Brand name, passed through to `<brand-mark wordmark>`
+ * @attr {string} name       - Brand name, passed through as `<brand-mark>` child text content
  * @attr {string} data-sizes - Space-separated `<brand-mark data-size>` values
  *                             for the scale row (default: "s m l xl")
  *
@@ -37,8 +37,12 @@ class BrandSpecimen extends VBElement {
     const src = this.getAttribute('src') || '';
     const name = this.getAttribute('name') || 'Brand';
     const sizes = (this.getAttribute('data-sizes') || 's m l xl').trim().split(/\s+/);
+    // `<brand-mark>` treats `wordmark` as a boolean presence attribute and
+    // reads the displayed brand name from its light-DOM text content — the
+    // name must be the element's child text, not the value of `wordmark=`.
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const mark = (size) =>
-      `<brand-mark${src ? ` src="${src}"` : ''} wordmark="${name}"${size ? ` data-size="${size}"` : ''}></brand-mark>`;
+      `<brand-mark${src ? ` src="${esc(src)}"` : ''} wordmark${size ? ` data-size="${size}"` : ''}>${esc(name)}</brand-mark>`;
     this.innerHTML = `
       <section class="brand-specimen">
         <div class="bs-surfaces">

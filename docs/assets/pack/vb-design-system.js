@@ -4319,7 +4319,8 @@ var BrandSpecimen = class extends VBElement {
     const src = this.getAttribute("src") || "";
     const name = this.getAttribute("name") || "Brand";
     const sizes = (this.getAttribute("data-sizes") || "s m l xl").trim().split(/\s+/);
-    const mark = (size) => `<brand-mark${src ? ` src="${src}"` : ""} wordmark="${name}"${size ? ` data-size="${size}"` : ""}></brand-mark>`;
+    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const mark = (size) => `<brand-mark${src ? ` src="${esc(src)}"` : ""} wordmark${size ? ` data-size="${size}"` : ""}>${esc(name)}</brand-mark>`;
     this.innerHTML = `
       <section class="brand-specimen">
         <div class="bs-surfaces">
