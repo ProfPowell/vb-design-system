@@ -17,3 +17,4 @@ import './web-components/breakpoint-specimen/logic.js';
 import './web-components/layout-specimen/logic.js';
 import './web-components/font-pairer/logic.js';
 import './web-components/gradient-builder/logic.js';
+import './web-components/theme-import/logic.js';

@@ -1,0 +1,125 @@
+---
+layout: element
+title: "theme-import"
+description: "Apply a DTCG (Design Tokens Community Group) tokens.json file to a preview scope. Sibling of theme-export — paste, file, or URL input feeds a pure deserializer."
+elementName: theme-import
+category: component
+currentPath: /docs/elements/web-components/theme-import/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;theme-import&gt;</code> component applies a DTCG <code>tokens.json</code> file to a preview scope. It is the sibling of <a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a>: three input modes &mdash; paste, file, URL &mdash; feed a pure deserializer that reverses VB's prefix mapping and rebuilds CSS values.</p>
+
+  <p>Tokens land on the host's preview scope (default <code>#preview</code>), never on <code>:root</code>, so import experiments don't leak into the live site. Round-trip is lossless for VB-authored DTCG: <code>$extensions["com.vanilla-breeze"]</code> preserves relative-color expressions, <code>light-dark()</code> literals, and em/% units.</p>
+
+  <div class="example">
+    <theme-import target="#preview"></theme-import>
+    <section id="preview" style="margin-block-start:1rem;padding:1rem;border:1px dashed var(--color-border,#ccc)">
+      <p>Preview scope &mdash; imported tokens are applied here as inline custom properties.</p>
+    </section>
+  </div>
+
+  <code-block language="html" show-lines label="Basic usage" data-escape><theme-import target="#preview"></theme-import>
+
+<section id="preview">
+  <p>Preview scope.</p>
+</section></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>target</code></td>
+        <td>string</td>
+        <td><code>#preview</code></td>
+        <td>CSS selector for the scope to apply tokens to. Tokens are written as inline custom properties on this element.</td>
+      </tr>
+      <tr>
+        <td><code>placeholder</code></td>
+        <td>string</td>
+        <td><code>Paste DTCG tokens.json here&hellip;</code></td>
+        <td>Textarea placeholder for the paste input mode.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Input modes</h2>
+  <p>Three tabs feed the same deserializer:</p>
+  <ul>
+    <li><strong>Paste</strong> &mdash; paste raw DTCG JSON into a textarea and apply it directly.</li>
+    <li><strong>File</strong> &mdash; pick a local <code>.json</code> file from disk.</li>
+    <li><strong>URL</strong> &mdash; fetch a <code>tokens.json</code> from a remote URL.</li>
+  </ul>
+  <p>Each mode reports how many tokens were applied and lists any ignored entries (tokens with prefixes or types <code>theme-import</code> doesn't recognize) in a collapsible details panel.</p>
+</section>
+
+<section>
+  <h2>Scoping to a custom target</h2>
+  <p>Pass <code>target</code> to apply imported tokens to any element other than the default <code>#preview</code> &mdash; useful for previewing a theme against a specific component subtree.</p>
+
+  <code-block language="html" show-lines label="Custom target" data-escape><theme-import target="#custom-preview" placeholder="Paste a DTCG theme…"></theme-import>
+
+<section id="custom-preview" data-theme="custom">
+  <type-specimen target="#custom-preview"></type-specimen>
+</section></code-block>
+</section>
+
+<section>
+  <h2>Events</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>theme-import:applied</code></td>
+        <td><code>{ tokens, applied, ignored, source }</code></td>
+        <td>Fires after tokens are applied. <code>source</code> is <code>paste</code>, <code>file</code>, or <code>url</code>.</td>
+      </tr>
+      <tr>
+        <td><code>theme-import:error</code></td>
+        <td><code>{ error, phase }</code></td>
+        <td>Fires when parsing, fetching, or applying the tokens fails.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Design system workflow</h2>
+  <p>Use <code>theme-import</code> alongside <a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a> and <a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a> to round-trip themes:</p>
+  <ol>
+    <li>Export the current theme with <code>theme-export</code> as DTCG JSON.</li>
+    <li>Edit the file, or grab a curated set from a third-party design system.</li>
+    <li>Paste, upload, or link it back in with <code>theme-import</code> to preview the result.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Paste, file, and URL are native <code>&lt;textarea&gt;</code>, <code>&lt;input type="file"&gt;</code>, and <code>&lt;input type="url"&gt;</code> elements.</li>
+    <li>Mode tabs use <code>role="tablist"</code> with an accessible label.</li>
+    <li>Apply results and ignored-token counts are announced via an <code>&lt;output&gt;</code> element.</li>
+  </ul>
+</section>

@@ -41,3 +41,9 @@ test('gradient-builder registers and renders', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => !!customElements.get('gradient-builder'))).toBe(true);
   await expect(page.locator('gradient-builder').first()).toBeVisible();
 });
+
+test('theme-import registers and renders', async ({ page }) => {
+  await page.goto('elements/theme-import/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('theme-import'))).toBe(true);
+  await expect(page.locator('theme-import').first()).toBeVisible();
+});
