@@ -1,0 +1,160 @@
+---
+layout: element
+title: "accessibility-specimen"
+description: "WCAG contrast-ratio table and accessibility checklist web component for design-system docs. Computes AA/AAA pass/fail badges from authored foreground/background color pairs."
+elementName: accessibility-specimen
+category: component
+currentPath: /docs/elements/web-components/accessibility-specimen/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;accessibility-specimen&gt;</code> component renders a WCAG 2.x contrast-ratio table from authored foreground/background color pairs, or an accessibility checklist from an authored list. It computes relative luminance and contrast ratio client-side and shows AA / AA Large / AAA / AAA Large pass-fail badges per pair &mdash; no design-token dependency, so it works with any color values.</p>
+
+  <div class="example">
+    <accessibility-specimen>
+      <button data-fg="#000000" data-bg="#ffffff" data-label="Black on white">Default text</button>
+      <button data-fg="#666666" data-bg="#ffffff" data-label="Mid-gray on white">Muted text</button>
+      <button data-fg="#ffffff" data-bg="#0066cc" data-label="White on accent blue">Action button</button>
+      <button data-fg="#ffffff" data-bg="#dddddd" data-label="White on light-gray">Bad pairing</button>
+    </accessibility-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="WCAG contrast table" data-escape><accessibility-specimen>
+  <button data-fg="#000000" data-bg="#ffffff" data-label="Black on white">Default text</button>
+  <button data-fg="#666666" data-bg="#ffffff" data-label="Mid-gray on white">Muted text</button>
+  <button data-fg="#ffffff" data-bg="#0066cc" data-label="White on accent blue">Action button</button>
+  <button data-fg="#ffffff" data-bg="#dddddd" data-label="White on light-gray">Bad pairing</button>
+</accessibility-specimen></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>type</code></td>
+        <td>string</td>
+        <td><code>contrast</code></td>
+        <td>Rendering mode: <code>contrast</code> (color-pair table) or <code>checklist</code> (status list).</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Authoring Contrast Pairs</h2>
+  <p>In <code>contrast</code> mode (the default), author direct <code>&lt;button&gt;</code> children with <code>data-fg</code> / <code>data-bg</code> / optional <code>data-label</code>. The component replaces them with a table &mdash; one row per pair, each with a live sample, the computed ratio, and pass/fail badges for AA, AA Large, AAA, and AAA Large thresholds.</p>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Child attribute</th>
+        <th>On</th>
+        <th>Required</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>data-fg</code></td>
+        <td><code>button</code></td>
+        <td>Yes</td>
+        <td>Foreground color (hex, <code>rgb()</code>, or named CSS color).</td>
+      </tr>
+      <tr>
+        <td><code>data-bg</code></td>
+        <td><code>button</code></td>
+        <td>Yes</td>
+        <td>Background color (hex, <code>rgb()</code>, or named CSS color).</td>
+      </tr>
+      <tr>
+        <td><code>data-label</code></td>
+        <td><code>button</code></td>
+        <td>No</td>
+        <td>Display label for the pair. Defaults to the button's text content.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Checklist Mode</h2>
+  <p>Set <code>type="checklist"</code> and author a <code>&lt;ul&gt;</code> of <code>&lt;li data-status="pass|fail|warn|na"&gt;</code> items. The component normalizes the list styling and prepends a status icon (with a screen-reader-only label) per item.</p>
+
+  <div class="example">
+    <accessibility-specimen type="checklist">
+      <ul>
+        <li data-status="pass">Form inputs have associated labels.</li>
+        <li data-status="pass">Focus indicators are visible at 2px width minimum.</li>
+        <li data-status="warn">Some images may be missing alt text.</li>
+        <li data-status="fail">Color contrast on muted text fails AA.</li>
+        <li data-status="na">No videos in this component (captions N/A).</li>
+      </ul>
+    </accessibility-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Accessibility checklist" data-escape><accessibility-specimen type="checklist">
+  <ul>
+    <li data-status="pass">Form inputs have associated labels.</li>
+    <li data-status="pass">Focus indicators are visible at 2px width minimum.</li>
+    <li data-status="warn">Some images may be missing alt text.</li>
+    <li data-status="fail">Color contrast on muted text fails AA.</li>
+    <li data-status="na">No videos in this component (captions N/A).</li>
+  </ul>
+</accessibility-specimen></code-block>
+
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Child attribute</th>
+        <th>On</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>data-status</code></td>
+        <td><code>li</code></td>
+        <td><code>pass</code>, <code>fail</code>, <code>warn</code>, or <code>na</code> (default when omitted).</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Reading the Badges</h2>
+  <p>Ratios are computed per <a href="https://www.w3.org/TR/WCAG21/#contrast-minimum">WCAG 2.x relative luminance</a>. Thresholds: AA normal text &ge;4.5:1, AA large text &ge;3:1, AAA normal text &ge;7:1, AAA large text &ge;4.5:1. A pair that fails to parse (unsupported color syntax) shows <code>?</code> for the ratio and fails every badge.</p>
+
+  <div class="example">
+    <accessibility-specimen>
+      <button data-fg="#333333" data-bg="#f5f5f5" data-label="Dark gray on off-white">Body copy</button>
+      <button data-fg="oklch(70% 0.15 145)" data-bg="#ffffff" data-label="Success green on white">Status text</button>
+    </accessibility-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Named / functional colors also parse" data-escape><accessibility-specimen>
+  <button data-fg="#333333" data-bg="#f5f5f5" data-label="Dark gray on off-white">Body copy</button>
+  <button data-fg="oklch(70% 0.15 145)" data-bg="#ffffff" data-label="Success green on white">Status text</button>
+</accessibility-specimen></code-block>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Contrast table uses semantic <code>&lt;table&gt;</code> markup with <code>&lt;th scope="col"&gt;</code> / <code>&lt;th scope="row"&gt;</code>, so screen readers can navigate rows and columns.</li>
+    <li>Pass/fail badges carry an explicit <code>aria-label</code> ("Pass" / "Fail") &mdash; they never rely on the check/cross glyph alone.</li>
+    <li>Checklist items get a screen-reader-only status label (e.g. "Warning: ") prepended before the item text, in addition to the visual icon.</li>
+    <li>The component itself doesn't judge your page's actual colors &mdash; it's a documentation aid. Always verify real rendered text against these thresholds, not just documented token pairs.</li>
+  </ul>
+</section>

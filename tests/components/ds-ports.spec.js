@@ -10,3 +10,9 @@ test('semantic-palette still renders after palette-generator port', async ({ pag
   await page.goto('elements/semantic-palette/');
   await expect(page.locator('semantic-palette').first()).toBeVisible();
 });
+
+test('accessibility-specimen registers and renders', async ({ page }) => {
+  await page.goto('elements/accessibility-specimen/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('accessibility-specimen'))).toBe(true);
+  await expect(page.locator('accessibility-specimen').first()).toBeVisible();
+});
