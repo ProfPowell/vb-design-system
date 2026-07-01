@@ -1,0 +1,71 @@
+---
+layout: element
+title: "layout-specimen"
+description: "Visual specimen web component for VB layout primitives. Renders each layout-* element with a labeled mini-example and the canonical HTML snippet."
+elementName: layout-specimen
+category: component
+currentPath: /docs/elements/web-components/layout-specimen/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;layout-specimen&gt;</code> component documents Vanilla Breeze's <strong>layout primitives</strong> &mdash; <code>&lt;layout-stack&gt;</code>, <code>&lt;layout-cluster&gt;</code>, <code>&lt;layout-grid&gt;</code>, and eleven more &mdash; by rendering each one as a labeled live example next to its canonical HTML snippet. The primitives themselves are VB core elements; this component only visualizes them for docs pages, so it has no dependency beyond what <code>vanilla-breeze</code> already provides.</p>
+
+  <div class="example">
+    <layout-specimen data-only="stack,cluster,grid"></layout-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Basic specimen" data-escape><layout-specimen data-only="stack,cluster,grid"></layout-specimen></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>data-only</code></td>
+        <td>string</td>
+        <td>-</td>
+        <td>Comma-separated subset of primitive names to render (e.g. <code>"cluster,grid,stack"</code>; with or without the <code>layout-</code> prefix). Defaults to all 14 primitives.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>All Primitives</h2>
+  <p>Omit <code>data-only</code> to render every VB layout primitive: stack, cluster, grid, center, cover, imposter, columns, card, canvas, badge, reel, sidebar, switcher, and text.</p>
+
+  <div class="example">
+    <layout-specimen></layout-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Every primitive" data-escape><layout-specimen></layout-specimen></code-block>
+</section>
+
+<section>
+  <h2>Custom Subset</h2>
+  <p>Pick just the primitives relevant to the page you're documenting.</p>
+
+  <div class="example">
+    <layout-specimen data-only="center,cover,sidebar"></layout-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Custom subset" data-escape><layout-specimen data-only="center,cover,sidebar"></layout-specimen></code-block>
+</section>
+
+<section>
+  <h2>Theme-Aware</h2>
+  <p>Each mini-example is built from the real <code>layout-*</code> custom elements, so it inherits whatever theme is active on the page &mdash; spacing tokens, surface colors, and radii all update live. Pair with <code>&lt;spacing-specimen&gt;</code> and <code>&lt;breakpoint-specimen&gt;</code> for complete design-system documentation pages.</p>
+</section>

@@ -1,7 +1,7 @@
 {
   "name": "@profpowell/vb-design-system",
   "version": "0.1.0",
-  "description": "Design-system documentation components for Vanilla Breeze: color, type, spacing, token and motion specimens, palette generator, semantic palette, component sampler, theme export, accessibility specimen, and breakpoint specimen.",
+  "description": "Design-system documentation components for Vanilla Breeze: color, type, spacing, token and motion specimens, palette generator, semantic palette, component sampler, theme export, accessibility specimen, breakpoint specimen, and layout specimen.",
   "license": "MIT",
   "author": "Patrick Powell",
   "type": "module",
@@ -46,6 +46,7 @@
     "./theme-export": "./src/web-components/theme-export/logic.js",
     "./accessibility-specimen": "./src/web-components/accessibility-specimen/logic.js",
     "./breakpoint-specimen": "./src/web-components/breakpoint-specimen/logic.js",
+    "./layout-specimen": "./src/web-components/layout-specimen/logic.js",
     "./package.json": "./package.json"
   },
   "scripts": {

@@ -22,3 +22,9 @@ test('breakpoint-specimen registers and renders', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => !!customElements.get('breakpoint-specimen'))).toBe(true);
   await expect(page.locator('breakpoint-specimen').first()).toBeVisible();
 });
+
+test('layout-specimen registers and renders', async ({ page }) => {
+  await page.goto('elements/layout-specimen/');
+  await expect.poll(() => page.evaluate(() => !!customElements.get('layout-specimen'))).toBe(true);
+  await expect(page.locator('layout-specimen').first()).toBeVisible();
+});

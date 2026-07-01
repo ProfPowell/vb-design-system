@@ -195,13 +195,13 @@ function getText(button) {
   return "";
 }
 function announce(message, context) {
-  const el = document.createElement("div");
-  el.setAttribute("role", "status");
-  el.setAttribute("aria-live", "polite");
-  el.className = "visually-hidden";
-  el.textContent = message;
-  context.appendChild(el);
-  setTimeout(() => el.remove(), ANNOUNCE_DURATION);
+  const el2 = document.createElement("div");
+  el2.setAttribute("role", "status");
+  el2.setAttribute("aria-live", "polite");
+  el2.className = "visually-hidden";
+  el2.textContent = message;
+  context.appendChild(el2);
+  setTimeout(() => el2.remove(), ANNOUNCE_DURATION);
 }
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => initCopyButtons());
@@ -212,17 +212,17 @@ var observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
     for (const node of mutation.addedNodes) {
       if (node.nodeType !== Node.ELEMENT_NODE) continue;
-      const el = (
+      const el2 = (
         /** @type {Element} */
         node
       );
-      if (el.matches(SELECTOR)) {
+      if (el2.matches(SELECTOR)) {
         enhanceButton(
           /** @type {HTMLElement} */
-          el
+          el2
         );
       }
-      el.querySelectorAll(SELECTOR).forEach((child) => enhanceButton(
+      el2.querySelectorAll(SELECTOR).forEach((child) => enhanceButton(
         /** @type {HTMLElement} */
         child
       ));
@@ -296,10 +296,10 @@ var ColorPalette = class extends VBElement {
     }
   }
   #wireReadonly(colors, names, showValues) {
-    this.querySelectorAll(".color-box").forEach((el) => {
+    this.querySelectorAll(".color-box").forEach((el2) => {
       const btn = (
         /** @type {HTMLElement} */
-        el
+        el2
       );
       if (!showValues) {
         btn.addEventListener("pointerenter", () => {
@@ -744,10 +744,10 @@ var PaletteGenerator = class extends VBElement {
   }
   /** Wire click-to-copy and hover on swatches */
   #wireSwatches(container, colors, names, showValues) {
-    container.querySelectorAll(".color-box").forEach((el) => {
+    container.querySelectorAll(".color-box").forEach((el2) => {
       const btn = (
         /** @type {HTMLElement} */
-        el
+        el2
       );
       if (!showValues) {
         btn.addEventListener("pointerenter", () => {
@@ -1143,11 +1143,11 @@ var TokenSpecimen = class extends VBElement {
   #injectEditors(type, prefix) {
     const cs = getComputedStyle(this);
     this.querySelectorAll("[data-token-value]").forEach((node) => {
-      const el = (
+      const el2 = (
         /** @type {HTMLElement} */
         node
       );
-      const name = el.dataset.tokenValue;
+      const name = el2.dataset.tokenValue;
       const raw = cs.getPropertyValue(`${prefix}${name}`).trim();
       const input = document.createElement("input");
       input.type = type === "color" && /^#[0-9a-f]{3,8}$/i.test(raw) ? "color" : "text";
@@ -1156,7 +1156,7 @@ var TokenSpecimen = class extends VBElement {
       input.setAttribute("data-token", name || "");
       input.setAttribute("aria-label", `${name} value`);
       input.style.cssText = `font-family:var(--font-mono,monospace);font-size:0.625rem;padding:0.125rem 0.25rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-surface,#fff);color:var(--color-text,#222);inline-size:${type === "color" ? "3rem" : "100%"};${type === "color" ? "block-size:1.5rem;padding:0;" : "max-inline-size:8rem;"}`;
-      el.replaceWith(input);
+      el2.replaceWith(input);
       this.listen(input, "change", () => this.#applyEdit(input, prefix));
       this.listen(input, "keydown", (e) => {
         if (
@@ -1192,21 +1192,21 @@ var TokenSpecimen = class extends VBElement {
   #readComputedValues(type, prefix, tokens) {
     const cs = getComputedStyle(this);
     this.querySelectorAll("[data-token-value]").forEach((node) => {
-      const el = (
+      const el2 = (
         /** @type {HTMLElement} */
         node
       );
-      const name = el.dataset.tokenValue;
+      const name = el2.dataset.tokenValue;
       const raw = cs.getPropertyValue(`${prefix}${name}`).trim();
       if (type === "radius" || type === "size") {
         const sample = this.querySelector(`[data-token-sample="${name}"]`);
         if (sample) {
           const prop = type === "radius" ? "borderRadius" : "width";
           const rect = type === "size" ? sample.getBoundingClientRect().width : null;
-          el.textContent = rect != null ? `${Math.round(rect * 100) / 100}px` : raw || "\u2014";
+          el2.textContent = rect != null ? `${Math.round(rect * 100) / 100}px` : raw || "\u2014";
         }
       } else {
-        el.textContent = raw || "\u2014";
+        el2.textContent = raw || "\u2014";
       }
     });
   }
@@ -1915,11 +1915,11 @@ var MotionSpecimen = class extends VBElement {
     return `<ul class="ms-list" role="list" aria-label="Duration scale" style="${this.#listStyle()}">${rows}</ul>`;
   }
   #fillValues() {
-    this.querySelectorAll(".ms-value").forEach((el) => {
-      const v = el.getAttribute("data-var");
+    this.querySelectorAll(".ms-value").forEach((el2) => {
+      const v = el2.getAttribute("data-var");
       if (!v) return;
       const computed = getComputedStyle(this).getPropertyValue(v).trim();
-      el.textContent = computed || "\u2014";
+      el2.textContent = computed || "\u2014";
     });
   }
 };
@@ -2684,9 +2684,9 @@ var BreakpointSpecimen = class extends VBElement {
       const pct = Math.min(100, width / this.#max * 100);
       this.#cursorEl.style.setProperty("--bps-pos", `${pct}%`);
     }
-    this.querySelectorAll("[data-bp]").forEach((el) => {
-      const matches = active && el.getAttribute("data-bp") === active.name;
-      el.toggleAttribute("data-current", !!matches);
+    this.querySelectorAll("[data-bp]").forEach((el2) => {
+      const matches = active && el2.getAttribute("data-bp") === active.name;
+      el2.toggleAttribute("data-current", !!matches);
     });
   }
   #activeFor(width) {
@@ -2719,3 +2719,188 @@ var BreakpointSpecimen = class extends VBElement {
   #cursorEl = null;
 };
 registerComponent("breakpoint-specimen", BreakpointSpecimen);
+
+// src/web-components/layout-specimen/logic.js
+var PRIMITIVES = [
+  {
+    name: "layout-stack",
+    desc: "Vertical stack with consistent gap between children.",
+    snippet: `<layout-stack data-layout-gap="m">
+  <p>One</p>
+  <p>Two</p>
+  <p>Three</p>
+</layout-stack>`,
+    render: () => el("layout-stack", { "data-layout-gap": "s" }, [box("One"), box("Two"), box("Three")])
+  },
+  {
+    name: "layout-cluster",
+    desc: "Horizontal cluster that wraps; for tag rows, button groups.",
+    snippet: `<layout-cluster data-layout-gap="s">
+  <button>One</button> <button>Two</button> <button>Three</button>
+</layout-cluster>`,
+    render: () => el("layout-cluster", { "data-layout-gap": "s" }, [chip("One"), chip("Two"), chip("Three"), chip("Four")])
+  },
+  {
+    name: "layout-grid",
+    desc: "Auto-fit responsive grid; columns flow based on min-item-size.",
+    snippet: `<layout-grid data-layout-min="12rem">
+  <div>1</div> <div>2</div> <div>3</div> <div>4</div>
+</layout-grid>`,
+    render: () => el("layout-grid", { "data-layout-min": "6rem", "data-layout-gap": "s" }, [box("1"), box("2"), box("3"), box("4"), box("5"), box("6")])
+  },
+  {
+    name: "layout-center",
+    desc: "Center a block horizontally with optional max-width.",
+    snippet: `<layout-center data-layout-max="readable">
+  <p>Centered prose.</p>
+</layout-center>`,
+    render: () => el("layout-center", { "data-layout-max": "narrow", style: "border: 1px dashed var(--color-border); padding: var(--size-2xs)" }, [box("Centered")])
+  },
+  {
+    name: "layout-cover",
+    desc: "Vertical cover layout: optional header + main area + optional footer, with main filling available space.",
+    snippet: `<layout-cover style="block-size: 12rem">
+  <header>Top</header>
+  <main>Center</main>
+  <footer>Bottom</footer>
+</layout-cover>`,
+    render: () => el("layout-cover", { style: "block-size: 9rem; border: 1px dashed var(--color-border); padding: var(--size-2xs)" }, [
+      el("header", {}, [box("Top")]),
+      el("main", {}, [box("Center", "main")]),
+      el("footer", {}, [box("Bottom")])
+    ])
+  },
+  {
+    name: "layout-imposter",
+    desc: "Absolute centering \u2014 child sits in the dead center of the parent.",
+    snippet: `<div style="position:relative; block-size:8rem">
+  <layout-imposter><span>Centered</span></layout-imposter>
+</div>`,
+    render: () => el("div", { style: "position:relative; block-size: 6rem; border: 1px dashed var(--color-border)" }, [
+      el("layout-imposter", {}, [box("Imposter")])
+    ])
+  },
+  {
+    name: "layout-columns",
+    desc: "Multi-column text layout (CSS columns); good for newspapery prose.",
+    snippet: `<layout-columns data-layout-columns="3">
+  <p>Long prose flows across columns\u2026</p>
+</layout-columns>`,
+    render: () => el("layout-columns", { "data-layout-columns": "3" }, [
+      el("p", { style: "margin: 0; font-size: 0.85em" }, ["One two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen."])
+    ])
+  },
+  {
+    name: "layout-card",
+    desc: "Stack of header + body + actions with card chrome (border + padding).",
+    snippet: `<layout-card>
+  <h3>Title</h3>
+  <p>Body text.</p>
+  <div data-layout-card-actions><button>OK</button></div>
+</layout-card>`,
+    render: () => el("layout-card", {}, [
+      el("h3", { style: "margin: 0; font-size: 0.9em" }, ["Card title"]),
+      el("p", { style: "margin: 0; font-size: 0.85em" }, ["Card body content."])
+    ])
+  },
+  {
+    name: "layout-canvas",
+    desc: "Full-bleed canvas section that breaks the centered max-width.",
+    snippet: `<layout-canvas>
+  <p>Edge-to-edge content.</p>
+</layout-canvas>`,
+    render: () => el("layout-canvas", { style: "background: var(--color-surface-sunken, oklch(94% 0 0)); padding: var(--size-2xs)" }, [box("Full-bleed")])
+  },
+  {
+    name: "layout-badge",
+    desc: "Tiny inline badge / pill for inline labels.",
+    snippet: `<layout-badge>NEW</layout-badge>`,
+    render: () => el("layout-cluster", { "data-layout-gap": "xs" }, [
+      el("layout-badge", {}, ["NEW"]),
+      el("layout-badge", {}, ["BETA"]),
+      el("layout-badge", {}, ["v2.0"])
+    ])
+  },
+  {
+    name: "layout-reel",
+    desc: "Horizontal scrollable reel with snap points.",
+    snippet: `<layout-reel>
+  <article>1</article> <article>2</article> <article>3</article>
+</layout-reel>`,
+    render: () => el("layout-reel", {}, [box("1", "reel"), box("2", "reel"), box("3", "reel"), box("4", "reel"), box("5", "reel"), box("6", "reel")])
+  },
+  {
+    name: "layout-sidebar",
+    desc: "Sidebar + main split that collapses to a stack on narrow viewports.",
+    snippet: `<layout-sidebar>
+  <aside>Side</aside>
+  <main>Main</main>
+</layout-sidebar>`,
+    render: () => el("layout-sidebar", {}, [
+      el("aside", { style: "background: var(--color-surface-sunken, oklch(94% 0 0)); padding: var(--size-2xs)" }, ["Side"]),
+      el("main", {}, [box("Main")])
+    ])
+  },
+  {
+    name: "layout-switcher",
+    desc: "Container that switches from a row to a stack at a configurable threshold.",
+    snippet: `<layout-switcher data-layout-threshold="30rem">
+  <div>One</div> <div>Two</div>
+</layout-switcher>`,
+    render: () => el("layout-switcher", { "data-layout-threshold": "20rem" }, [box("One"), box("Two")])
+  },
+  {
+    name: "layout-text",
+    desc: "Constrains line length to a readable measure (~60ch).",
+    snippet: `<layout-text>
+  <p>Constrained-measure prose for comfortable reading.</p>
+</layout-text>`,
+    render: () => el("layout-text", {}, [
+      el("p", { style: "margin: 0; font-size: 0.85em" }, ["This paragraph is constrained to a comfortable reading measure (~60ch) regardless of the parent width."])
+    ])
+  }
+];
+function el(tag, attrs = {}, children = []) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null) continue;
+    if (k === "style") node.setAttribute("style", v);
+    else node.setAttribute(k, v === true ? "" : String(v));
+  }
+  for (const c of children) {
+    if (typeof c === "string") node.appendChild(document.createTextNode(c));
+    else if (c) node.appendChild(c);
+  }
+  return node;
+}
+function box(label, variant) {
+  const b = el("div", { class: `ls-box${variant ? ` ls-box-${variant}` : ""}` }, [label]);
+  return b;
+}
+function chip(label) {
+  return el("span", { class: "ls-chip" }, [label]);
+}
+var LayoutSpecimen = class extends VBElement {
+  setup() {
+    const only = this.getAttribute("data-only");
+    const allowed = only ? new Set(only.split(",").map((s) => s.trim())) : null;
+    const list = PRIMITIVES.filter((p) => !allowed || allowed.has(p.name) || allowed.has(p.name.replace(/^layout-/, "")));
+    this.replaceChildren();
+    for (const prim of list) {
+      this.appendChild(this.#renderEntry(prim));
+    }
+  }
+  #renderEntry(prim) {
+    const section = el("section", { class: "ls-entry" });
+    const head = el("header", { class: "ls-entry-head" }, [
+      el("h3", { class: "ls-entry-name" }, [prim.name]),
+      el("p", { class: "ls-entry-desc" }, [prim.desc])
+    ]);
+    const live = el("div", { class: "ls-live" });
+    live.appendChild(prim.render());
+    const code = el("pre", { class: "ls-snippet" }, [el("code", {}, [prim.snippet])]);
+    section.append(head, live, code);
+    return section;
+  }
+};
+registerComponent("layout-specimen", LayoutSpecimen);
