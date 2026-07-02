@@ -1,0 +1,59 @@
+/* icon-set: Searchable icon catalog/browser with click-to-copy names */
+
+icon-set:not(:defined) {
+  display: block;
+}
+
+icon-set {
+  display: block;
+  font-family: var(--font-sans, system-ui);
+  color: var(--color-text, #1a1a1a);
+}
+
+@scope (icon-set) {
+  .icon-set__search input {
+    inline-size: 100%;
+    padding: var(--size-s, 0.5rem);
+    border: 1px solid var(--color-border, #d4d4d8);
+    border-radius: var(--radius-s, 0.25rem);
+    font: inherit;
+    color: inherit;
+    background: var(--color-surface, #fff);
+  }
+
+  .icon-set__grid {
+    list-style: none;
+    margin: var(--size-m, 1rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+    gap: var(--size-2xs, 0.25rem);
+  }
+
+  .icon-set__grid [hidden] {
+    display: none;
+  }
+
+  .icon-set__grid button {
+    inline-size: 100%;
+    display: grid;
+    justify-items: center;
+    gap: var(--size-2xs, 0.25rem);
+    padding: var(--size-s, 0.75rem);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-s, 0.25rem);
+    cursor: pointer;
+    font-size: var(--font-size-xs, 0.75rem);
+    color: inherit;
+  }
+
+  .icon-set__grid button:hover {
+    border-color: var(--color-border, #d4d4d8);
+    background: var(--color-surface-2, #f4f4f5);
+  }
+
+  .icon-set__grid icon-wc {
+    font-size: 1.5rem;
+  }
+}

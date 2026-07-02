@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Icon Set — Static Fallback</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; }
+    ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr)); gap: 0.5rem; }
+    li { text-align: center; font-size: 0.75rem; color: #666; }
+  </style>
+</head>
+<body>
+  <!--
+    Static fallback for <icon-set>.
+
+    Upgrade relationship:
+    - Without JS: a plain list of icon names remains readable, so the
+      catalog's contents are never hidden from no-JS readers.
+    - With JS: the component replaces this with a filterable grid where
+      each cell renders the actual icon via <icon-wc> and a click copies
+      the name to the clipboard.
+  -->
+
+  <icon-set names="star home search settings heart check">
+    <ul>
+      <li>star</li>
+      <li>home</li>
+      <li>search</li>
+      <li>settings</li>
+      <li>heart</li>
+      <li>check</li>
+    </ul>
+  </icon-set>
+</body>
+</html>

@@ -4336,3 +4336,81 @@ var BrandSpecimen = class extends VBElement {
   }
 };
 registerComponent("brand-specimen", BrandSpecimen);
+
+// src/web-components/icon-set/logic.js
+var iconBase = () => document.documentElement.dataset.iconPath || "/vb-design-system/cdn/icons";
+var IconSet = class extends VBElement {
+  static observedAttributes = ["set", "names"];
+  setup() {
+    this.#render();
+    this.#load();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) {
+      this.#render();
+      this.#load();
+    }
+  }
+  get set() {
+    return this.getAttribute("set") || "lucide";
+  }
+  async #load() {
+    const attr = this.getAttribute("names");
+    let names = attr ? attr.split(/[\s,]+/).filter(Boolean) : null;
+    if (!names) {
+      try {
+        names = await (await fetch(`${iconBase()}/${this.set}.json`)).json();
+      } catch {
+        names = [];
+      }
+    }
+    this.#renderGrid(names);
+  }
+  #render() {
+    this.innerHTML = `
+      <div class="icon-set">
+        <label class="icon-set__search">
+          <span class="visually-hidden">Filter icons</span>
+          <input type="search" placeholder="Filter ${this.set} icons\u2026">
+        </label>
+        <ul class="icon-set__grid" role="list"></ul>
+      </div>`;
+    const input = (
+      /** @type {HTMLInputElement} */
+      this.querySelector("input")
+    );
+    this.listen(input, "input", (e) => this.#filter(
+      /** @type {HTMLInputElement} */
+      e.target.value
+    ));
+  }
+  #renderGrid(names) {
+    const ul = this.querySelector(".icon-set__grid");
+    if (!ul) return;
+    ul.innerHTML = names.map((n) => `
+      <li data-icon-name="${n}">
+        <button type="button" title="Copy \u201C${n}\u201D" data-copy="${n}">
+          <icon-wc name="${n}" set="${this.set}"></icon-wc>
+          <span>${n}</span>
+        </button>
+      </li>`).join("");
+    this.listen(ul, "click", (e) => {
+      const btn = (
+        /** @type {HTMLElement} */
+        e.target.closest("[data-copy]")
+      );
+      if (btn) navigator.clipboard?.writeText(
+        /** @type {HTMLElement} */
+        btn.dataset.copy ?? ""
+      );
+    });
+  }
+  #filter(q) {
+    const term = q.trim().toLowerCase();
+    for (const li of this.querySelectorAll("[data-icon-name]")) {
+      li.hidden = !!term && !/** @type {HTMLElement} */
+      (li.dataset.iconName ?? "").toLowerCase().includes(term);
+    }
+  }
+};
+registerComponent("icon-set", IconSet);

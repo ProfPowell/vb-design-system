@@ -13,6 +13,7 @@
 @import "./web-components/font-pairer/styles.css";
 @import "./web-components/gradient-builder/styles.css";
 @import "./web-components/brand-specimen/styles.css";
+@import "./web-components/icon-set/styles.css";
 
 /* design-system authoring patterns */
 @import "./patterns/do-dont.css";

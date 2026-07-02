@@ -1,0 +1,75 @@
+---
+layout: element
+title: "icon-set"
+description: "Searchable grid of icons in a set, with click-to-copy names."
+elementName: icon-set
+category: component
+currentPath: /docs/elements/web-components/icon-set/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;icon-set&gt;</code> component renders a searchable, filterable grid of every icon in a set. Each cell renders the real icon via <code>&lt;icon-wc&gt;</code> and copies its name to the clipboard on click &mdash; a quick way to browse and pick icon names for use elsewhere.</p>
+
+  <div class="example">
+    <icon-set names="star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"></icon-set>
+  </div>
+
+  <code-block language="html" show-lines label="Basic usage" data-escape><icon-set names="star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"></icon-set></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>set</code></td>
+        <td>string</td>
+        <td><code>lucide</code></td>
+        <td>Icon set directory under the icon base path.</td>
+      </tr>
+      <tr>
+        <td><code>names</code></td>
+        <td>string</td>
+        <td>&mdash;</td>
+        <td>Space/comma-separated list of icon names. When present, this bypasses the <code>{iconBase}/{set}.json</code> manifest fetch entirely &mdash; useful for curated subsets or offline demos.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Filtering and copying</h2>
+  <p>Type in the search field to narrow the grid by icon name. Click any icon's button to copy its name to the clipboard &mdash; paste it directly into an <code>&lt;icon-wc name="..."&gt;</code> attribute or a <code>data-icon</code> value elsewhere in your markup.</p>
+</section>
+
+<section>
+  <h2>Design system workflow</h2>
+  <p>Use <code>&lt;icon-set&gt;</code> as a live reference alongside <code>&lt;icon-wc&gt;</code> whenever you need to pick an icon name without leaving the docs:</p>
+  <ol>
+    <li>Filter the grid to narrow down candidates.</li>
+    <li>Click an icon to copy its name.</li>
+    <li>Paste the name into a <code>&lt;icon-wc name="..."&gt;</code> element.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>The filter field is a native <code>&lt;input type="search"&gt;</code> with an accessible (visually-hidden) label.</li>
+    <li>Each grid cell is a real <code>&lt;button type="button"&gt;</code>, keyboard-focusable and operable with Enter/Space.</li>
+    <li>Each cell's icon name is echoed as visible text next to the icon &mdash; never conveyed by the icon glyph alone.</li>
+    <li>Filtered-out cells are hidden with the native <code>hidden</code> attribute, removing them from the accessibility tree.</li>
+  </ul>
+</section>

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schemas/api.schema.json",
+  "element": "icon-set",
+  "type": "web-component",
+  "description": "Searchable grid of every icon in a set, with click-to-copy names.",
+  "htmlvalidate": {
+    "flow": true,
+    "permittedContent": [
+      "@flow"
+    ]
+  },
+  "attributes": [
+    {
+      "name": "set",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Icon set directory (default: \"lucide\")"
+    },
+    {
+      "name": "names",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Optional space/comma-separated list of icon names. Overrides the {iconBase}/{set}.json manifest fetch."
+    }
+  ],
+  "childAttributes": [
+    {
+      "name": "name",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "element": "icon-wc",
+      "description": "Icon filename (without .svg), passed through from each grid cell."
+    }
+  ],
+  "structure": []
+}

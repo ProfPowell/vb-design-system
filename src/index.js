@@ -20,3 +20,4 @@ import './web-components/gradient-builder/logic.js';
 import './web-components/theme-import/logic.js';
 import './web-components/theme-catalog/logic.js';
 import './web-components/brand-specimen/logic.js';
+import './web-components/icon-set/logic.js';
