@@ -14,11 +14,19 @@ crumbLabel: Web Components
   <h2>Overview</h2>
   <p>The <code>&lt;icon-set&gt;</code> component renders a searchable, filterable grid of every icon in a set. Each cell renders the real icon via <code>&lt;icon-wc&gt;</code> and copies its name to the clipboard on click &mdash; a quick way to browse and pick icon names for use elsewhere.</p>
 
+  <h3>The full set</h3>
+  <p>With just a <code>set</code>, <code>&lt;icon-set&gt;</code> fetches that set's name manifest and renders <strong>every</strong> icon (the Lucide set is ~1,900 icons). Use the search box to filter as you type. Loading the whole set fetches each SVG, so give it a moment on first paint.</p>
+  <div class="example">
+    <icon-set set="lucide"></icon-set>
+  </div>
+  <code-block language="html" show-lines label="Full set" data-escape><icon-set set="lucide"></icon-set></code-block>
+
+  <h3>A curated subset</h3>
+  <p>Pass an explicit <code>names</code> list to show just the icons you care about &mdash; useful for documenting a project's chosen icon vocabulary without the full catalog.</p>
   <div class="example">
     <icon-set names="star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"></icon-set>
   </div>
-
-  <code-block language="html" show-lines label="Basic usage" data-escape><icon-set names="star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"></icon-set></code-block>
+  <code-block language="html" show-lines label="Curated subset" data-escape><icon-set names="star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"></icon-set></code-block>
 </section>
 
 <section>

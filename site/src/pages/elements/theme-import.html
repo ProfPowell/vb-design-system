@@ -18,10 +18,43 @@ crumbLabel: Web Components
 
   <div class="example">
     <theme-import target="#preview"></theme-import>
-    <section id="preview" style="margin-block-start:1rem;padding:1rem;border:1px dashed var(--color-border,#ccc)">
-      <p>Preview scope &mdash; imported tokens are applied here as inline custom properties.</p>
+    <style>
+      #preview.theme-preview { margin-block-start: 1rem; padding: var(--size-m, 1rem); border: 1px solid var(--color-border, #ddd); border-radius: var(--radius-m, 0.5rem); background: var(--color-surface, #fff); color: var(--color-text, #1c1b1f); display: grid; gap: 0.75rem; }
+      #preview .tp-swatches { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+      #preview .tp-swatches li { display: grid; gap: 0.25rem; justify-items: center; font-size: 0.7rem; }
+      #preview .tp-chip { inline-size: 2.5rem; block-size: 2.5rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12); }
+      #preview .tp-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      #preview .tp-btn { padding: 0.45rem 1rem; border: 0; border-radius: var(--radius-s, 0.25rem); font: inherit; cursor: pointer; }
+    </style>
+    <section id="preview" class="theme-preview">
+      <ul class="tp-swatches">
+        <li><span class="tp-chip" style="background: var(--color-primary, #6750a4)"></span>primary</li>
+        <li><span class="tp-chip" style="background: var(--color-secondary, #625b71)"></span>secondary</li>
+        <li><span class="tp-chip" style="background: var(--color-accent, #7d5260)"></span>accent</li>
+        <li><span class="tp-chip" style="background: var(--color-success, #2e7d32)"></span>success</li>
+        <li><span class="tp-chip" style="background: var(--color-border, #ddd)"></span>border</li>
+      </ul>
+      <div class="tp-actions">
+        <button type="button" class="tp-btn" style="background: var(--color-primary, #6750a4); color: #fff">Primary action</button>
+        <button type="button" class="tp-btn" style="background: var(--color-secondary, #625b71); color: #fff">Secondary</button>
+      </div>
+      <p style="margin: 0">Sample content in the preview scope &mdash; imported tokens land here and recolor the swatches, buttons, surface, and text, never the live page.</p>
     </section>
   </div>
+
+  <p>New to DTCG? Copy this sample and paste it into the <strong>Paste</strong> tab above, then apply &mdash; the preview swatches will switch to a warm rose/cyan palette:</p>
+  <code-block language="json" show-lines label="Sample DTCG tokens.json (copy &amp; paste)" data-escape>{
+  "color": {
+    "primary":       { "$type": "color", "$value": { "hex": "#e11d48" } },
+    "primary-hover": { "$type": "color", "$value": { "hex": "#be123c" } },
+    "secondary":     { "$type": "color", "$value": { "hex": "#0891b2" } },
+    "accent":        { "$type": "color", "$value": { "hex": "#f59e0b" } },
+    "success":       { "$type": "color", "$value": { "hex": "#15803d" } },
+    "surface":       { "$type": "color", "$value": { "hex": "#fff7ed" } },
+    "text":          { "$type": "color", "$value": { "hex": "#1c1917" } },
+    "border":        { "$type": "color", "$value": { "hex": "#fed7aa" } }
+  }
+}</code-block>
 
   <code-block language="html" show-lines label="Basic usage" data-escape><theme-import target="#preview"></theme-import>
 
