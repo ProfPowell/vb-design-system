@@ -3,10 +3,9 @@
  *
  * Presents a fixed, curated set of icon names across the project's sizing
  * scale — a design specimen (not a searchable browser like <icon-set>).
- * Each cell renders via <icon-wc> so it shares the design system's real
- * icon-loading/caching/theming path (SVG fetch, currentColor, size tokens)
- * rather than duplicating that logic with a bare [data-icon] primitive,
- * which the mini-site's vendored VB does not ship.
+ * Each cell renders the icon with the `[data-icon]` primitive itself (a
+ * currentColor CSS mask sized in `em`), so the specimen documents the same
+ * terse authoring pattern it is teaching.
  *
  * @attr {string} set         - Icon set directory (default: "lucide")
  * @attr {string} names       - Space/comma-separated list of icon names (required)
@@ -44,8 +43,10 @@ class IconSpecimen extends VBElement {
 
   #render() {
     const { set, names, sizes } = this;
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const cell = (n) => sizes.map((sz) => `
-        <td><icon-wc name="${n}" set="${set}" style="font-size:${sz}"></icon-wc></td>`).join('');
+        <td><i data-icon="${esc(n)}" data-icon-set="${set}" style="font-size:${sz}" aria-hidden="true"></i></td>`).join('');
     this.innerHTML = `
       <table class="icon-specimen">
         <thead>

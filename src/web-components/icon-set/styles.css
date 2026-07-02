@@ -80,7 +80,7 @@ icon-set {
     block-size: 1.5rem;
   }
 
-  .icon-set__grid icon-wc {
+  .icon-set__grid [data-icon] {
     font-size: 1.5rem;
   }
 }

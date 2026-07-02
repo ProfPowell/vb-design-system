@@ -847,7 +847,7 @@ icon-set {
     inline-size: 1.5rem;
     block-size: 1.5rem;
   }
-  .icon-set__grid icon-wc {
+  .icon-set__grid [data-icon] {
     font-size: 1.5rem;
   }
 }
@@ -879,7 +879,7 @@ icon-specimen {
     letter-spacing: 0.05em;
     color: var(--color-text-muted, #71717a);
   }
-  .icon-specimen td icon-wc {
+  .icon-specimen td [data-icon] {
     color: inherit;
     vertical-align: middle;
   }

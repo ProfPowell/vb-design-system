@@ -31,7 +31,7 @@ icon-specimen {
     color: var(--color-text-muted, #71717a);
   }
 
-  .icon-specimen td icon-wc {
+  .icon-specimen td [data-icon] {
     color: inherit;
     vertical-align: middle;
   }

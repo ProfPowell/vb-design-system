@@ -12,7 +12,7 @@ crumbLabel: Web Components
 
 <section>
   <h2>Overview</h2>
-  <p>The <code>&lt;icon-set&gt;</code> component renders a searchable, filterable grid of every icon in a set. Each cell renders the real icon via <code>&lt;icon-wc&gt;</code> and copies its name to the clipboard on click &mdash; a quick way to browse and pick icon names for use elsewhere.</p>
+  <p>The <code>&lt;icon-set&gt;</code> component renders a searchable, filterable grid of every icon in a set. Each cell renders the icon with the <code>[data-icon]</code> primitive (lazy-mounted as you scroll, so the full set doesn't fetch every SVG at once) and copies its name to the clipboard on click &mdash; a quick way to browse and pick icon names for use elsewhere.</p>
 
   <h3>The full set</h3>
   <p>With just a <code>set</code>, <code>&lt;icon-set&gt;</code> fetches that set's name manifest and renders <strong>every</strong> icon (the Lucide set is ~1,900 icons). Use the search box to filter as you type. Loading the whole set fetches each SVG, so give it a moment on first paint.</p>

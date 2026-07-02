@@ -2,9 +2,9 @@
  * icon-set: Searchable icon catalog/browser
  *
  * Renders a filterable grid of icons for a given icon set, with
- * click-to-copy names. Each cell renders via <icon-wc> so it shares the
- * design system's real icon-loading/caching/theming path (SVG fetch,
- * currentColor, size tokens) rather than duplicating that logic.
+ * click-to-copy names. Each cell renders the icon with the `[data-icon]`
+ * primitive (a currentColor CSS mask), lazy-mounted so a full set does not
+ * fetch every SVG at once.
  *
  * By default it fetches {iconBase}/{set}.json — a manifest listing every
  * icon name in the set. The `names` attribute bypasses that fetch entirely
@@ -28,7 +28,7 @@ const iconBase = () => document.documentElement.dataset.iconPath || '/cdn/icons'
 class IconSet extends VBElement {
   static observedAttributes = ['set', 'names'];
 
-  /** @type {IntersectionObserver | null} Lazy-mounts <icon-wc> as cells scroll in. */
+  /** @type {IntersectionObserver | null} Lazy-mounts [data-icon] icons as cells scroll in. */
   #io = null;
 
   setup() {
@@ -84,9 +84,9 @@ class IconSet extends VBElement {
     if (!ul) return;
     const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    // Cells render with an empty, correctly-sized icon slot; the real <icon-wc>
-    // (which fetches its SVG on connect) is mounted lazily below. Rendering a
-    // full set (~1900 icons) as <icon-wc> up front fires ~1900 concurrent
+    // Cells render with an empty, correctly-sized icon slot; the real icon
+    // (an <i data-icon>, whose CSS mask fetches the SVG) is mounted lazily
+    // below. Rendering a full set (~1900 icons) up front fires ~1900 concurrent
     // fetches and exhausts the browser (net::ERR_INSUFFICIENT_RESOURCES).
     ul.innerHTML = names.map((n) => `
       <li data-icon-name="${esc(n)}">
@@ -100,7 +100,7 @@ class IconSet extends VBElement {
       if (btn) navigator.clipboard?.writeText(/** @type {HTMLElement} */ (btn).dataset.copy ?? '');
     });
 
-    // Lazy-mount <icon-wc> only when a cell nears the viewport, so only the
+    // Lazy-mount the icon only when a cell nears the viewport, so only the
     // handful of visible icons fetch at a time instead of the whole set at once.
     const set = this.set;
     this.#io?.disconnect();
@@ -110,9 +110,10 @@ class IconSet extends VBElement {
         const slot = /** @type {HTMLElement} */ (entry.target);
         obs.unobserve(slot);
         if (slot.firstElementChild) continue; // already mounted
-        const icon = document.createElement('icon-wc');
-        icon.setAttribute('name', slot.dataset.name ?? '');
-        icon.setAttribute('set', set);
+        const icon = document.createElement('i');
+        icon.setAttribute('data-icon', slot.dataset.name ?? '');
+        icon.setAttribute('data-icon-set', set);
+        icon.setAttribute('aria-hidden', 'true');
         slot.appendChild(icon);
       }
     }, { rootMargin: '400px' });

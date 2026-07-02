@@ -4341,7 +4341,7 @@ registerComponent("brand-specimen", BrandSpecimen);
 var iconBase = () => document.documentElement.dataset.iconPath || "/vb-design-system/cdn/icons";
 var IconSet = class extends VBElement {
   static observedAttributes = ["set", "names"];
-  /** @type {IntersectionObserver | null} Lazy-mounts icon-wc as cells scroll in. */
+  /** @type {IntersectionObserver | null} Lazy-mounts [data-icon] icons as cells scroll in. */
   #io = null;
   setup() {
     this.#render();
@@ -4423,9 +4423,10 @@ var IconSet = class extends VBElement {
         );
         obs.unobserve(slot);
         if (slot.firstElementChild) continue;
-        const icon = document.createElement("icon-wc");
-        icon.setAttribute("name", slot.dataset.name ?? "");
-        icon.setAttribute("set", set);
+        const icon = document.createElement("i");
+        icon.setAttribute("data-icon", slot.dataset.name ?? "");
+        icon.setAttribute("data-icon-set", set);
+        icon.setAttribute("aria-hidden", "true");
         slot.appendChild(icon);
       }
     }, { rootMargin: "400px" });
@@ -4461,8 +4462,9 @@ var IconSpecimen = class extends VBElement {
   }
   #render() {
     const { set, names, sizes } = this;
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     const cell = (n) => sizes.map((sz) => `
-        <td><icon-wc name="${n}" set="${set}" style="font-size:${sz}"></icon-wc></td>`).join("");
+        <td><i data-icon="${esc(n)}" data-icon-set="${set}" style="font-size:${sz}" aria-hidden="true"></i></td>`).join("");
     this.innerHTML = `
       <table class="icon-specimen">
         <thead>

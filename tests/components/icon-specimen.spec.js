@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('icon-specimen shows each icon across the size scale via icon-wc', async ({ page }) => {
+test('icon-specimen shows each icon across the size scale via [data-icon]', async ({ page }) => {
   await page.goto('elements/icon-specimen/');
   await expect.poll(() => page.evaluate(() => !!customElements.get('icon-specimen'))).toBe(true);
   await page.evaluate(() => {
@@ -11,12 +11,15 @@ test('icon-specimen shows each icon across the size scale via icon-wc', async ({
     document.body.appendChild(s);
   });
   const specimen = page.locator('#probe');
-  // 2 icons x 2 sizes = 4 rendered icon-wc cells (not [data-icon] — unpublished primitive)
-  await expect(specimen.locator('icon-wc')).toHaveCount(4);
-  // at least one icon actually renders (proves icon-wc upgraded and displays)
-  await expect(specimen.locator('icon-wc').first()).toBeVisible();
-  // sizes actually differ in the rendered output
-  const fontSizes = await specimen.locator('icon-wc').evaluateAll(
+  // 2 icons x 2 sizes = 4 rendered [data-icon] cells
+  await expect(specimen.locator('i[data-icon]')).toHaveCount(4);
+  // the VB enhancer resolves each icon to its SVG (proves [data-icon] renders,
+  // not just that the element exists)
+  await expect
+    .poll(() => specimen.locator('i[data-icon]').first().evaluate((el) => el.style.getPropertyValue('--vb-icon')))
+    .toContain('.svg');
+  // sizes actually differ in the rendered output ([data-icon] is sized in em)
+  const fontSizes = await specimen.locator('i[data-icon]').evaluateAll(
     (els) => els.map((el) => getComputedStyle(el).fontSize)
   );
   expect(new Set(fontSizes).size).toBeGreaterThan(1);
