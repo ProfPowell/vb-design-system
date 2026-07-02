@@ -85,10 +85,10 @@
 
   <title>theme-import — VB Design System</title>
   <meta name="description" content="Apply a DTCG (Design Tokens Community Group) tokens.json file to a preview scope. Sibling of theme-export — paste, file, or URL input feeds a pure deserializer.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr427b9f">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr427b9f">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr427b9f">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr427b9f">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr42lpky">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr42lpky">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr42lpky">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr42lpky">
   
 </head>
 <body style="overflow-x: clip;">
@@ -269,12 +269,9 @@
       #preview .tp-chip { inline-size: 2.5rem; block-size: 2.5rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12); }
       #preview .tp-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
       #preview .tp-btn { padding: 0.45rem 1rem; border: 0; border-radius: var(--radius-s, 0.25rem); font: inherit; cursor: pointer; }
-      /* Neutralize the doc chrome's flow-spacing (margin-block-start on non-first
-         siblings), which offsets items in these horizontal flex rows. */
-      #preview .tp-swatches li, #preview .tp-actions .tp-btn { margin: 0; }
     </style>
     <section id="preview" class="theme-preview">
-      <ul class="tp-swatches">
+      <ul class="tp-swatches" data-layout="cluster">
         <li><span class="tp-chip" style="background: var(--color-primary, #6750a4)"></span>primary</li>
         <li><span class="tp-chip" style="background: var(--color-secondary, #625b71)"></span>secondary</li>
         <li><span class="tp-chip" style="background: var(--color-accent, #7d5260)"></span>accent</li>
@@ -1907,10 +1904,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr427b9f"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr427b9f"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr427b9f"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr427b9f"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr42lpky"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr42lpky"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr42lpky"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr42lpky"></script>
   
 </body>
 </html>
