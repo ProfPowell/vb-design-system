@@ -73,7 +73,7 @@ class IconSet extends VBElement {
           <span class="visually-hidden">Filter icons</span>
           <input type="search" placeholder="Filter ${this.set} icons…">
         </label>
-        <ul class="icon-set__grid" role="list"></ul>
+        <ul class="icon-set__grid" data-layout="grid" role="list"></ul>
       </div>`;
     const input = /** @type {HTMLInputElement} */ (this.querySelector('input'));
     this.listen(input, 'input', (e) => this.#filter(/** @type {HTMLInputElement} */ (e.target).value));

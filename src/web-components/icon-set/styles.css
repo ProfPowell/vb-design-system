@@ -21,23 +21,19 @@ icon-set {
     background: var(--color-surface, #fff);
   }
 
+  /* data-layout="grid" on the <ul> lets vanilla-breeze reset the block-flow
+     li margin (which would otherwise skew the rows); these rules override the
+     primitive's defaults with the catalog's own dense column sizing + gap. */
   .icon-set__grid {
     list-style: none;
     margin: var(--size-m, 1rem) 0 0;
     padding: 0;
-    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
     gap: var(--size-2xs, 0.25rem);
   }
 
   .icon-set__grid [hidden] {
     display: none;
-  }
-
-  /* Neutralize the doc chrome's flow-spacing (margin-block-start on non-first
-     siblings), which offsets the first cell and skews the grid rows. */
-  .icon-set__grid li {
-    margin: 0;
   }
 
   .icon-set__grid button {

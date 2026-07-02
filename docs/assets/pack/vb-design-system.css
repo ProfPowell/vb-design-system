@@ -806,15 +806,11 @@ icon-set {
     list-style: none;
     margin: var(--size-m, 1rem) 0 0;
     padding: 0;
-    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
     gap: var(--size-2xs, 0.25rem);
   }
   .icon-set__grid [hidden] {
     display: none;
-  }
-  .icon-set__grid li {
-    margin: 0;
   }
   .icon-set__grid button {
     inline-size: 100%;
