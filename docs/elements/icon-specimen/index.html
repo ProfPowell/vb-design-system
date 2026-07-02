@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Tell VB's theme-loader / icon-wc where /cdn lives under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). Runtime config
-       beats patching minified paths. -->
+  <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
+       (/vb-design-system is replaced at publish; empty for local root). -->
   <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
@@ -84,8 +83,8 @@
   } catch (e) {}
 </script>
 
-  <title>Overview — VB Design System</title>
-  <meta name="description" content="Design-system documentation components for Vanilla Breeze.">
+  <title>icon-specimen — VB Design System</title>
+  <meta name="description" content="Curated icon-language specimen: a fixed set of icons across the sizing scale.">
   <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr2rrblz">
   <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr2rrblz">
   <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr2rrblz">
@@ -100,7 +99,7 @@
     <nav class="horizontal pills">
       <ul>
         <li><a href="/vb-design-system/" data-nav-link="">Home</a></li>
-        <li><a href="/vb-design-system/elements/" data-nav-link="">Elements</a></li>
+        <li><a class="active-parent" href="/vb-design-system/elements/" data-nav-link="">Elements</a></li>
         <li><a href="/vb-design-system/guides/" data-nav-link="">Guides</a></li>
         <li><a href="/vb-design-system/tools/theme-composer/" data-nav-link="">Composer</a></li>
         <li><a href="/vb-design-system/showcase/" data-nav-link="">Showcases</a></li>
@@ -144,7 +143,7 @@
           <strong class="mobile-section-title">Pages</strong>
           <ul>
             <li><a href="/vb-design-system/">Home</a></li>
-            <li><a href="/vb-design-system/elements/">Elements</a></li>
+            <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
             <li><a href="/vb-design-system/guides/">Guides</a></li>
             <li><a href="/vb-design-system/tools/theme-composer/">Composer</a></li>
             <li><a href="/vb-design-system/showcase/">Showcases</a></li>
@@ -163,43 +162,107 @@
 
 
   <main data-pagefind-body="" style="overflow-x: clip;">
-    <layout-center data-layout-max="wide">
-      <section data-layout="stack" data-layout-gap="m" style="text-align: center; padding-block: var(--size-2xl);">
-    <h1>vb-design-system</h1>
-    <p class="lead" style="margin-inline: auto;">Web Components for documenting brand guidelines, design tokens, and visual standards — built on Vanilla Breeze and driven entirely by its theme tokens.</p>
-    <nav data-layout="cluster" data-layout-justify="center" data-layout-gap="s">
-      <a class="button" href="/vb-design-system/showcase/meridian/">See the Meridian showcase</a>
-      <a class="button secondary" href="/vb-design-system/elements/">Browse elements</a>
-    </nav>
-    <color-palette colors="#6366f1,#ec4899,#22c55e,#eab308,#06b6d4" names="Indigo,Pink,Green,Amber,Cyan" show-names=""></color-palette>
-  </section>
+    <input type="checkbox" id="nav-drawer-toggle" class="nav-drawer-checkbox" data-pagefind-ignore="">
+    <label for="nav-drawer-toggle" class="nav-drawer-toggle" data-pagefind-ignore="">
+      <icon-wc name="list-tree" size="sm"></icon-wc>
+      Navigation
+    </label>
+    <label for="nav-drawer-toggle" class="nav-drawer-backdrop" data-pagefind-ignore=""></label>
 
-  <section data-layout="stack" data-layout-gap="m">
-    <h2>Showcases</h2>
-    <layout-grid data-layout-min="18rem">
-      <layout-card><a href="/vb-design-system/showcase/meridian/"><strong>Meridian Labs</strong></a><p>A complete example design system — identity, tokens, type, components, voice.</p></layout-card>
-      <layout-card><a href="/vb-design-system/showcase/alpenglow/"><strong>Alpenglow Gear</strong></a><p>One site, four brand looks (Starbucks, IBM, Anthropic, McDonald’s) — VB replicating brands via themes.</p></layout-card>
-      <layout-card><a href="/vb-design-system/showcase/mobile/"><strong>Mobile demos</strong></a><p>Nuvaris biosite + Luminary landing — mobile design systems in device frames.</p></layout-card>
-    </layout-grid>
-  </section>
+    <layout-sidebar data-layout-gap="xl" data-layout-sidebar-width="narrow" data-layout-content-min="60">
+      <nav class="tree" id="nav-drawer" data-layout-density="compact" data-layout-sticky="" aria-label="Elements navigation" data-pagefind-ignore="">
+        <label for="nav-drawer-toggle" class="nav-drawer-close" aria-label="Close navigation">
+          <icon-wc name="x"></icon-wc>
+        </label>
+        <p class="sidebar-title"><a class="active-parent" href="/vb-design-system/elements/">All elements</a></p>
 
-  <section data-layout="stack" data-layout-gap="m">
-    <h2>Elements</h2>
-    <layout-grid data-layout-min="16rem">
-      <layout-card><a href="/vb-design-system/elements/color-palette/"><code>&lt;color-palette&gt;</code></a><p>Color ramp swatches with copy.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code></a><p>Semantic color roles from tokens.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/type-specimen/"><code>&lt;type-specimen&gt;</code></a><p>Typography scale specimen.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code></a><p>Spacing scale specimen.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a><p>Design-token table specimen.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code></a><p>Motion / easing specimen.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/component-sampler/"><code>&lt;component-sampler&gt;</code></a><p>Render a component across variants.</p></layout-card>
-      <layout-card><a href="/vb-design-system/elements/theme-export/"><code>&lt;theme-export&gt;</code></a><p>Export the active theme (DTCG / CSS).</p></layout-card>
-    </layout-grid>
-  </section>
+<details data-sidebar-group="Color" open>
+  <summary>Color</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/brand-specimen/">brand-specimen</a></li>
+    <li><a href="/vb-design-system/elements/color-palette/">color-palette</a></li>
+    <li><a href="/vb-design-system/elements/palette-generator/">palette-generator</a></li>
+    <li><a href="/vb-design-system/elements/semantic-palette/">semantic-palette</a></li>
+  </ul>
+</details>
 
-  <section data-layout="stack" data-layout-gap="s">
-    <h2>Install</h2>
-    <code-block language="bash" data-ssr><template shadowrootmode="open"><style>
+<details data-sidebar-group="Type & space" open>
+  <summary>Type &amp; space</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/type-specimen/">type-specimen</a></li>
+    <li><a href="/vb-design-system/elements/spacing-specimen/">spacing-specimen</a></li>
+    <li><a href="/vb-design-system/elements/breakpoint-specimen/">breakpoint-specimen</a></li>
+    <li><a href="/vb-design-system/elements/layout-specimen/">layout-specimen</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Tokens" open>
+  <summary>Tokens</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/token-specimen/">token-specimen</a></li>
+    <li><a href="/vb-design-system/elements/theme-export/">theme-export</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Motion & composition" open>
+  <summary>Motion &amp; composition</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/motion-specimen/">motion-specimen</a></li>
+    <li><a href="/vb-design-system/elements/component-sampler/">component-sampler</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Accessibility" open>
+  <summary>Accessibility</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/accessibility-specimen/">accessibility-specimen</a></li>
+  </ul>
+</details>
+
+<details data-sidebar-group="Tools" open>
+  <summary>Tools</summary>
+  <ul>
+    <li><a href="/vb-design-system/elements/font-pairer/">font-pairer</a></li>
+    <li><a href="/vb-design-system/elements/gradient-builder/">gradient-builder</a></li>
+    <li><a href="/vb-design-system/elements/icon-set/">icon-set</a></li>
+    <li><a class="active" href="/vb-design-system/elements/icon-specimen/">icon-specimen</a></li>
+    <li><a href="/vb-design-system/elements/theme-catalog/">theme-catalog</a></li>
+    <li><a href="/vb-design-system/elements/theme-import/">theme-import</a></li>
+  </ul>
+</details>
+
+      </nav>
+
+      <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+        <aside data-layout-sticky="" data-pagefind-ignore="">
+          <page-toc levels="h2,h3" scope="main article"></page-toc>
+          <page-tools data-orientation="horizontal">
+            <print-page></print-page>
+            <share-wc variant="icon" size="s"></share-wc>
+            <text-reader variant="icon" for="doc-article"></text-reader>
+          </page-tools>
+        </aside>
+        <article id="doc-article">
+          <nav class="breadcrumb" aria-label="Breadcrumb" data-pagefind-ignore="">
+            <ol>
+              <li><a href="/vb-design-system/">Home</a></li>
+              <li><a class="active-parent" href="/vb-design-system/elements/">Elements</a></li>
+              <li><span aria-current="page">icon-specimen</span></li>
+            </ol>
+          </nav>
+          <h1><code>&lt;icon-specimen&gt;</code></h1>
+          <p class="lead">Curated icon-language specimen: a fixed set of icons across the sizing scale.</p>
+
+          <heading-links levels="h2,h3">
+            <section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;icon-specimen&gt;</code> component presents a project's icon <em>language</em>: a curated, fixed set of icon names rendered across the sizing scale. Unlike <code>&lt;icon-set&gt;</code>, it doesn't search or fetch a manifest — it's a design specimen for showing which icons a project uses and how they read at each size, not a browser for finding icon names.</p>
+
+  <div class="example">
+    <icon-specimen names="check x star settings" data-sizes="1rem 1.5rem 2rem"></icon-specimen>
+  </div>
+
+  <code-block language="html" data-ssr label="Basic usage" show-lines><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -677,504 +740,76 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">BASH</span></div>
+        <div class="label-container" id="code-label"><span class="label">Basic usage</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        
-        <pre><code class="language-bash" tabindex="0"><span class="code-line">npm install @profpowell/vb-design-system</span></code></pre>
+        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">icon-specimen</span> <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;check x star settings&quot;</span> <span class="hljs-attr">data-sizes</span>=<span class="hljs-string">&quot;1rem 1.5rem 2rem&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">icon-specimen</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">npm install @profpowell/vb-design-system</textarea></code-block>
-    <code-block language="js" data-ssr><template shadowrootmode="open"><style>
-      :host {
-        --_cb-bg: var(--color-surface-raised, #f6f8fa);
-        --_cb-code-bg: var(--color-surface, #fff);
-        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
-        --_cb-text-color: var(--color-text, #24292e);
-        --_cb-border-color: var(--color-border, #e1e4e8);
-        --_cb-comment: var(--color-text-muted, #6a737d);
-        --_cb-button-bg: #fff;
-        --_cb-button-color: var(--color-text, #24292e);
-        --_cb-scrollbar-track: #f6f8fa;
-        --_cb-scrollbar-thumb: #d1d5da;
-
-        display: block;
-        margin: var(--cb-margin, 1rem 0);
-        border-radius: var(--cb-border-radius, 8px);
-        overflow: hidden;
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        background: var(--cb-bg, var(--_cb-bg));
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-        font-size: var(--cb-font-size, 0.875rem);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--cb-header-padding, 0.5rem 1rem);
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        gap: 1rem;
-      }
-
-      .label-container {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 0;
-        flex: 1;
-      }
-
-      .label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--cb-label-color, #586069);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
-      }
-
-      .filename {
-        font-size: 0.8rem;
-        color: var(--cb-filename-color, #24292e);
-        font-weight: 500;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
-      }
-
-      .copy-button {
-        background: var(--cb-button-bg, var(--_cb-button-bg));
-        border-width: var(--cb-button-border-width, 1px);
-        border-style: var(--cb-button-border-style, solid);
-        border-color: var(--cb-button-border, #d1d5da);
-        border-radius: var(--cb-button-radius, 4px);
-        padding: var(--cb-button-padding, 4px 12px);
-        font-size: var(--cb-button-font-size, 0.75rem);
-        font-weight: 500;
-        color: var(--cb-button-color, var(--_cb-button-color));
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        flex-shrink: 0;
-      }
-
-      .copy-button:hover {
-        background: var(--cb-button-hover-bg, #f3f4f6);
-        border-color: var(--cb-button-hover-border, #959da5);
-      }
-
-      .copy-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: 2px;
-      }
-
-      .copy-button:active {
-        transform: scale(0.98);
-      }
-
-      .copy-button.copied {
-        background: var(--cb-success-color, #238636);
-        color: white;
-        border-color: var(--cb-success-color, #238636);
-      }
-
-      .copy-button.failed {
-        background: var(--cb-error-color, #da3633);
-        color: white;
-        border-color: var(--cb-error-color, #da3633);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .action-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--cb-label-color, #57606a);
-        transition: all 0.15s ease;
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      .action-button:hover {
-        color: var(--cb-button-color, var(--_cb-button-color));
-        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
-      }
-
-      .action-button:active {
-        transform: scale(0.95);
-      }
-
-      .action-button.active {
-        color: var(--cb-focus-color, #0969da);
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .action-button svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .share-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      .share-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        background: var(--cb-header-bg, var(--_cb-header-bg));
-        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: var(--cb-menu-radius, 8px);
-        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
-        min-width: 160px;
-        z-index: 1000;
-        overflow: hidden;
-      }
-
-      .share-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 0.625rem;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background: none;
-        border: none;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        font-size: 0.8125rem;
-        font-weight: 500;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-      }
-
-      .share-menu-item:last-child {
-        border-bottom: none;
-      }
-
-      .share-menu-item:hover {
-        background: rgba(0,0,0,0.03);
-      }
-
-      .share-menu-item:active {
-        background: rgba(9, 105, 218, 0.1);
-      }
-
-      .share-menu-item svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-      }
-
-      .code-container {
-        display: flex;
-        overflow-x: auto;
-        background: var(--cb-code-bg, var(--_cb-code-bg));
-      }
-
-      .line-numbers {
-        padding: var(--cb-code-padding, 1rem) 0;
-        text-align: right;
-        user-select: none;
-        background: var(--cb-line-numbers-bg, #f6f8fa);
-        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-line-numbers-color, #959da5);
-        line-height: var(--cb-line-height, 1.6);
-        flex-shrink: 0;
-      }
-
-      .line-numbers span {
-        display: block;
-        padding: 0 0.75rem;
-        min-width: 2.5rem;
-      }
-
-      .line-numbers span.highlighted {
-        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
-        color: var(--cb-line-numbers-highlight-color, #24292e);
-      }
-
-      pre {
-        margin: 0;
-        padding: 0;
-        flex: 1;
-        overflow-x: auto;
-      }
-
-      code {
-        display: block;
-        font-family: inherit;
-        color: var(--cb-text-color, var(--_cb-text-color));
-        background: transparent;
-        padding: var(--cb-code-padding, 1rem);
-      }
-
-      .code-line {
-        display: block;
-        line-height: var(--cb-line-height, 1.6);
-        padding: 0 0.5rem;
-        margin: 0 -0.5rem;
-        white-space: pre;
-      }
-
-      .code-line.highlighted {
-        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
-        border-left: 3px solid var(--cb-highlight-border, #f9a825);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      :host([focus-mode]) .code-line:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-        filter: blur(var(--cb-focus-blur, 0.5px));
-        transition: opacity 0.2s ease, filter 0.2s ease;
-      }
-
-      :host([focus-mode]) .code-line.highlighted {
-        opacity: 1;
-        filter: none;
-      }
-
-      :host([focus-mode]) .line-numbers span:not(.highlighted) {
-        opacity: var(--cb-focus-dim-opacity, 0.4);
-      }
-
-      .hljs-comment,
-      .hljs-quote {
-        color: var(--cb-comment, var(--_cb-comment));
-        font-style: italic;
-      }
-
-      .hljs-keyword,
-      .hljs-selector-tag,
-      .hljs-addition {
-        color: var(--cb-keyword, #d73a49);
-      }
-
-      .hljs-number,
-      .hljs-literal,
-      .hljs-doctag,
-      .hljs-regexp {
-        color: var(--cb-number, #005cc5);
-      }
-
-      .hljs-string,
-      .hljs-meta .hljs-meta-string {
-        color: var(--cb-string, #22863a);
-      }
-
-      .hljs-title,
-      .hljs-section,
-      .hljs-name,
-      .hljs-selector-id,
-      .hljs-selector-class {
-        color: var(--cb-function, #6f42c1);
-      }
-
-      .hljs-attribute,
-      .hljs-attr,
-      .hljs-variable,
-      .hljs-template-variable,
-      .hljs-class .hljs-title,
-      .hljs-type {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-symbol,
-      .hljs-bullet,
-      .hljs-subst,
-      .hljs-meta,
-      .hljs-meta .hljs-keyword,
-      .hljs-selector-attr,
-      .hljs-selector-pseudo,
-      .hljs-link {
-        color: var(--cb-meta, #e36209);
-      }
-
-      .hljs-built_in,
-      .hljs-deletion {
-        color: var(--cb-builtin, #d73a49);
-      }
-
-      .hljs-tag {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-name {
-        color: var(--cb-tag, #22863a);
-      }
-
-      .hljs-tag .hljs-attr {
-        color: var(--cb-attribute, #005cc5);
-      }
-
-      .hljs-emphasis {
-        font-style: italic;
-      }
-
-      .hljs-strong {
-        font-weight: bold;
-      }
-
-      .code-line.diff-add {
-        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
-        border-left: 3px solid var(--cb-diff-add-border, #22863a);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .code-line.diff-remove {
-        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
-        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
-        margin-left: calc(-0.5rem - 3px);
-        padding-left: calc(0.5rem + 3px);
-      }
-
-      .line-numbers span.diff-add {
-        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
-        color: var(--cb-diff-add-color, #22863a);
-      }
-
-      .line-numbers span.diff-remove {
-        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
-        color: var(--cb-diff-remove-color, #cb2431);
-      }
-
-      .hljs-addition {
-        color: var(--cb-diff-add-text, #22863a);
-        background: transparent;
-      }
-
-      .hljs-deletion {
-        color: var(--cb-diff-remove-text, #cb2431);
-        background: transparent;
-      }
-
-      :host([collapsed]) .code-container {
-        position: relative;
-      }
-
-      :host([collapsed]) .code-container::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
-        pointer-events: none;
-      }
-
-      :host([collapsed]) pre {
-        overflow: hidden;
-      }
-
-      :host([collapsed]) code {
-        display: block;
-        overflow: hidden;
-      }
-
-      .expand-button {
-        display: none;
-        width: 100%;
-        padding: 0.5rem 1rem;
-        background: var(--cb-expand-bg, #f6f8fa);
-        border: none;
-        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        color: var(--cb-expand-color, #0366d6);
-        font-size: 0.8rem;
-        font-weight: 500;
-        cursor: pointer;
-        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
-        transition: background 0.2s;
-      }
-
-      .expand-button:hover {
-        background: var(--cb-expand-hover-bg, #e1e4e8);
-      }
-
-      .expand-button:focus {
-        outline: 2px solid var(--cb-focus-color, #0366d6);
-        outline-offset: -2px;
-      }
-
-      :host([collapsed]) .expand-button,
-      :host([data-expandable]) .expand-button {
-        display: block;
-      }
-
-      :host([max-height]) .code-container {
-        max-height: var(--cb-max-height);
-        overflow-y: auto;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: var(--cb-button-radius, 4px);
-      }
-
-      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
-        background: var(--cb-scrollbar-thumb-hover, #959da5);
-      }
-
-      :host([wrap]) code {
-        white-space: pre-wrap;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
-
-      :host([wrap]) .code-line {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :host([no-copy]) code {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      }
-
-      :host([no-copy]) .code-line {
-        user-select: none;
-        -webkit-user-select: none;
-      }
-    </style>
-      <div class="header">
-        <div class="label-container" id="code-label"><span class="label">JS</span></div>
-        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
-      </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        
-        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@profpowell/vb-design-system&#x27;</span>;</span><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@profpowell/vb-design-system/css&#x27;</span>;</span></code></pre>
-      </div>
-      </template><textarea style="display:none">import &#39;@profpowell/vb-design-system&#39;;
-import &#39;@profpowell/vb-design-system/css&#39;;</textarea></code-block>
-    <p>Pair with Vanilla Breeze tokens/themes on the page — components inherit the active theme automatically. Try the <strong>Theme</strong> picker above.</p>
-  </section>
-    </layout-center>
+      </template><textarea style="display:none">&lt;icon-specimen names=&quot;check x star settings&quot; data-sizes=&quot;1rem 1.5rem 2rem&quot;&gt;&lt;/icon-specimen&gt;</textarea></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>set</code></td>
+        <td>string</td>
+        <td><code>lucide</code></td>
+        <td>Icon set directory under the icon base path.</td>
+      </tr>
+      <tr>
+        <td><code>names</code></td>
+        <td>string</td>
+        <td>— (required)</td>
+        <td>Space/comma-separated list of curated icon names to display.</td>
+      </tr>
+      <tr>
+        <td><code>data-sizes</code></td>
+        <td>string</td>
+        <td><code>1rem 1.5rem 2rem</code></td>
+        <td>Space-separated sizing scale. Each icon renders once per size.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Rendering</h2>
+  <p>Each cell renders via <code>&lt;icon-wc name="..." set="..."&gt;</code> — the same real icon-loading path (SVG fetch, caching, <code>currentColor</code> theming) used elsewhere in the system. Sizing comes from an inline <code>font-size</code> on each <code>&lt;icon-wc&gt;</code>, since the component sizes itself in <code>em</code> units relative to its own font-size.</p>
+</section>
+
+<section>
+  <h2>Design system workflow</h2>
+  <p>Use <code>&lt;icon-specimen&gt;</code> to document the small, curated set of icons a project actually uses — as opposed to <code>&lt;icon-set&gt;</code>, which browses the full catalog. A typical icon guidelines page shows:</p>
+  <ol>
+    <li>The curated icon list at every size the project uses (via <code>data-sizes</code>).</li>
+    <li>Do/don't guidance authored alongside it (e.g. a <code>data-list="do-dont"</code> block) for usage rules such as stroke weight or minimum size.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Icon names are always visible as text (in a <code>&lt;code&gt;</code> row header), never conveyed by glyph alone.</li>
+    <li>The specimen renders as a native <code>&lt;table&gt;</code> with <code>&lt;th scope="row"&gt;</code>/<code>&lt;th scope="col"&gt;</code> headers, so assistive tech can announce which icon and size a cell represents.</li>
+    <li>Icons render via <code>&lt;icon-wc&gt;</code>, which marks decorative glyphs <code>aria-hidden</code> by default.</li>
+  </ul>
+</section>
+          </heading-links>
+        </article>
+      </layout-sidebar>
+    </layout-sidebar>
   </main>
 
   <!-- Canonical VB-ecosystem footer — pattern: bg-wc docs/superpowers/specs/2026-06-10-vb-site-footer-pattern-design.md -->
@@ -1202,6 +837,23 @@ import &#39;@profpowell/vb-design-system/css&#39;;</textarea></code-block>
     <settings-panel></settings-panel>
     <a href="#" data-back-to-top="" aria-label="Back to top">↑</a>
   </fab-stack>
+
+  <script>
+  // Mark the active sidebar link (matches the rewritten href under the Pages
+  // subpath via the anchor's resolved .pathname) and open its <details> chain.
+  (function () {
+    var here = location.pathname.replace(/\/+$/, '');
+    var links = document.querySelectorAll('.tree a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].pathname.replace(/\/+$/, '') === here) {
+        links[i].setAttribute('aria-current', 'page');
+        var el = links[i].closest('details');
+        while (el) { el.open = true; el = el.parentElement.closest('details'); }
+        break;
+      }
+    }
+  })();
+  </script>
 
   <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr2rrblz"></script>
   <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr2rrblz"></script>

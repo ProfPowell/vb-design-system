@@ -4414,3 +4414,41 @@ var IconSet = class extends VBElement {
   }
 };
 registerComponent("icon-set", IconSet);
+
+// src/web-components/icon-specimen/logic.js
+var IconSpecimen = class extends VBElement {
+  static observedAttributes = ["set", "names", "data-sizes"];
+  setup() {
+    this.#render();
+  }
+  attributeChangedCallback() {
+    if (this.isConnected) this.#render();
+  }
+  get set() {
+    return this.getAttribute("set") || "lucide";
+  }
+  get names() {
+    return (this.getAttribute("names") || "").split(/[\s,]+/).filter(Boolean);
+  }
+  get sizes() {
+    return (this.getAttribute("data-sizes") || "1rem 1.5rem 2rem").trim().split(/\s+/);
+  }
+  #render() {
+    const { set, names, sizes } = this;
+    const cell = (n) => sizes.map((sz) => `
+        <td><icon-wc name="${n}" set="${set}" style="font-size:${sz}"></icon-wc></td>`).join("");
+    this.innerHTML = `
+      <table class="icon-specimen">
+        <thead>
+          <tr>
+            <th scope="col">Icon</th>
+            ${sizes.map((sz) => `<th scope="col">${sz}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody>
+          ${names.map((n) => `<tr><th scope="row"><code>${n}</code></th>${cell(n)}</tr>`).join("")}
+        </tbody>
+      </table>`;
+  }
+};
+registerComponent("icon-specimen", IconSpecimen);

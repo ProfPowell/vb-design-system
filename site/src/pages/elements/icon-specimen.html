@@ -1,0 +1,79 @@
+---
+layout: element
+title: "icon-specimen"
+description: "Curated icon-language specimen: a fixed set of icons across the sizing scale."
+elementName: icon-specimen
+category: component
+currentPath: /docs/elements/web-components/icon-specimen/
+
+crumbHref: /docs/elements/web-components/
+crumbLabel: Web Components
+---
+
+<section>
+  <h2>Overview</h2>
+  <p>The <code>&lt;icon-specimen&gt;</code> component presents a project's icon <em>language</em>: a curated, fixed set of icon names rendered across the sizing scale. Unlike <code>&lt;icon-set&gt;</code>, it doesn't search or fetch a manifest &mdash; it's a design specimen for showing which icons a project uses and how they read at each size, not a browser for finding icon names.</p>
+
+  <div class="example">
+    <icon-specimen names="check x star settings" data-sizes="1rem 1.5rem 2rem"></icon-specimen>
+  </div>
+
+  <code-block language="html" show-lines label="Basic usage" data-escape><icon-specimen names="check x star settings" data-sizes="1rem 1.5rem 2rem"></icon-specimen></code-block>
+</section>
+
+<section>
+  <h2>Attributes</h2>
+  <table class="props-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>set</code></td>
+        <td>string</td>
+        <td><code>lucide</code></td>
+        <td>Icon set directory under the icon base path.</td>
+      </tr>
+      <tr>
+        <td><code>names</code></td>
+        <td>string</td>
+        <td>&mdash; (required)</td>
+        <td>Space/comma-separated list of curated icon names to display.</td>
+      </tr>
+      <tr>
+        <td><code>data-sizes</code></td>
+        <td>string</td>
+        <td><code>1rem 1.5rem 2rem</code></td>
+        <td>Space-separated sizing scale. Each icon renders once per size.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Rendering</h2>
+  <p>Each cell renders via <code>&lt;icon-wc name="..." set="..."&gt;</code> &mdash; the same real icon-loading path (SVG fetch, caching, <code>currentColor</code> theming) used elsewhere in the system. Sizing comes from an inline <code>font-size</code> on each <code>&lt;icon-wc&gt;</code>, since the component sizes itself in <code>em</code> units relative to its own font-size.</p>
+</section>
+
+<section>
+  <h2>Design system workflow</h2>
+  <p>Use <code>&lt;icon-specimen&gt;</code> to document the small, curated set of icons a project actually uses &mdash; as opposed to <code>&lt;icon-set&gt;</code>, which browses the full catalog. A typical icon guidelines page shows:</p>
+  <ol>
+    <li>The curated icon list at every size the project uses (via <code>data-sizes</code>).</li>
+    <li>Do/don't guidance authored alongside it (e.g. a <code>data-list="do-dont"</code> block) for usage rules such as stroke weight or minimum size.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <ul>
+    <li>Icon names are always visible as text (in a <code>&lt;code&gt;</code> row header), never conveyed by glyph alone.</li>
+    <li>The specimen renders as a native <code>&lt;table&gt;</code> with <code>&lt;th scope="row"&gt;</code>/<code>&lt;th scope="col"&gt;</code> headers, so assistive tech can announce which icon and size a cell represents.</li>
+    <li>Icons render via <code>&lt;icon-wc&gt;</code>, which marks decorative glyphs <code>aria-hidden</code> by default.</li>
+  </ul>
+</section>

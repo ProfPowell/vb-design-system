@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Icon Specimen — Static Fallback</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 2rem; }
+    table { border-collapse: collapse; }
+    th, td { text-align: left; padding: 0.5rem 1rem; border-bottom: 1px solid #d4d4d8; }
+  </style>
+</head>
+<body>
+  <!--
+    Static fallback for <icon-specimen>.
+
+    Upgrade relationship:
+    - Without JS: a plain table listing each curated icon name across the
+      size scale remains readable, so the specimen's contents are never
+      hidden from no-JS readers.
+    - With JS: the component re-renders each cell with the real icon via
+      <icon-wc>, sized per the `data-sizes` scale.
+  -->
+
+  <icon-specimen names="check x star settings" data-sizes="1rem 1.5rem 2rem">
+    <table>
+      <thead>
+        <tr><th>Icon</th><th>1rem</th><th>1.5rem</th><th>2rem</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><code>check</code></th><td>check</td><td>check</td><td>check</td></tr>
+        <tr><th scope="row"><code>x</code></th><td>x</td><td>x</td><td>x</td></tr>
+        <tr><th scope="row"><code>star</code></th><td>star</td><td>star</td><td>star</td></tr>
+        <tr><th scope="row"><code>settings</code></th><td>settings</td><td>settings</td><td>settings</td></tr>
+      </tbody>
+    </table>
+  </icon-specimen>
+</body>
+</html>

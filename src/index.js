@@ -21,3 +21,4 @@ import './web-components/theme-import/logic.js';
 import './web-components/theme-catalog/logic.js';
 import './web-components/brand-specimen/logic.js';
 import './web-components/icon-set/logic.js';
+import './web-components/icon-specimen/logic.js';

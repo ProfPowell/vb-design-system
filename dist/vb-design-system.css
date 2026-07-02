@@ -835,6 +835,39 @@ icon-set {
   }
 }
 
+/* src/web-components/icon-specimen/styles.css */
+icon-specimen:not(:defined) {
+  display: block;
+}
+icon-specimen {
+  display: block;
+  font-family: var(--font-sans, system-ui);
+  color: var(--color-text, #1a1a1a);
+}
+@scope (icon-specimen) {
+  .icon-specimen {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+  .icon-specimen th,
+  .icon-specimen td {
+    text-align: start;
+    padding: var(--size-s, 0.75rem);
+    border-block-end: 1px solid var(--color-border, #d4d4d8);
+  }
+  .icon-specimen thead th {
+    font-size: var(--font-size-xs, 0.75rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted, #71717a);
+  }
+  .icon-specimen td icon-wc {
+    color: inherit;
+    vertical-align: middle;
+  }
+}
+
 /* src/patterns/do-dont.css */
 [data-list=do-dont],
 [data-list=pro-con] {

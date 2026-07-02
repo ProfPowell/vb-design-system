@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../schemas/api.schema.json",
+  "element": "icon-specimen",
+  "type": "web-component",
+  "description": "Curated icon-language specimen: a fixed set of icon names rendered across the project's sizing scale.",
+  "htmlvalidate": {
+    "flow": true,
+    "permittedContent": [
+      "@flow"
+    ]
+  },
+  "attributes": [
+    {
+      "name": "set",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Icon set directory (default: \"lucide\")"
+    },
+    {
+      "name": "names",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Space/comma-separated list of icon names to display (required)."
+    },
+    {
+      "name": "data-sizes",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "description": "Space-separated sizing scale, e.g. \"1rem 1.5rem 2rem\" (default)."
+    }
+  ],
+  "childAttributes": [
+    {
+      "name": "name",
+      "kind": "host-api",
+      "purpose": "config",
+      "type": "string",
+      "element": "icon-wc",
+      "description": "Icon filename (without .svg), passed through from each specimen cell."
+    }
+  ],
+  "structure": []
+}

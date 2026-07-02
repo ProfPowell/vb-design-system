@@ -53,6 +53,7 @@
     "./theme-catalog": "./src/web-components/theme-catalog/logic.js",
     "./brand-specimen": "./src/web-components/brand-specimen/logic.js",
     "./icon-set": "./src/web-components/icon-set/logic.js",
+    "./icon-specimen": "./src/web-components/icon-specimen/logic.js",
     "./package.json": "./package.json"
   },
   "scripts": {
