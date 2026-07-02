@@ -4,7 +4,7 @@
  *   - the pack's own dist bundle (../dist) — the components this site documents
  *   - companion components used by the docs (browser-window, code-block)
  */
-import { mkdirSync, copyFileSync, existsSync, readFileSync, cpSync, readdirSync } from 'node:fs';
+import { mkdirSync, copyFileSync, existsSync, readFileSync, cpSync, readdirSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -59,6 +59,18 @@ const iconsDest = resolve(siteRoot, 'src/pages/cdn/icons');
 mkdirSync(iconsDest, { recursive: true });
 cpSync(resolve(nm, 'vanilla-breeze/dist/cdn/icons'), iconsDest, { recursive: true });
 console.log('  ✓ src/pages/cdn/icons (' + readdirSync(iconsDest).length + ' sets)');
+// Emit a <set>.json name manifest per icon set so <icon-set set="…"> (no `names`)
+// can fetch and render the full set. Regenerated every prebuild from the copied
+// SVGs, so it stays in sync with whatever vanilla-breeze ships.
+for (const set of readdirSync(iconsDest, { withFileTypes: true })) {
+  if (!set.isDirectory()) continue;
+  const names = readdirSync(resolve(iconsDest, set.name))
+    .filter((f) => f.endsWith('.svg'))
+    .map((f) => f.slice(0, -4))
+    .sort();
+  if (names.length) writeFileSync(resolve(iconsDest, set.name + '.json'), JSON.stringify(names));
+}
+console.log('  ✓ icon set manifests (<set>.json)');
 
 console.log('Copying pack bundle…');
 cp(resolve(repoRoot, 'dist/vb-design-system.js'), resolve(packDir, 'vb-design-system.js'));
