@@ -4341,6 +4341,8 @@ registerComponent("brand-specimen", BrandSpecimen);
 var iconBase = () => document.documentElement.dataset.iconPath || "/cdn/icons";
 var IconSet = class extends VBElement {
   static observedAttributes = ["set", "names"];
+  /** @type {IntersectionObserver | null} Lazy-mounts <icon-wc> as cells scroll in. */
+  #io = null;
   setup() {
     this.#render();
     this.#load();
@@ -4350,6 +4352,11 @@ var IconSet = class extends VBElement {
       this.#render();
       this.#load();
     }
+  }
+  disconnectedCallback() {
+    this.#io?.disconnect();
+    this.#io = null;
+    super.disconnectedCallback?.();
   }
   get set() {
     return this.getAttribute("set") || "lucide";
@@ -4387,11 +4394,12 @@ var IconSet = class extends VBElement {
   #renderGrid(names) {
     const ul = this.querySelector(".icon-set__grid");
     if (!ul) return;
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     ul.innerHTML = names.map((n) => `
-      <li data-icon-name="${n}">
-        <button type="button" title="Copy \u201C${n}\u201D" data-copy="${n}">
-          <icon-wc name="${n}" set="${this.set}"></icon-wc>
-          <span>${n}</span>
+      <li data-icon-name="${esc(n)}">
+        <button type="button" title="Copy \u201C${esc(n)}\u201D" data-copy="${esc(n)}">
+          <span class="icon-set__icon" data-name="${esc(n)}"></span>
+          <span>${esc(n)}</span>
         </button>
       </li>`).join("");
     this.listen(ul, "click", (e) => {
@@ -4404,6 +4412,24 @@ var IconSet = class extends VBElement {
         btn.dataset.copy ?? ""
       );
     });
+    const set = this.set;
+    this.#io?.disconnect();
+    this.#io = new IntersectionObserver((entries, obs) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const slot = (
+          /** @type {HTMLElement} */
+          entry.target
+        );
+        obs.unobserve(slot);
+        if (slot.firstElementChild) continue;
+        const icon = document.createElement("icon-wc");
+        icon.setAttribute("name", slot.dataset.name ?? "");
+        icon.setAttribute("set", set);
+        slot.appendChild(icon);
+      }
+    }, { rootMargin: "400px" });
+    for (const slot of ul.querySelectorAll(".icon-set__icon")) this.#io.observe(slot);
   }
   #filter(q) {
     const term = q.trim().toLowerCase();

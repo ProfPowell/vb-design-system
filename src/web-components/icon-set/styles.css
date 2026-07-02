@@ -53,6 +53,17 @@ icon-set {
     background: var(--color-surface-2, #f4f4f5);
   }
 
+  /* Reserve the icon box up front so the grid doesn't reflow as icons
+     lazily mount, and so each empty slot is observable/visible for the
+     IntersectionObserver. */
+  .icon-set__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
   .icon-set__grid icon-wc {
     font-size: 1.5rem;
   }

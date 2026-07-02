@@ -830,6 +830,13 @@ icon-set {
     border-color: var(--color-border, #d4d4d8);
     background: var(--color-surface-2, #f4f4f5);
   }
+  .icon-set__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
   .icon-set__grid icon-wc {
     font-size: 1.5rem;
   }

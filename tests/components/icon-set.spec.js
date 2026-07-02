@@ -11,6 +11,9 @@ test('icon-set renders a filterable, copyable grid from names via icon-wc', asyn
   });
   const grid = page.locator('#probe');
   await expect(grid.locator('[data-icon-name]')).toHaveCount(3);
+  // Icons lazy-mount when a cell nears the viewport (avoids a fetch storm on
+  // large sets). Scroll the grid in so the IntersectionObserver mounts them.
+  await grid.scrollIntoViewIfNeeded();
   // each cell renders via <icon-wc>, not a bare [data-icon] element (unpublished primitive)
   await expect(grid.locator('icon-wc').first()).toBeVisible();
   // filter
