@@ -85,10 +85,10 @@
 
   <title>theme-catalog — VB Design System</title>
   <meta name="description" content="Browse and apply curated public design-system token sets — Material, IBM Carbon, Salesforce Lightning, GOV.UK, Atlassian, Tailwind, Bootstrap, Catppuccin Mocha — to a preview scope.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr3wiksm">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr3wiksm">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr3wiksm">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr3wiksm">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr3ykb4j">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr3ykb4j">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr3ykb4j">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr3ykb4j">
   
 </head>
 <body style="overflow-x: clip;">
@@ -269,6 +269,9 @@
       #preview .tp-chip { inline-size: 2.5rem; block-size: 2.5rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12); }
       #preview .tp-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
       #preview .tp-btn { padding: 0.45rem 1rem; border: 0; border-radius: var(--radius-s, 0.25rem); font: inherit; cursor: pointer; }
+      /* Neutralize the doc chrome's flow-spacing (margin-block-start on non-first
+         siblings), which offsets items in these horizontal flex rows. */
+      #preview .tp-swatches li, #preview .tp-actions .tp-btn { margin: 0; }
     </style>
     <section id="preview" class="theme-preview">
       <ul class="tp-swatches">
@@ -902,10 +905,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr3wiksm"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr3wiksm"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr3wiksm"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr3wiksm"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr3ykb4j"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr3ykb4j"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr3ykb4j"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr3ykb4j"></script>
   
 </body>
 </html>

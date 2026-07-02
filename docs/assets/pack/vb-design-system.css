@@ -813,9 +813,14 @@ icon-set {
   .icon-set__grid [hidden] {
     display: none;
   }
+  .icon-set__grid li {
+    margin: 0;
+  }
   .icon-set__grid button {
     inline-size: 100%;
+    block-size: 100%;
     display: grid;
+    align-content: start;
     justify-items: center;
     gap: var(--size-2xs, 0.25rem);
     padding: var(--size-s, 0.75rem);
@@ -825,6 +830,11 @@ icon-set {
     cursor: pointer;
     font-size: var(--font-size-xs, 0.75rem);
     color: inherit;
+  }
+  .icon-set__grid button > span:last-child {
+    min-block-size: 2lh;
+    text-align: center;
+    overflow-wrap: anywhere;
   }
   .icon-set__grid button:hover {
     border-color: var(--color-border, #d4d4d8);

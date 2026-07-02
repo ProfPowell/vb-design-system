@@ -25,6 +25,9 @@ crumbLabel: Web Components
       #preview .tp-chip { inline-size: 2.5rem; block-size: 2.5rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12); }
       #preview .tp-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
       #preview .tp-btn { padding: 0.45rem 1rem; border: 0; border-radius: var(--radius-s, 0.25rem); font: inherit; cursor: pointer; }
+      /* Neutralize the doc chrome's flow-spacing (margin-block-start on non-first
+         siblings), which offsets items in these horizontal flex rows. */
+      #preview .tp-swatches li, #preview .tp-actions .tp-btn { margin: 0; }
     </style>
     <section id="preview" class="theme-preview">
       <ul class="tp-swatches">

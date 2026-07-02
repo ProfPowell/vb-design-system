@@ -34,9 +34,17 @@ icon-set {
     display: none;
   }
 
+  /* Neutralize the doc chrome's flow-spacing (margin-block-start on non-first
+     siblings), which offsets the first cell and skews the grid rows. */
+  .icon-set__grid li {
+    margin: 0;
+  }
+
   .icon-set__grid button {
     inline-size: 100%;
+    block-size: 100%;        /* fill the cell so every card is the same height */
     display: grid;
+    align-content: start;    /* icon + name anchored at the top, so icons line up */
     justify-items: center;
     gap: var(--size-2xs, 0.25rem);
     padding: var(--size-s, 0.75rem);
@@ -46,6 +54,14 @@ icon-set {
     cursor: pointer;
     font-size: var(--font-size-xs, 0.75rem);
     color: inherit;
+  }
+
+  /* Reserve two lines for the name so 1- and 2-line names produce equal-height
+     cards; long names wrap instead of overflowing their neighbours. */
+  .icon-set__grid button > span:last-child {
+    min-block-size: 2lh;
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   .icon-set__grid button:hover {
