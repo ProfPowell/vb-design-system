@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+  <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
+
+     Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
+     hardcode data-theme on <html>; the deferred vanilla-breeze.js ThemeManager
+     then read the saved prefs from VBStore and re-applied them after first
+     paint, producing a visible flash from the default theme to the stored one.
+
+     This inline, render-blocking script reads the same VBStore envelopes
+     (localStorage key "vb:{namespace}:{key}" -> { data, timestamp }) and applies
+     the saved theme/mode to <html> BEFORE first paint, so ThemeManager.init()
+     later re-applies identical prefs with nothing to change.
+
+     NOTE: written with string concatenation (no `${ }` template literals) so the
+     cook templating engine does not treat the JS as template variables. The brand
+     theme href is built from window.__VB_THEME_BASE (set just above) so this needs
+     no publish-time path rewrite. -->
+<style>
+  /* Keep paint suppressed until a boot-loaded brand theme stylesheet resolves,
+     so a returning visitor's brand theme never flashes through the default. */
+  html:has(link[data-vb-theme-state="loading"]) body { visibility: hidden; }
+</style>
+<script>
+  try {
+    var vbRead = function (ns, key) {
+      try {
+        var raw = localStorage.getItem('vb:' + ns + ':' + key);
+        if (!raw) return null;
+        var env = JSON.parse(raw);
+        return env && typeof env === 'object' && 'data' in env ? env.data : null;
+      } catch (e) { return null; }
+    };
+
+    var stored = vbRead('theme', 'current') || {};
+    var mode = stored.mode || 'auto';
+    var brand = stored.brand || 'default';
+    var coreThemes = {
+      'default': 1, 'a11y-high-contrast': 1, 'a11y-large-text': 1,
+      'a11y-dyslexia': 1, 'modern': 1, 'minimal': 1, 'classic': 1
+    };
+
+    if (mode !== 'auto') {
+      document.documentElement.dataset.mode = mode;
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.dataset.mode = 'dark';
+    }
+
+    var a11y = vbRead('settings', 'a11y');
+    var parts = [];
+    if (brand && brand !== 'default') parts.push(brand);
+    if (Array.isArray(a11y)) parts = parts.concat(a11y);
+    if (parts.length) document.documentElement.dataset.theme = parts.join(' ');
+
+    var safeBrand = /^[a-z0-9-]+$/.test(brand) ? brand : 'default';
+    if (safeBrand && !coreThemes[safeBrand] &&
+        !document.querySelector('link[data-vb-theme="' + safeBrand + '"]')) {
+      var base = window.__VB_THEME_BASE || '';
+      var href = base + '/themes/' + safeBrand + '.css';
+      document.write(
+        '<link rel="stylesheet" href="' + href + '"' +
+        ' data-vb-theme="' + safeBrand + '"' +
+        ' data-vb-theme-state="loading" data-vb-theme-boot=""' +
+        ' onload="this.setAttribute(\'data-vb-theme-state\',\'ready\')"' +
+        ' onerror="this.setAttribute(\'data-vb-theme-state\',\'error\')">'
+      );
+      // Safety fallback: if neither onload nor onerror fires (slow net, broken
+      // cache), flip state anyway so the :has(loading) guard never leaves the
+      // page invisible.
+      setTimeout(function () {
+        var link = document.querySelector('link[data-vb-theme-boot]');
+        if (link && link.getAttribute('data-vb-theme-state') === 'loading') {
+          link.setAttribute('data-vb-theme-state', 'timeout');
+        }
+      }, 1500);
+    }
+  } catch (e) {}
+</script>
+
+  <title>Theme Library — VB Design System</title>
+  <meta name="description" content="Every Vanilla Breeze theme with downloadable CSS and DTCG (Design Tokens Community Group) artifacts. Filter by tier; copy CDN URLs; browse with attribution for brand-reference themes.">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr4bon1b">
+  <style>
+  .lib-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-s, 0.75rem);
+    align-items: center;
+    margin-block: var(--size-m, 1rem);
+    padding: var(--size-m, 1rem);
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: var(--radius-m, 0.5rem);
+    background: var(--color-surface-raised, #fafafa);
+  }
+
+  .lib-toolbar label {
+    display: flex;
+    align-items: center;
+    gap: var(--size-2xs, 0.375rem);
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  .lib-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    margin-block: var(--size-m, 1rem);
+  }
+
+  .lib-table th,
+  .lib-table td {
+    padding: var(--size-xs, 0.5rem) var(--size-s, 0.75rem);
+    border-block-end: 1px solid var(--color-border, #eee);
+    text-align: start;
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  .lib-table th {
+    background: var(--color-surface-raised, #fafafa);
+    font-weight: 600;
+    position: sticky;
+    inset-block-start: 0;
+  }
+
+  .lib-table td a {
+    color: var(--color-interactive, #0066cc);
+    text-decoration: none;
+  }
+
+  .lib-table td a:hover { text-decoration: underline; }
+
+  .lib-tier {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: var(--font-size-xs, 0.75rem);
+    background: var(--color-surface-sunken, #f0f0f0);
+    color: var(--color-text-muted, #555);
+  }
+
+  .lib-tier[data-tier="core"] {
+    background: var(--color-success-subtle, #d4edda);
+    color: var(--color-success-text, #155724);
+  }
+
+  .lib-tier[data-tier="showcase"] {
+    background: var(--color-info-subtle, #d1ecf1);
+    color: var(--color-info-text, #0c5460);
+  }
+
+  .lib-status {
+    margin-block: var(--size-s, 0.75rem);
+    color: var(--color-text-muted, #666);
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+</style>
+</head>
+<body style="overflow-x: clip;">
+
+  <header class="site" data-sticky="" data-vt="header">
+  <a href="/vb-design-system/"><brand-mark>VB Design System</brand-mark></a>
+  <nav-bar aria-label="Main navigation">
+    <nav class="horizontal pills">
+      <ul>
+        <li><a href="/vb-design-system/" data-nav-link="">Home</a></li>
+        <li><a href="/vb-design-system/elements/" data-nav-link="">Elements</a></li>
+        <li><a href="/vb-design-system/guides/" data-nav-link="">Guides</a></li>
+        <li><a href="/vb-design-system/tools/theme-composer/" data-nav-link="">Composer</a></li>
+        <li><a href="/vb-design-system/showcase/" data-nav-link="">Showcases</a></li>
+        <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+      </ul>
+    </nav>
+  </nav-bar>
+  <site-tools>
+    <site-search>
+      <button type="button" data-trigger="" class="ghost">
+        <icon-wc name="search" size="sm"></icon-wc>
+        Search
+      </button>
+    </site-search>
+    <theme-picker compact="">
+      <button type="button" data-trigger="" class="ghost">
+        <icon-wc name="palette" size="sm"></icon-wc>
+        Theme
+      </button>
+    </theme-picker>
+  </site-tools>
+  <mobile-menu breakpoint="52rem">
+    <button type="button" data-trigger="" popovertarget="mobile-menu" aria-label="Menu">
+      <icon-wc name="menu"></icon-wc>
+    </button>
+    <nav popover="" id="mobile-menu" class="mobile-menu-panel">
+      <button type="button" class="mobile-menu-close" popovertarget="mobile-menu" popovertargetaction="hide" aria-label="Close menu">
+        <icon-wc name="x"></icon-wc>
+      </button>
+      <div class="mobile-menu-search">
+        <site-search>
+          <button type="button" data-trigger="" class="ghost" style="inline-size: 100%">
+            <icon-wc name="search" size="sm"></icon-wc>
+            Search
+          </button>
+        </site-search>
+      </div>
+      <ul>
+        <li class="mobile-section">
+          <strong class="mobile-section-title">Pages</strong>
+          <ul>
+            <li><a href="/vb-design-system/">Home</a></li>
+            <li><a href="/vb-design-system/elements/">Elements</a></li>
+            <li><a href="/vb-design-system/guides/">Guides</a></li>
+            <li><a href="/vb-design-system/tools/theme-composer/">Composer</a></li>
+            <li><a href="/vb-design-system/showcase/">Showcases</a></li>
+            <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="mobile-menu-theme">
+        <strong class="mobile-section-title">Theme</strong>
+        <theme-picker variant="inline" compact=""></theme-picker>
+      </div>
+    </nav>
+  </mobile-menu>
+</header>
+
+
+  <main data-pagefind-body="" style="overflow-x: clip;">
+    <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+      <aside data-layout-sticky="" data-pagefind-ignore="">
+        <page-toc levels="h2,h3" scope="main article"></page-toc>
+        <page-tools data-orientation="horizontal">
+          <print-page></print-page>
+          <share-wc variant="icon" size="s"></share-wc>
+          <text-reader variant="icon" for="doc-article"></text-reader>
+        </page-tools>
+      </aside>
+      <article id="doc-article">
+        <heading-links levels="h2,h3">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="https://vanilla-breeze.com/docs/themes/">Docs</a></li>
+    <li><a class="active-parent" href="https://vanilla-breeze.com/docs/tools/">Tools</a></li>
+    <li><span aria-current="page">Theme Library</span></li>
+  </ol>
+</nav>
+
+<h1>Theme Library</h1>
+
+<p class="lead">
+  Every Vanilla Breeze theme ships as a CSS file at
+  <a href="/vb-design-system/cdn/themes/"><code>/cdn/themes/{slug}.css</code></a> and as a
+  <a href="/vb-design-system/guides/dtcg/">DTCG</a> sibling at
+  <code>{slug}.tokens.json</code>. Themes with an explicit dark-mode
+  variant also ship <code>{slug}-dark.tokens.json</code>.
+</p>
+
+<aside class="note">
+  <p>
+    <strong>Tiers:</strong> <span class="lib-tier" data-tier="core">core</span>
+    themes ship in the bundled <code>vanilla-breeze.css</code>;
+    <span class="lib-tier" data-tier="showcase">showcase</span> and
+    <span class="lib-tier">community</span> themes load on demand.
+  </p>
+</aside>
+
+<section class="lib-toolbar" aria-label="Filter">
+  <label>
+    <span>Tier</span>
+    <select id="lib-tier-filter">
+      <option value="">All</option>
+      <option value="core">Core</option>
+      <option value="showcase">Showcase</option>
+      <option value="community">Community</option>
+    </select>
+  </label>
+  <label>
+    <input type="checkbox" id="lib-dtcg-only">
+    <span>DTCG only</span>
+  </label>
+  <span id="lib-count" class="lib-status"></span>
+</section>
+
+<output id="lib-status" class="lib-status">Loading manifest…</output>
+
+<noscript>
+  <p>
+    The library requires JavaScript to render the table. The raw manifest
+    is available at <a href="/vb-design-system/cdn/themes/manifest.json"><code>/cdn/themes/manifest.json</code></a>.
+  </p>
+</noscript>
+
+<table class="lib-table" id="lib-table" hidden>
+  <thead>
+    <tr>
+      <th scope="col">Theme</th>
+      <th scope="col">Tier</th>
+      <th scope="col">CSS</th>
+      <th scope="col">DTCG</th>
+      <th scope="col">DTCG (dark)</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<section style="margin-block-start: var(--size-xl, 2rem);">
+  <h2>Brand reference themes</h2>
+  <p>
+    The brand themes (<strong>mcdonalds</strong>, <strong>starbucks</strong>,
+    <strong>ibm</strong>, <strong>anthropic</strong>) are reference
+    interpretations of public brand cues, intended for design-system
+    demonstration. Trademarks belong to their respective owners; each
+    theme is a single removable file. See the disclaimer in any
+    <code>src/tokens/themes/_brand-{name}.css</code> file for full text.
+  </p>
+</section>
+
+<section style="margin-block-start: var(--size-l, 1.5rem);">
+  <h2>How to use</h2>
+  <p>
+    Load the CSS as a stylesheet and set <code>data-theme</code> on the
+    root element to activate it:
+  </p>
+  <pre><code>&lt;link rel="stylesheet" href="https://vanilla-breeze.com/cdn/themes/dracula.css"&gt;
+&lt;html data-theme="dracula"&gt;</code></pre>
+  <p>
+    Or import the DTCG into <a href="/vb-design-system/elements/theme-import/"><code>&lt;theme-import&gt;</code></a>
+    to apply tokens dynamically. The
+    <a href="/vb-design-system/tools/theme-composer/">Theme Composer</a> exposes both
+    flows.
+  </p>
+</section>
+
+<script type="module">
+  // Render the library table from the manifest. Pure DOM, no framework.
+  // CDN base is base-path-aware so the page works both at the site root and
+  // under the GitHub Pages project subpath (/vb-design-system is substituted at publish).
+  const CDN_THEMES = '/vb-design-system/cdn/themes';
+  const tableEl  = document.getElementById('lib-table');
+  const tbody    = tableEl?.querySelector('tbody');
+  const status   = document.getElementById('lib-status');
+  const count    = document.getElementById('lib-count');
+  const tierSel  = document.getElementById('lib-tier-filter');
+  const dtcgOnly = document.getElementById('lib-dtcg-only');
+
+  let manifest = {};
+
+  async function load() {
+    try {
+      const res = await fetch(`${CDN_THEMES}/manifest.json`);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      manifest = await res.json();
+      status.hidden = true;
+      tableEl.hidden = false;
+      render();
+    } catch (err) {
+      status.textContent = `Couldn't load ${CDN_THEMES}/manifest.json: ${err && err.message ? err.message : err}`;
+    }
+  }
+
+  function render() {
+    const tier = tierSel.value;
+    const onlyDTCG = dtcgOnly.checked;
+    const ids = Object.keys(manifest).filter((id) => {
+      const e = manifest[id];
+      if (tier && e.tier !== tier) return false;
+      if (onlyDTCG && !e.dtcg) return false;
+      return true;
+    }).sort();
+
+    tbody.innerHTML = '';
+    for (const id of ids) {
+      const e = manifest[id];
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${escapeHTML(id)}</strong></td>
+        <td><span class="lib-tier" data-tier="${escapeAttr(e.tier)}">${escapeHTML(e.tier)}</span></td>
+        <td>${e.file ? `<a href="${CDN_THEMES}/${escapeAttr(e.file)}" download>${escapeHTML(e.file)}</a>` : '—'}</td>
+        <td>${e.dtcg ? `<a href="${CDN_THEMES}/${escapeAttr(e.dtcg)}" download>${escapeHTML(e.dtcg)}</a>` : '—'}</td>
+        <td>${e.dtcgDark ? `<a href="${CDN_THEMES}/${escapeAttr(e.dtcgDark)}" download>${escapeHTML(e.dtcgDark)}</a>` : '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+    count.textContent = `${ids.length} theme${ids.length === 1 ? '' : 's'}`;
+  }
+
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"']/g, (ch) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[ch]));
+  }
+  function escapeAttr(s) { return escapeHTML(s); }
+
+  tierSel.addEventListener('change', render);
+  dtcgOnly.addEventListener('change', render);
+  load();
+</script>
+        </heading-links>
+      </article>
+    </layout-sidebar>
+  </main>
+
+  <!-- Canonical VB-ecosystem footer — pattern: bg-wc docs/superpowers/specs/2026-06-10-vb-site-footer-pattern-design.md -->
+<footer class="minimal">
+  <a href="/vb-design-system/">
+    <brand-mark data-stack="">
+      VB Design System
+      <em>Design-system documentation components for Vanilla Breeze.</em>
+    </brand-mark>
+  </a>
+  <site-legal>
+    <span>© 2026 Thomas A. Powell</span>
+    <span>MIT License</span>
+    <span>Part of the <a href="https://vanilla-breeze.com">Vanilla Breeze</a> ecosystem</span>
+  </site-legal>
+  <nav aria-label="Footer links">
+    <a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">
+      <icon-wc name="github" size="sm"></icon-wc> GitHub
+    </a>
+  </nav>
+</footer>
+
+
+  <fab-stack>
+    <settings-panel></settings-panel>
+    <a href="#" data-back-to-top="" aria-label="Back to top">↑</a>
+  </fab-stack>
+
+  <!-- Full Vanilla Breeze bundle: provides every component (specimens, theme
+       tools, brand-mark, icon-wc, page-toc, theme-picker, site-search…). -->
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr4bon1b"></script>
+  <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
+       that the full bundle omits; registerComponent is first-wins, so loading
+       both is safe (no double-registration). -->
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/color-picker.js?v=mr4bon1b"></script>
+  
+</body>
+</html>

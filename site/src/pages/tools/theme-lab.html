@@ -1,0 +1,981 @@
+---
+layout: guide
+title: "Theme Lab"
+description: "Unified playground for theme identity — border styles, icon sets, and color modes with comprehensive component previews."
+---
+
+<template slot="extraHead">
+<style>
+  /* ===== Toolbar Controls ===== */
+  .lab-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-m, 1rem);
+    align-items: end;
+    padding: var(--size-m, 1rem);
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-border, #ddd);
+    border-radius: var(--radius-m, 0.5rem);
+    background: var(--color-surface, #fff);
+    margin-block-end: var(--size-l, 1.5rem);
+  }
+
+  .lab-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: 500;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .lab-controls select {
+    padding: 0.375rem 0.5rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-border, #ddd);
+    border-radius: var(--radius-s, 0.25rem);
+    font: inherit;
+    font-size: var(--font-size-sm, 0.875rem);
+    background: var(--color-surface, #fff);
+    color: var(--color-text, #222);
+  }
+
+  .lab-controls button {
+    font-size: var(--font-size-sm, 0.875rem);
+    align-self: end;
+  }
+
+  .theme-character {
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--color-text-muted, #666);
+    margin: 0;
+    flex-basis: 100%;
+  }
+
+  /* ===== Surface Picker + Iframe ===== */
+  .surface-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-block-end: var(--border-width-thin, 1px) solid var(--color-border, #ddd);
+    margin-block-start: var(--size-m, 1rem);
+  }
+
+  .surface-picker button {
+    padding: var(--size-s, 0.75rem) var(--size-m, 1rem);
+    border: none;
+    border-block-end: 2px solid transparent;
+    margin-block-end: -1px;
+    background: none;
+    font: inherit;
+    font-weight: 500;
+    color: var(--color-text-muted, #666);
+    cursor: pointer;
+  }
+
+  .surface-picker button:hover {
+    color: var(--color-text, #222);
+  }
+
+  .surface-picker button[aria-pressed="true"] {
+    color: var(--color-interactive, #2563eb);
+    border-block-end-color: var(--color-interactive, #2563eb);
+  }
+
+  .surface-frame {
+    width: 100%;
+    border-width: 0;
+    display: block;
+    min-height: 400px;
+    transition: height 0.2s ease;
+  }
+
+  /* ===== Comparison Galleries ===== */
+  .gallery-section {
+    margin-block-start: var(--size-xl, 2rem);
+  }
+
+  .gallery-section summary {
+    cursor: pointer;
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: 700;
+    padding: var(--size-s, 0.75rem) 0;
+  }
+
+  .border-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--size-m, 1rem);
+    margin-block-start: var(--size-m, 1rem);
+  }
+
+  .border-card {
+    padding: var(--size-m, 1rem);
+    background: var(--color-surface, #fff);
+    border: var(--vb-border-width, 1px) var(--vb-border-style, solid) var(--color-border, #ddd);
+    border-image: var(--vb-border-image, none);
+    border-radius: var(--vb-border-radius-override, var(--radius-m, 0.5rem));
+    filter: var(--vb-border-filter, none);
+    box-shadow: var(--vb-border-glow, none);
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-xs, 0.5rem);
+    text-align: center;
+  }
+
+  .border-card h3 {
+    margin: 0;
+    font-family: var(--font-mono, monospace);
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  .border-card p {
+    margin: 0;
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--color-text-muted, #666);
+  }
+
+  .icon-compare-grid {
+    display: grid;
+    grid-template-columns: auto repeat(5, 1fr);
+    gap: 1px;
+    background: var(--color-border, #eee);
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-border, #eee);
+    border-radius: var(--radius-m, 0.5rem);
+    overflow: hidden;
+    margin-block-start: var(--size-m, 1rem);
+  }
+
+  .icon-compare-grid > * {
+    background: var(--color-surface, #fff);
+    padding: var(--size-xs, 0.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-compare-grid .label {
+    font-family: var(--font-mono, monospace);
+    font-size: var(--font-size-xs, 0.75rem);
+    justify-content: start;
+  }
+
+  .icon-compare-grid .header {
+    font-weight: 700;
+    font-size: var(--font-size-sm, 0.875rem);
+    background: var(--color-surface-alt, #f5f5f5);
+  }
+
+  .vignettes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--size-l, 1.5rem);
+    margin-block-start: var(--size-m, 1rem);
+  }
+
+  .vignette {
+    padding: var(--size-m, 1rem);
+    border: var(--vb-border-width, 1px) var(--vb-border-style, solid) var(--color-border, #ddd);
+    border-image: var(--vb-border-image, none);
+    border-radius: var(--vb-border-radius-override, var(--radius-m, 0.5rem));
+    filter: var(--vb-border-filter, none);
+    box-shadow: var(--vb-border-glow, none);
+    background: var(--color-surface, #fff);
+    color: var(--color-text, #222);
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-s, 0.75rem);
+  }
+
+  .vignette h3 { margin: 0; }
+
+  .vignette .icon-row {
+    display: flex;
+    gap: var(--size-s, 0.75rem);
+    flex-wrap: wrap;
+  }
+
+  .vignette blockquote {
+    margin: 0;
+    padding: var(--size-s, 0.75rem);
+    border-inline-start: 3px solid var(--color-primary, #333);
+    font-style: italic;
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  .vignette form {
+    display: flex;
+    gap: var(--size-xs, 0.5rem);
+    align-items: end;
+  }
+
+  .vignette input {
+    flex: 1;
+    padding: 0.375rem 0.5rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--color-border, #ddd);
+    border-radius: var(--radius-s, 0.25rem);
+    background: var(--color-surface, #fff);
+    color: var(--color-text, #222);
+  }
+
+  .vignette .open-in-composer {
+    font-size: var(--font-size-xs, 0.75rem);
+    padding: 0.25rem 0.75rem;
+    align-self: end;
+    cursor: pointer;
+  }
+
+  /* Hidden SVG filter container */
+  .svg-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+</style>
+</template>
+
+<!-- Hidden SVG filters for rough border styles -->
+<svg class="svg-filters" aria-hidden="true">
+  <defs>
+    <filter id="rough-light">
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="1" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="rough-medium">
+      <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="4" result="noise" seed="2" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="https://vanilla-breeze.com/docs/quick-start/">Docs</a></li>
+    <li><a href="https://vanilla-breeze.com/docs/tools/">Tools</a></li>
+    <li><span aria-current="page">Theme Lab</span></li>
+  </ol>
+</nav>
+
+<h1>Theme Lab</h1>
+<p class="lead">Unified playground for theme identity &mdash; pick a theme, border style, icon set, and color mode, then preview components across six test surfaces.</p>
+
+<!-- ===== Controls Toolbar ===== -->
+<form id="lab-controls" class="lab-controls" aria-label="Theme controls">
+  <label>
+    Theme
+    <select name="theme" id="lab-theme-select">
+      <option value="">Default</option>
+      <optgroup label="Extreme">
+        <option value="swiss">Swiss</option>
+        <option value="brutalist">Brutalist</option>
+        <option value="art-deco">Art Deco</option>
+        <option value="editorial">Editorial</option>
+        <option value="genai">GenAI</option>
+        <option value="glassmorphism">Glassmorphism</option>
+        <option value="startup">Startup</option>
+        <option value="organic">Organic</option>
+        <option value="rough">Rough</option>
+        <option value="cyber">Cyber</option>
+        <option value="vaporwave">Vaporwave</option>
+        <option value="neumorphism">Neumorphism</option>
+        <option value="bauhaus">Bauhaus</option>
+        <option value="claymorphism">Claymorphism</option>
+        <option value="alpha1999">Alpha1999</option>
+        <option value="super2026">Super2026</option>
+        <option value="magna">Magna</option>
+        <option value="8bit">8-Bit</option>
+        <option value="nes">NES</option>
+        <option value="win9x">Win9x</option>
+        <option value="kawaii">Kawaii</option>
+        <option value="memphis">Memphis</option>
+        <option value="nord">Nord</option>
+        <option value="solarized">Solarized</option>
+        <option value="dracula">Dracula</option>
+        <option value="catppuccin-mocha">Catppuccin Mocha</option>
+        <option value="catppuccin-latte">Catppuccin Latte</option>
+        <option value="catppuccin-frappe">Catppuccin Frappé</option>
+        <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
+        <option value="gruvbox">Gruvbox</option>
+        <option value="tokyo-night">Tokyo Night</option>
+        <option value="rose-pine">Rosé Pine</option>
+        <option value="cottagecore">Cottagecore</option>
+        <option value="terminal">Terminal</option>
+        <option value="clinical">Clinical</option>
+        <option value="financial">Financial</option>
+        <option value="government">Government</option>
+        <option value="dawn">Dawn</option>
+        <option value="dusk">Dusk</option>
+        <option value="midnight">Midnight</option>
+        <option value="high-noon">High Noon</option>
+      </optgroup>
+    </select>
+  </label>
+  <label>
+    Border Style
+    <select name="border-style">
+      <option value="clean">Clean (default)</option>
+      <option value="sharp">Sharp</option>
+      <option value="soft">Soft</option>
+      <option value="sketch">Sketch</option>
+      <option value="rough">Rough</option>
+      <option value="marker">Marker</option>
+      <option value="kawaii">Kawaii</option>
+      <option value="pixel">Pixel</option>
+      <option value="neon">Neon</option>
+      <option value="double">Double</option>
+      <option value="organic">Organic</option>
+      <option value="bubbly">Bubbly</option>
+    </select>
+  </label>
+  <label>
+    Icon Set
+    <select name="icon-set">
+      <option value="lucide">Lucide (default)</option>
+      <option value="phosphor">Phosphor</option>
+      <option value="tabler">Tabler</option>
+      <option value="bold">Bold</option>
+      <option value="mage">Mage</option>
+    </select>
+  </label>
+  <label>
+    Color Mode
+    <select name="color-mode">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </label>
+  <button type="button" data-action="reset">Reset All</button>
+  <button type="button" data-action="export-ds-page">Export as Design System Page</button>
+  <p class="theme-character" id="lab-theme-character">The VB default theme</p>
+</form>
+
+<!-- ===== Surface Previews ===== -->
+<nav class="surface-picker" aria-label="Surface picker">
+  <button type="button" data-surface="typography-prose" aria-pressed="true">Typography</button>
+  <button type="button" data-surface="forms-inputs">Forms</button>
+  <button type="button" data-surface="navigation-layout">Navigation</button>
+  <button type="button" data-surface="data-display">Data</button>
+  <button type="button" data-surface="feedback-status">Feedback</button>
+  <button type="button" data-surface="interactive-components">Interactive</button>
+</nav>
+<iframe class="surface-frame" id="surface-frame" title="Theme preview surface"></iframe>
+
+<!-- Comparison Galleries -->
+<details class="gallery-section">
+  <summary>Border Style Gallery</summary>
+  <p>Each card applies its own <code>data-border-style</code> so you can compare all 12 styles at once.</p>
+  <section class="border-gallery">
+    <article class="border-card" data-border-style="clean">
+      <icon-wc name="star"></icon-wc>
+      <h3>clean</h3>
+      <p>Default</p>
+    </article>
+    <article class="border-card" data-border-style="sharp">
+      <icon-wc name="star"></icon-wc>
+      <h3>sharp</h3>
+      <p>Crisp 2px, zero radius</p>
+    </article>
+    <article class="border-card" data-border-style="soft">
+      <icon-wc name="star"></icon-wc>
+      <h3>soft</h3>
+      <p>Large radius, thin</p>
+    </article>
+    <article class="border-card" data-border-style="sketch">
+      <icon-wc name="star"></icon-wc>
+      <h3>sketch</h3>
+      <p>Wavy hand-drawn</p>
+    </article>
+    <article class="border-card" data-border-style="rough">
+      <icon-wc name="star"></icon-wc>
+      <h3>rough</h3>
+      <p>Heavy hand, dashed</p>
+    </article>
+    <article class="border-card" data-border-style="marker">
+      <icon-wc name="star"></icon-wc>
+      <h3>marker</h3>
+      <p>Marker strokes</p>
+    </article>
+    <article class="border-card" data-border-style="kawaii">
+      <icon-wc name="star"></icon-wc>
+      <h3>kawaii</h3>
+      <p>Scalloped cloud</p>
+    </article>
+    <article class="border-card" data-border-style="pixel">
+      <icon-wc name="star"></icon-wc>
+      <h3>pixel</h3>
+      <p>Stepped staircase</p>
+    </article>
+    <article class="border-card" data-border-style="neon">
+      <icon-wc name="star"></icon-wc>
+      <h3>neon</h3>
+      <p>Glowing box-shadow</p>
+    </article>
+    <article class="border-card" data-border-style="double">
+      <icon-wc name="star"></icon-wc>
+      <h3>double</h3>
+      <p>Classic double-line</p>
+    </article>
+    <article class="border-card" data-border-style="organic">
+      <icon-wc name="star"></icon-wc>
+      <h3>organic</h3>
+      <p>Wavy irregular</p>
+    </article>
+    <article class="border-card" data-border-style="bubbly">
+      <icon-wc name="star"></icon-wc>
+      <h3>bubbly</h3>
+      <p>Dotted + glow</p>
+    </article>
+  </section>
+</details>
+
+<details class="gallery-section">
+  <summary>Icon Set Comparison</summary>
+  <p>Five representative icons across all five sets.</p>
+  <section class="icon-compare-grid">
+    <span class="header label">Name</span>
+    <span class="header">Lucide</span>
+    <span class="header">Phosphor</span>
+    <span class="header">Tabler</span>
+    <span class="header">Bold</span>
+    <span class="header">Mage</span>
+    <span class="label">home</span>
+    <span><icon-wc name="home" set="lucide"></icon-wc></span>
+    <span><icon-wc name="home" set="phosphor"></icon-wc></span>
+    <span><icon-wc name="home" set="tabler"></icon-wc></span>
+    <span><icon-wc name="home" set="bold"></icon-wc></span>
+    <span><icon-wc name="home" set="mage"></icon-wc></span>
+    <span class="label">heart</span>
+    <span><icon-wc name="heart" set="lucide"></icon-wc></span>
+    <span><icon-wc name="heart" set="phosphor"></icon-wc></span>
+    <span><icon-wc name="heart" set="tabler"></icon-wc></span>
+    <span><icon-wc name="heart" set="bold"></icon-wc></span>
+    <span><icon-wc name="heart" set="mage"></icon-wc></span>
+    <span class="label">search</span>
+    <span><icon-wc name="search" set="lucide"></icon-wc></span>
+    <span><icon-wc name="search" set="phosphor"></icon-wc></span>
+    <span><icon-wc name="search" set="tabler"></icon-wc></span>
+    <span><icon-wc name="search" set="bold"></icon-wc></span>
+    <span><icon-wc name="search" set="mage"></icon-wc></span>
+    <span class="label">settings</span>
+    <span><icon-wc name="settings" set="lucide"></icon-wc></span>
+    <span><icon-wc name="settings" set="phosphor"></icon-wc></span>
+    <span><icon-wc name="settings" set="tabler"></icon-wc></span>
+    <span><icon-wc name="settings" set="bold"></icon-wc></span>
+    <span><icon-wc name="settings" set="mage"></icon-wc></span>
+    <span class="label">zap</span>
+    <span><icon-wc name="zap" set="lucide"></icon-wc></span>
+    <span><icon-wc name="zap" set="phosphor"></icon-wc></span>
+    <span><icon-wc name="zap" set="tabler"></icon-wc></span>
+    <span><icon-wc name="zap" set="bold"></icon-wc></span>
+    <span><icon-wc name="zap" set="mage"></icon-wc></span>
+  </section>
+</details>
+
+<details class="gallery-section" id="vignettes-section">
+  <summary>Theme Vignettes</summary>
+  <p>Self-contained mini-layouts showing how themes, border styles, and icon sets work together. Click &ldquo;Open in Composer&rdquo; to load a theme as a starting point.</p>
+  <section class="vignettes-grid">
+    <article class="vignette" data-theme="swiss" data-border-style="sharp">
+      <h3>Swiss</h3>
+      <span class="icon-row">
+        <icon-wc name="home" set="lucide"></icon-wc>
+        <icon-wc name="settings" set="lucide"></icon-wc>
+        <icon-wc name="search" set="lucide"></icon-wc>
+        <icon-wc name="user" set="lucide"></icon-wc>
+      </span>
+      <blockquote>Grid-based precision. Helvetica heritage. Red accent.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="Enter data...">
+        <button type="button">Submit</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="swiss">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="brutalist" data-border-style="rough">
+      <h3>Brutalist</h3>
+      <span class="icon-row">
+        <icon-wc name="home" set="bold"></icon-wc>
+        <icon-wc name="lock" set="bold"></icon-wc>
+        <icon-wc name="zap" set="bold"></icon-wc>
+        <icon-wc name="settings" set="bold"></icon-wc>
+      </span>
+      <blockquote>Raw structure. No polish. Zero compromise.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="ENTER TEXT">
+        <button type="button">GO</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="brutalist">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="cyber" data-border-style="neon">
+      <h3>Cyber</h3>
+      <span class="icon-row">
+        <icon-wc name="zap" set="phosphor"></icon-wc>
+        <icon-wc name="globe" set="phosphor"></icon-wc>
+        <icon-wc name="lock" set="phosphor"></icon-wc>
+        <icon-wc name="settings" set="phosphor"></icon-wc>
+      </span>
+      <blockquote>Neon lights in the digital void. Future is now.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="// enter command...">
+        <button type="button">Execute</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="cyber">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="terminal" data-border-style="sharp">
+      <h3>Terminal</h3>
+      <span class="icon-row">
+        <icon-wc name="home" set="lucide"></icon-wc>
+        <icon-wc name="search" set="lucide"></icon-wc>
+        <icon-wc name="settings" set="lucide"></icon-wc>
+        <icon-wc name="mail" set="lucide"></icon-wc>
+      </span>
+      <blockquote>root@system:~# Green phosphor on CRT black.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="&gt; type command...">
+        <button type="button">Run</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="terminal">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="organic" data-border-style="organic">
+      <h3>Organic</h3>
+      <span class="icon-row">
+        <icon-wc name="globe" set="mage"></icon-wc>
+        <icon-wc name="heart" set="mage"></icon-wc>
+        <icon-wc name="calendar" set="mage"></icon-wc>
+        <icon-wc name="bell" set="mage"></icon-wc>
+      </span>
+      <blockquote>Soft curves, natural flow, warm earthy tones.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="Plant a thought...">
+        <button type="button">Grow</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="organic">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="editorial" data-border-style="sharp">
+      <h3>Editorial</h3>
+      <span class="icon-row">
+        <icon-wc name="bookmark" set="lucide"></icon-wc>
+        <icon-wc name="mail" set="lucide"></icon-wc>
+        <icon-wc name="globe" set="lucide"></icon-wc>
+        <icon-wc name="search" set="lucide"></icon-wc>
+      </span>
+      <blockquote>Clean lines, sharp edges, timeless typography.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="Search articles...">
+        <button type="button">Find</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="editorial">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="kawaii" data-border-style="kawaii">
+      <h3>Kawaii</h3>
+      <span class="icon-row">
+        <icon-wc name="heart" set="mage"></icon-wc>
+        <icon-wc name="star" set="mage"></icon-wc>
+        <icon-wc name="music" set="mage"></icon-wc>
+        <icon-wc name="camera" set="mage"></icon-wc>
+      </span>
+      <blockquote>Everything is cuter with pastel pink and scalloped borders!</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="Type something kawaii...">
+        <button type="button">Send</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="kawaii">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="8bit" data-border-style="pixel">
+      <h3>8-Bit</h3>
+      <span class="icon-row">
+        <icon-wc name="star" set="bold"></icon-wc>
+        <icon-wc name="heart" set="bold"></icon-wc>
+        <icon-wc name="zap" set="bold"></icon-wc>
+        <icon-wc name="home" set="bold"></icon-wc>
+      </span>
+      <blockquote>PRESS START TO CONTINUE. Chunky pixels ahead.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="ENTER NAME...">
+        <button type="button">START</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="8bit">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="nes" data-border-style="pixel">
+      <h3>NES</h3>
+      <span class="icon-row">
+        <icon-wc name="star" set="bold"></icon-wc>
+        <icon-wc name="heart" set="bold"></icon-wc>
+        <icon-wc name="home" set="bold"></icon-wc>
+        <icon-wc name="settings" set="bold"></icon-wc>
+      </span>
+      <blockquote>4-color palette. Beveled frames. Console pixels.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="Player 1...">
+        <button type="button">SELECT</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="nes">Open in Composer</button>
+    </article>
+    <article class="vignette" data-theme="win9x" data-border-style="sharp">
+      <h3>Win9x</h3>
+      <span class="icon-row">
+        <icon-wc name="home" set="lucide"></icon-wc>
+        <icon-wc name="search" set="lucide"></icon-wc>
+        <icon-wc name="settings" set="lucide"></icon-wc>
+        <icon-wc name="mail" set="lucide"></icon-wc>
+      </span>
+      <blockquote>Classic desktop computing. 3D bevels. System gray.</blockquote>
+      <form onsubmit="return false">
+        <input type="text" placeholder="C:\&gt;">
+        <button type="button">OK</button>
+      </form>
+      <button type="button" class="open-in-composer" data-composer-theme="win9x">Open in Composer</button>
+    </article>
+  </section>
+</details>
+
+<template slot="extraScripts">
+<script type="module">
+  // ========================================
+  // Theme CSS Loader (for vignettes section)
+  // ========================================
+
+  // Base-path-aware CDN root (%BASE_PATH% is substituted at publish time; empty
+  // string for the local root, "/vb-design-system" under GitHub Pages).
+  const CDN_BASE = '%BASE_PATH%/cdn';
+  const loadedThemes = new Set();
+
+  async function ensureThemeCSS(themeName) {
+    if (!themeName || loadedThemes.has(themeName)) return;
+
+    if (document.querySelector(`link[data-vb-theme="${themeName}"]`)) {
+      loadedThemes.add(themeName);
+      return;
+    }
+
+    loadedThemes.add(themeName);
+
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `${CDN_BASE}/themes/${themeName}.css`;
+      link.setAttribute('data-vb-theme', themeName);
+      link.onload = resolve;
+      link.onerror = () => {
+        link.remove();
+        loadedThemes.delete(themeName);
+        reject(new Error(`Failed to load theme: ${themeName}`));
+      };
+      document.head.appendChild(link);
+    });
+  }
+
+  // ========================================
+  // Configuration
+  // ========================================
+
+  // Per-theme hints (recommended border style + icon set) and one-line
+  // character descriptions. Inlined here so the page is self-contained and
+  // needs no build-time data injection.
+  const THEME_META = {
+    "swiss": { border: "sharp", icons: "lucide", character: "Precision grid typography with Swiss red" },
+    "brutalist": { border: "sharp", icons: "bold", character: "Raw industrial — monospace, hard shadows" },
+    "art-deco": { border: "sharp", icons: "lucide", character: "Gold + black, geometric shapes — 1920s luxury" },
+    "editorial": { border: "sharp", icons: "lucide", character: "Magazine elegance — serif hierarchy, thin rules" },
+    "genai": { border: "soft", icons: "lucide", character: "AI startup aesthetic — purple gradients, glow, sparkle" },
+    "glassmorphism": { border: "soft", icons: "lucide", character: "Frosted glass surfaces — blur, gradients, translucency" },
+    "startup": { border: "soft", icons: "lucide", character: "Modern SaaS energy — electric indigo, gradient CTAs" },
+    "organic": { border: "organic", icons: "mage", character: "Natural handcrafted — warm earthy curves" },
+    "rough": { border: "sketch", icons: "lucide", character: "Hand-drawn sketchbook — pencil lines on warm paper" },
+    "cyber": { border: "neon", icons: "phosphor", character: "Neon futuristic — glowing UI on dark void" },
+    "vaporwave": { border: "soft", icons: "lucide", character: "Hot pink/cyan on deep purple — neon glow, retro-dreamy" },
+    "neumorphism": { border: "soft", icons: "lucide", character: "Soft embossed surfaces — monochromatic double-shadow UI" },
+    "bauhaus": { border: "sharp", icons: "lucide", character: "Geometric precision — primary colors, zero shadows, functional beauty" },
+    "claymorphism": { border: "soft", icons: "lucide", character: "3D clay surfaces — puffy pastels, squish interactions" },
+    "alpha1999": { border: "soft", icons: "lucide", character: "Space retro-fi — amber CRT on deep void" },
+    "super2026": { border: "sharp", icons: "lucide", character: "Supergraphic bold — warm paper, geometric red accents" },
+    "magna": { border: "sharp", icons: "lucide", character: "Magnavox Odyssey 2 retro — rainbow spectrum, chrome text, deep space void" },
+    "8bit": { border: "pixel", icons: "bold", character: "Retro pixel art — chunky blocks, CRT glow" },
+    "nes": { border: "pixel", icons: "bold", character: "Console pixels — 4-color palette, beveled frames" },
+    "win9x": { border: "sharp", icons: "lucide", character: "Classic desktop — 3D bevels, system gray" },
+    "kawaii": { border: "kawaii", icons: "mage", character: "Cute aesthetic — pastel pink, bouncy pills" },
+    "memphis": { border: "sharp", icons: "bold", character: "1980s bold playfulness — offset shadows, confetti, chaos" },
+    "nord": { border: "soft", icons: "lucide", character: "Arctic blue-gray — muted palette, calm professional" },
+    "solarized": { border: "clean", icons: "lucide", character: "Engineered 16-color precision — light/dark symmetry" },
+    "dracula": { border: "clean", icons: "lucide", character: "Purple bg, cyan/green/pink accents — dark-first elegance" },
+    "catppuccin-mocha": { border: "soft", icons: "lucide", character: "Warm pastels on tinted dark — cozy, unhurried" },
+    "catppuccin-latte": { border: "soft", icons: "lucide", character: "Warm pastels on light cream — cozy daytime Catppuccin" },
+    "catppuccin-frappe": { border: "soft", icons: "lucide", character: "Muted pastels on mid-dark blue — cool Catppuccin twilight" },
+    "catppuccin-macchiato": { border: "soft", icons: "lucide", character: "Rich pastels on deep blue — the darkest Catppuccin" },
+    "gruvbox": { border: "soft", icons: "lucide", character: "Earthy retro warmth — warm grays, red/green/yellow/aqua accents" },
+    "tokyo-night": { border: "soft", icons: "lucide", character: "Deep indigo night-owl — muted blue-purple, bright accent pops" },
+    "rose-pine": { border: "soft", icons: "lucide", character: "Muted rose/pine/gold — elegant, restrained, expensive" },
+    "cottagecore": { border: "soft", icons: "lucide", character: "Pastoral warmth — sage green, dusty rose, botanical dividers" },
+    "terminal": { border: "sharp", icons: "lucide", character: "Retro CRT — green phosphor on black" },
+    "clinical": { border: "clean", icons: "lucide", character: "Sterile precision — medical blue, maximum clarity" },
+    "financial": { border: "clean", icons: "lucide", character: "Trustworthy authority — navy + gold, serif headings" },
+    "government": { border: "sharp", icons: "lucide", character: "Official USWDS-inspired — navy + red, maximum legibility" },
+    "dawn": { border: "soft", icons: "lucide", character: "Golden morning light — warm peach/gold/cream, soft and inviting" },
+    "dusk": { border: "soft", icons: "lucide", character: "Twilight contemplation — purple-blue + warm amber, elongated shadows" },
+    "midnight": { border: "clean", icons: "lucide", character: "Deep night minimalism — near-black, muted blue, desaturated" },
+    "high-noon": { border: "sharp", icons: "lucide", character: "Maximum brightness — vivid saturated colors, strong shadows" },
+  };
+
+  const THEME_HINTS = Object.fromEntries(
+    Object.entries(THEME_META).map(([id, m]) => [id, { border: m.border || 'clean', icons: m.icons || 'lucide' }])
+  );
+
+  const THEME_CHARS = Object.fromEntries(
+    Object.entries(THEME_META).map(([id, m]) => [id, m.character || ''])
+  );
+
+  // ========================================
+  // DOM refs
+  // ========================================
+
+  const form            = document.getElementById('lab-controls');
+  const themeSelect     = form.querySelector('[name="theme"]');
+  const borderSelect    = form.querySelector('[name="border-style"]');
+  const iconSelect      = form.querySelector('[name="icon-set"]');
+  const modeSelect      = form.querySelector('[name="color-mode"]');
+  const themeCharacter  = document.getElementById('lab-theme-character');
+
+  // ========================================
+  // Surface iframe management
+  // ========================================
+
+  // Surfaces are published as foldered pages (…/surfaces/<name>/index.html),
+  // so the request path uses the trailing-slash form, not "<name>.html".
+  const SURFACE_BASE = '%BASE_PATH%/tools/theme-lab/surfaces/';
+  const frame = document.getElementById('surface-frame');
+  const pickerButtons = document.querySelectorAll('.surface-picker button');
+  let activeSurface = 'typography-prose';
+
+  function buildSurfaceUrl(surface) {
+    const params = new URLSearchParams();
+    if (themeSelect.value) params.set('theme', themeSelect.value);
+    params.set('border', borderSelect.value);
+    params.set('mode', modeSelect.value);
+    params.set('icons', iconSelect.value);
+    return `${SURFACE_BASE}${surface}/?${params}`;
+  }
+
+  function loadSurface(surface) {
+    activeSurface = surface;
+    frame.style.height = '';
+    frame.src = buildSurfaceUrl(surface);
+    pickerButtons.forEach(btn => {
+      btn.setAttribute('aria-pressed', btn.dataset.surface === surface);
+    });
+  }
+
+  function reloadSurface() {
+    frame.src = buildSurfaceUrl(activeSurface);
+  }
+
+  // Surface picker button clicks
+  pickerButtons.forEach(btn => {
+    btn.addEventListener('click', () => loadSurface(btn.dataset.surface));
+  });
+
+  // Listen for surface height reports
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'surface-height' && e.source === frame.contentWindow) {
+      frame.style.height = e.data.height + 'px';
+    }
+  });
+
+  // ========================================
+  // Control Handlers
+  // ========================================
+
+  // Theme picker — loads CSS for vignettes and auto-sets border + icons
+  themeSelect.addEventListener('change', async () => {
+    const theme = themeSelect.value;
+
+    if (theme) {
+      try { await ensureThemeCSS(theme); } catch { /* continue without CSS */ }
+    }
+
+    // Show theme character description
+    themeCharacter.textContent = THEME_CHARS[theme] || 'The VB default theme';
+
+    // Auto-hint border + icons from registry
+    const hints = THEME_HINTS[theme];
+    if (hints) {
+      borderSelect.value = hints.border;
+      iconSelect.value = hints.icons;
+    } else {
+      borderSelect.value = 'clean';
+      iconSelect.value = 'lucide';
+    }
+
+    reloadSurface();
+  });
+
+  // Border style
+  borderSelect.addEventListener('change', () => {
+    reloadSurface();
+  });
+
+  // Icon set
+  iconSelect.addEventListener('change', () => {
+    reloadSurface();
+  });
+
+  // Color mode
+  modeSelect.addEventListener('change', () => {
+    reloadSurface();
+  });
+
+  // Reset
+  document.querySelector('[data-action="reset"]').addEventListener('click', () => {
+    themeSelect.value = '';
+    borderSelect.value = 'clean';
+    iconSelect.value = 'lucide';
+    modeSelect.value = 'light';
+    themeCharacter.textContent = 'The VB default theme';
+
+    reloadSurface();
+  });
+
+  // ========================================
+  // Vignette theme preloading
+  // ========================================
+
+  const vignettesSection = document.getElementById('vignettes-section');
+  let vignettesLoaded = false;
+
+  vignettesSection.addEventListener('toggle', async () => {
+    if (!vignettesSection.open || vignettesLoaded) return;
+    vignettesLoaded = true;
+
+    const vignetteThemes = [...vignettesSection.querySelectorAll('[data-theme]')]
+      .map(el => el.dataset.theme)
+      .filter(Boolean);
+
+    await Promise.allSettled(vignetteThemes.map(t => ensureThemeCSS(t)));
+  });
+
+  // ========================================
+  // Open in Composer
+  // ========================================
+
+  document.querySelectorAll('.open-in-composer').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const themeId = btn.dataset.composerTheme;
+      localStorage.setItem('vb-composer-load-theme', themeId);
+      window.location.href = '%BASE_PATH%/tools/theme-composer/';
+    });
+  });
+
+  // ========================================
+  // Export as Design System Page
+  // ========================================
+
+  document.querySelector('[data-action="export-ds-page"]')?.addEventListener('click', () => {
+    const themeSelect = document.querySelector('[name="theme"]');
+    const themeName = themeSelect?.selectedOptions[0]?.textContent?.trim() || 'My Brand';
+    const themeId = themeSelect?.value || '';
+    const themeLink = themeId ? `\n  <link rel="stylesheet" href="/cdn/themes/${themeId}.css"/>` : '';
+    const themeAttr = themeId ? ` data-theme="${themeId}"` : '';
+
+    const html = `<!doctype html>
+<html lang="en"${themeAttr}>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <${'title'}>${themeName} — Design System</${'title'}>
+  <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css"/>
+  <link rel="stylesheet" href="/assets/pack/vb-design-system.css"/>${themeLink}
+  <script type="module" src="/assets/vendor/vanilla-breeze.js"><\/script>
+  <script type="module" src="/assets/pack/vb-design-system.js"><\/script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: var(--color-background); color: var(--color-text); }
+    main > section {
+      padding-block: var(--size-2xl);
+      border-block-end: 1px solid var(--color-border);
+    }
+    main > section:last-child { border-block-end: none; }
+  </style>
+</head>
+<${'body'}>
+  <layout-center data-layout-max="wide">
+    <${'main'}>
+
+      <header style="text-align: center; padding-block: var(--size-3xl);">
+        <h1>${themeName}</h1>
+        <p class="lead">Design System Reference</p>
+      </header>
+
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>Color System</h2>
+        <h3>Brand Palette</h3>
+        <color-palette colors="
+          Primary: var(--color-primary),
+          Secondary: var(--color-secondary),
+          Accent: var(--color-accent)
+        " show-values></color-palette>
+        <h3>Semantic Colors</h3>
+        <color-palette colors="
+          Surface: var(--color-surface),
+          Text: var(--color-text),
+          Border: var(--color-border),
+          Interactive: var(--color-interactive)
+        " show-values></color-palette>
+        <h3>Status Colors</h3>
+        <color-palette colors="
+          Success: var(--color-success),
+          Warning: var(--color-warning),
+          Error: var(--color-error),
+          Info: var(--color-info)
+        " show-values></color-palette>
+      </section>
+
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>Typography</h2>
+        <type-specimen font="var(--font-sans)" label="Body Font" show-scale></type-specimen>
+        <type-specimen font="var(--font-mono)" label="Monospace Font"></type-specimen>
+      </section>
+
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>Spacing</h2>
+        <spacing-specimen></spacing-specimen>
+      </section>
+
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>Shape and Elevation</h2>
+        <token-specimen type="radius" label="Border Radius"></token-specimen>
+        <token-specimen type="shadow" label="Shadow Scale"></token-specimen>
+        <token-specimen type="border" label="Border Widths"></token-specimen>
+      </section>
+
+      <section data-layout="stack" data-layout-gap="l">
+        <h2>Component Showcase</h2>
+        <component-sampler></component-sampler>
+      </section>
+
+    </${'main'}>
+  </layout-center>
+</${'body'}>
+</html>`;
+
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(themeId || 'design-system').replace(/[^a-z0-9-]/g, '-')}-design-system.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ========================================
+  // Initial render — load first surface
+  // ========================================
+
+  loadSurface(activeSurface);
+</script>
+</template>

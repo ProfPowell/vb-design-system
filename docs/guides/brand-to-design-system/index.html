@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+  <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
+
+     Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
+     hardcode data-theme on <html>; the deferred vanilla-breeze.js ThemeManager
+     then read the saved prefs from VBStore and re-applied them after first
+     paint, producing a visible flash from the default theme to the stored one.
+
+     This inline, render-blocking script reads the same VBStore envelopes
+     (localStorage key "vb:{namespace}:{key}" -> { data, timestamp }) and applies
+     the saved theme/mode to <html> BEFORE first paint, so ThemeManager.init()
+     later re-applies identical prefs with nothing to change.
+
+     NOTE: written with string concatenation (no `${ }` template literals) so the
+     cook templating engine does not treat the JS as template variables. The brand
+     theme href is built from window.__VB_THEME_BASE (set just above) so this needs
+     no publish-time path rewrite. -->
+<style>
+  /* Keep paint suppressed until a boot-loaded brand theme stylesheet resolves,
+     so a returning visitor's brand theme never flashes through the default. */
+  html:has(link[data-vb-theme-state="loading"]) body { visibility: hidden; }
+</style>
+<script>
+  try {
+    var vbRead = function (ns, key) {
+      try {
+        var raw = localStorage.getItem('vb:' + ns + ':' + key);
+        if (!raw) return null;
+        var env = JSON.parse(raw);
+        return env && typeof env === 'object' && 'data' in env ? env.data : null;
+      } catch (e) { return null; }
+    };
+
+    var stored = vbRead('theme', 'current') || {};
+    var mode = stored.mode || 'auto';
+    var brand = stored.brand || 'default';
+    var coreThemes = {
+      'default': 1, 'a11y-high-contrast': 1, 'a11y-large-text': 1,
+      'a11y-dyslexia': 1, 'modern': 1, 'minimal': 1, 'classic': 1
+    };
+
+    if (mode !== 'auto') {
+      document.documentElement.dataset.mode = mode;
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.dataset.mode = 'dark';
+    }
+
+    var a11y = vbRead('settings', 'a11y');
+    var parts = [];
+    if (brand && brand !== 'default') parts.push(brand);
+    if (Array.isArray(a11y)) parts = parts.concat(a11y);
+    if (parts.length) document.documentElement.dataset.theme = parts.join(' ');
+
+    var safeBrand = /^[a-z0-9-]+$/.test(brand) ? brand : 'default';
+    if (safeBrand && !coreThemes[safeBrand] &&
+        !document.querySelector('link[data-vb-theme="' + safeBrand + '"]')) {
+      var base = window.__VB_THEME_BASE || '';
+      var href = base + '/themes/' + safeBrand + '.css';
+      document.write(
+        '<link rel="stylesheet" href="' + href + '"' +
+        ' data-vb-theme="' + safeBrand + '"' +
+        ' data-vb-theme-state="loading" data-vb-theme-boot=""' +
+        ' onload="this.setAttribute(\'data-vb-theme-state\',\'ready\')"' +
+        ' onerror="this.setAttribute(\'data-vb-theme-state\',\'error\')">'
+      );
+      // Safety fallback: if neither onload nor onerror fires (slow net, broken
+      // cache), flip state anyway so the :has(loading) guard never leaves the
+      // page invisible.
+      setTimeout(function () {
+        var link = document.querySelector('link[data-vb-theme-boot]');
+        if (link && link.getAttribute('data-vb-theme-state') === 'loading') {
+          link.setAttribute('data-vb-theme-state', 'timeout');
+        }
+      }, 1500);
+    }
+  } catch (e) {}
+</script>
+
+  <title>From Users to Design System — VB Design System</title>
+  <meta name="description" content="How UX research — personas, empathy maps, and user journeys — informs design token choices and builds a design system grounded in real user needs.">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr4bon1b">
+  
+</head>
+<body style="overflow-x: clip;">
+
+  <header class="site" data-sticky="" data-vt="header">
+  <a href="/vb-design-system/"><brand-mark>VB Design System</brand-mark></a>
+  <nav-bar aria-label="Main navigation">
+    <nav class="horizontal pills">
+      <ul>
+        <li><a href="/vb-design-system/" data-nav-link="">Home</a></li>
+        <li><a href="/vb-design-system/elements/" data-nav-link="">Elements</a></li>
+        <li><a class="active-parent" href="/vb-design-system/guides/" data-nav-link="">Guides</a></li>
+        <li><a href="/vb-design-system/tools/theme-composer/" data-nav-link="">Composer</a></li>
+        <li><a href="/vb-design-system/showcase/" data-nav-link="">Showcases</a></li>
+        <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+      </ul>
+    </nav>
+  </nav-bar>
+  <site-tools>
+    <site-search>
+      <button type="button" data-trigger="" class="ghost">
+        <icon-wc name="search" size="sm"></icon-wc>
+        Search
+      </button>
+    </site-search>
+    <theme-picker compact="">
+      <button type="button" data-trigger="" class="ghost">
+        <icon-wc name="palette" size="sm"></icon-wc>
+        Theme
+      </button>
+    </theme-picker>
+  </site-tools>
+  <mobile-menu breakpoint="52rem">
+    <button type="button" data-trigger="" popovertarget="mobile-menu" aria-label="Menu">
+      <icon-wc name="menu"></icon-wc>
+    </button>
+    <nav popover="" id="mobile-menu" class="mobile-menu-panel">
+      <button type="button" class="mobile-menu-close" popovertarget="mobile-menu" popovertargetaction="hide" aria-label="Close menu">
+        <icon-wc name="x"></icon-wc>
+      </button>
+      <div class="mobile-menu-search">
+        <site-search>
+          <button type="button" data-trigger="" class="ghost" style="inline-size: 100%">
+            <icon-wc name="search" size="sm"></icon-wc>
+            Search
+          </button>
+        </site-search>
+      </div>
+      <ul>
+        <li class="mobile-section">
+          <strong class="mobile-section-title">Pages</strong>
+          <ul>
+            <li><a href="/vb-design-system/">Home</a></li>
+            <li><a href="/vb-design-system/elements/">Elements</a></li>
+            <li><a class="active-parent" href="/vb-design-system/guides/">Guides</a></li>
+            <li><a href="/vb-design-system/tools/theme-composer/">Composer</a></li>
+            <li><a href="/vb-design-system/showcase/">Showcases</a></li>
+            <li><a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://vanilla-breeze.com/docs/" target="_blank" rel="noopener">Vanilla Breeze ↗</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="mobile-menu-theme">
+        <strong class="mobile-section-title">Theme</strong>
+        <theme-picker variant="inline" compact=""></theme-picker>
+      </div>
+    </nav>
+  </mobile-menu>
+</header>
+
+
+  <main data-pagefind-body="" style="overflow-x: clip;">
+    <layout-sidebar data-layout-side="end" data-layout-sidebar-width="narrow" data-layout-gap="xl">
+      <aside data-layout-sticky="" data-pagefind-ignore="">
+        <page-toc levels="h2,h3" scope="main article"></page-toc>
+        <page-tools data-orientation="horizontal">
+          <print-page></print-page>
+          <share-wc variant="icon" size="s"></share-wc>
+          <text-reader variant="icon" for="doc-article"></text-reader>
+        </page-tools>
+      </aside>
+      <article id="doc-article">
+        <heading-links levels="h2,h3">
+          <header data-layout="stack" data-layout-gap="s">
+  <h1>From Users to Design System</h1>
+  <p class="lead">How UX research — personas, empathy maps, and user journeys — informs design token choices and builds a design system grounded in real user needs.</p>
+</header>
+
+<!-- Section 1: The Connection -->
+  <section id="the-connection" data-layout="stack" data-layout-gap="l">
+    <h2>Why UX Research Drives Design Systems</h2>
+    <p class="step-intro">A design system is not just a set of colors and fonts. It is a visual language that communicates with specific people. The UX Planning Pack gives you tools to understand those people. The Design System Pack gives you tools to document the visual decisions. This guide connects the two.</p>
+
+    <layout-text>
+      <p>Most design systems start with aesthetics — someone picks colors they like, fonts that look good, and spacing that feels right. This works until stakeholders ask <em>why</em> those choices were made. Without user research to ground the decisions, every design review becomes a battle of personal taste.</p>
+
+      <p>VB provides a complete pipeline: research your users with the <a href="https://vanilla-breeze.com/docs/packs/ux-planning/">UX Planning Pack</a>, make informed design decisions, then document everything with the <a href="https://vanilla-breeze.com/docs/packs/design-system/">Design System Pack</a>. Each step builds on the last.</p>
+    </layout-text>
+
+    <table>
+      <thead>
+        <tr><th>UX Planning Component</th><th>Informs</th><th>Design System Decision</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>&lt;user-persona&gt;</code></td><td>→</td><td>Brand personality, typography tone, accessibility requirements</td></tr>
+        <tr><td><code>&lt;empathy-map&gt;</code></td><td>→</td><td>Color psychology, content voice, interaction patterns</td></tr>
+        <tr><td><code>&lt;user-journey&gt;</code></td><td>→</td><td>Information architecture, spacing density, motion intensity</td></tr>
+        <tr><td><code>&lt;user-story&gt;</code></td><td>→</td><td>Component requirements, form patterns, data display needs</td></tr>
+        <tr><td><code>&lt;review-surface&gt;</code></td><td>→</td><td>Design system validation, consistency audits</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+<!-- Section 2: Personas to Tokens -->
+  <section id="personas-to-tokens" data-layout="stack" data-layout-gap="l">
+    <h2>From Personas to Design Tokens</h2>
+    <p class="step-intro">User personas carry information that directly maps to design token choices.</p>
+
+    <h3>Demographics → Accessibility Tokens</h3>
+    <layout-text>
+      <p>A persona’s age, location, and device preferences tell you about accessibility needs. Older users or users in bright-sunlight environments need higher contrast ratios. Mobile-first users need larger touch targets and more generous spacing.</p>
+    </layout-text>
+
+    <code-block language="html" data-ssr label="Persona informing accessibility"><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Persona informing accessibility</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">user-persona</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Maria Chen&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;Field Researcher&quot;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">&quot;58&quot;</span> <span class="hljs-attr">location</span>=<span class="hljs-string">&quot;Rural Montana&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;goals&quot;</span>&gt;</span>Quick data entry in bright sunlight<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;frustrations&quot;</span>&gt;</span>Small text, low contrast on mobile<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">user-persona</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-comment">&lt;!-- Maria&#x27;s needs → token decisions: --&gt;</span></span><span class="code-line"><span class="hljs-comment">&lt;!-- --font-size-md: 1rem (not smaller)</span></span><span class="code-line"><span class="hljs-comment">     --color-text: oklch(15% ...) (high contrast)</span></span><span class="code-line"><span class="hljs-comment">     --size-touch-target: 44px minimum</span></span><span class="code-line"><span class="hljs-comment">     Compose with a11y-large-text theme --&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;user-persona name=&quot;Maria Chen&quot; role=&quot;Field Researcher&quot; age=&quot;58&quot; location=&quot;Rural Montana&quot;&gt;
+  &lt;p slot=&quot;goals&quot;&gt;Quick data entry in bright sunlight&lt;/p&gt;
+  &lt;p slot=&quot;frustrations&quot;&gt;Small text, low contrast on mobile&lt;/p&gt;
+&lt;/user-persona&gt;
+
+&lt;!-- Maria&#39;s needs → token decisions: --&gt;
+&lt;!-- --font-size-md: 1rem (not smaller)
+     --color-text: oklch(15% ...) (high contrast)
+     --size-touch-target: 44px minimum
+     Compose with a11y-large-text theme --&gt;</textarea></code-block>
+
+    <h3>Goals &amp; Frustrations → Typography &amp; Color</h3>
+    <layout-text>
+      <p>What users want to accomplish and what blocks them shapes the emotional tone of your interface. A financial dashboard needs trust and precision (serif headings, muted palette). A creative tool needs energy and inspiration (display fonts, vibrant accents).</p>
+    </layout-text>
+
+    <table>
+      <thead>
+        <tr><th>Persona Signal</th><th>Token Direction</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Needs trust, authority</td><td>Serif headings, deep blue/green primary</td><td><code>--font-heading: "Merriweather"</code></td></tr>
+        <tr><td>Wants speed, efficiency</td><td>Sans-serif throughout, tight spacing</td><td><code>--size-m: 0.75rem</code></td></tr>
+        <tr><td>Values creativity</td><td>Display fonts, vibrant accent colors</td><td><code>--color-accent: oklch(70% 0.2 30)</code></td></tr>
+        <tr><td>Frustrated by complexity</td><td>Generous whitespace, larger radius</td><td><code>--radius-m: 12px</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+<!-- Section 3: Empathy Maps to Voice -->
+  <section id="empathy-to-voice" data-layout="stack" data-layout-gap="l">
+    <h2>From Empathy Maps to Brand Voice</h2>
+    <p class="step-intro">The four quadrants of an empathy map — Says, Thinks, Does, Feels — directly inform your design system’s voice and tone guidelines.</p>
+
+    <layout-text>
+      <p>The <strong>Says</strong> quadrant reveals the vocabulary your users actually use. Mirror it in your UI copy. The <strong>Thinks</strong> quadrant exposes hidden concerns — address them proactively in error messages and empty states. <strong>Does</strong> shows behavioral patterns that inform interaction design. <strong>Feels</strong> maps directly to the emotional tone your color and typography should convey.</p>
+    </layout-text>
+
+    <code-block language="html" data-ssr label="Empathy map informing voice and tone"><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Empathy map informing voice and tone</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">empathy-map</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Field Researcher Empathy&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;says&quot;</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>&quot;I need this to work offline&quot;<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>&quot;Don&#x27;t make me think about the UI&quot;<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;feels&quot;</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Anxious about data loss<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Proud of fieldwork contributions<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">empathy-map</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-comment">&lt;!-- Voice decisions from this empathy map:</span></span><span class="code-line"><span class="hljs-comment">     - Use direct, plain language (mirrors &quot;Says&quot;)</span></span><span class="code-line"><span class="hljs-comment">     - Always show save status (addresses &quot;Feels: anxious&quot;)</span></span><span class="code-line"><span class="hljs-comment">     - Celebrate milestones (addresses &quot;Feels: proud&quot;)</span></span><span class="code-line"><span class="hljs-comment">     - Design System do/don&#x27;t examples should reflect these --&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;empathy-map title=&quot;Field Researcher Empathy&quot;&gt;
+  &lt;ul slot=&quot;says&quot;&gt;
+    &lt;li&gt;&quot;I need this to work offline&quot;&lt;/li&gt;
+    &lt;li&gt;&quot;Don&#39;t make me think about the UI&quot;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;ul slot=&quot;feels&quot;&gt;
+    &lt;li&gt;Anxious about data loss&lt;/li&gt;
+    &lt;li&gt;Proud of fieldwork contributions&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/empathy-map&gt;
+
+&lt;!-- Voice decisions from this empathy map:
+     - Use direct, plain language (mirrors &quot;Says&quot;)
+     - Always show save status (addresses &quot;Feels: anxious&quot;)
+     - Celebrate milestones (addresses &quot;Feels: proud&quot;)
+     - Design System do/don&#39;t examples should reflect these --&gt;</textarea></code-block>
+  </section>
+
+<!-- Section 4: Journeys to Architecture -->
+  <section id="journeys-to-architecture" data-layout="stack" data-layout-gap="l">
+    <h2>From User Journeys to Information Architecture</h2>
+    <p class="step-intro">Journey maps show where users experience friction and delight. These emotional inflection points tell you where your design system needs to invest the most attention.</p>
+
+    <layout-text>
+      <p>High-emotion phases need expressive typography and generous spacing. Low-emotion utility phases need density and efficiency. The transition between phases needs motion tokens that match the emotional shift.</p>
+    </layout-text>
+
+    <table>
+      <thead>
+        <tr><th>Journey Phase</th><th>Emotion</th><th>Design Response</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Discovery / First visit</td><td>Curiosity + uncertainty</td><td>Hero layouts, display fonts, generous whitespace, warm colors</td></tr>
+        <tr><td>Onboarding</td><td>Cautious optimism</td><td>Step indicators, progress bars, encouraging micro-copy</td></tr>
+        <tr><td>Core workflow</td><td>Focused concentration</td><td>Dense layouts, system fonts, minimal decoration, fast transitions</td></tr>
+        <tr><td>Error / Failure</td><td>Frustration</td><td>Clear error states, warm error colors, recovery actions, generous padding</td></tr>
+        <tr><td>Success / Completion</td><td>Satisfaction</td><td>Celebration motion, success colors, share prompts</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+<!-- Section 5: Embedding Research in Your DS -->
+  <section id="embed-research" data-layout="stack" data-layout-gap="l">
+    <h2>Embedding Research in Your Design System Page</h2>
+    <p class="step-intro">Your design system page can include the research that justifies its decisions. This makes the system self-documenting and defensible.</p>
+
+    <layout-text>
+      <p>The UX Planning components work inside design system documentation. Add your personas directly to the brand identity section. Show the empathy map next to your voice and tone guidelines. Reference user journey phases alongside your motion token decisions.</p>
+    </layout-text>
+
+    <code-block language="html" data-ssr label="Personas in a design system page"><template shadowrootmode="open"><style>
+      :host {
+        --_cb-bg: var(--color-surface-raised, #f6f8fa);
+        --_cb-code-bg: var(--color-surface, #fff);
+        --_cb-header-bg: var(--color-surface-raised, #e1e4e8);
+        --_cb-text-color: var(--color-text, #24292e);
+        --_cb-border-color: var(--color-border, #e1e4e8);
+        --_cb-comment: var(--color-text-muted, #6a737d);
+        --_cb-button-bg: #fff;
+        --_cb-button-color: var(--color-text, #24292e);
+        --_cb-scrollbar-track: #f6f8fa;
+        --_cb-scrollbar-thumb: #d1d5da;
+
+        display: block;
+        margin: var(--cb-margin, 1rem 0);
+        border-radius: var(--cb-border-radius, 8px);
+        overflow: hidden;
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+        font-size: var(--cb-font-size, 0.875rem);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        gap: 1rem;
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--cb-label-color, #586069);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .filename {
+        font-size: 0.8rem;
+        color: var(--cb-filename-color, #24292e);
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+      }
+
+      .copy-button {
+        background: var(--cb-button-bg, var(--_cb-button-bg));
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, #d1d5da);
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
+        font-weight: 500;
+        color: var(--cb-button-color, var(--_cb-button-color));
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        flex-shrink: 0;
+      }
+
+      .copy-button:hover {
+        background: var(--cb-button-hover-bg, #f3f4f6);
+        border-color: var(--cb-button-hover-border, #959da5);
+      }
+
+      .copy-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: 2px;
+      }
+
+      .copy-button:active {
+        transform: scale(0.98);
+      }
+
+      .copy-button.copied {
+        background: var(--cb-success-color, #238636);
+        color: white;
+        border-color: var(--cb-success-color, #238636);
+      }
+
+      .copy-button.failed {
+        background: var(--cb-error-color, #da3633);
+        color: white;
+        border-color: var(--cb-error-color, #da3633);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--cb-label-color, #57606a);
+        transition: all 0.15s ease;
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      .action-button:hover {
+        color: var(--cb-button-color, var(--_cb-button-color));
+        background: var(--cb-action-button-hover-bg, rgba(0,0,0,0.05));
+      }
+
+      .action-button:active {
+        transform: scale(0.95);
+      }
+
+      .action-button.active {
+        color: var(--cb-focus-color, #0969da);
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .action-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .share-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .share-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+        min-width: 160px;
+        z-index: 1000;
+        overflow: hidden;
+      }
+
+      .share-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background: none;
+        border: none;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        font-size: 0.8125rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      }
+
+      .share-menu-item:last-child {
+        border-bottom: none;
+      }
+
+      .share-menu-item:hover {
+        background: rgba(0,0,0,0.03);
+      }
+
+      .share-menu-item:active {
+        background: rgba(9, 105, 218, 0.1);
+      }
+
+      .share-menu-item svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
+      .code-container {
+        display: flex;
+        overflow-x: auto;
+        background: var(--cb-code-bg, var(--_cb-code-bg));
+      }
+
+      .line-numbers {
+        padding: var(--cb-code-padding, 1rem) 0;
+        text-align: right;
+        user-select: none;
+        background: var(--cb-line-numbers-bg, #f6f8fa);
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-line-numbers-color, #959da5);
+        line-height: var(--cb-line-height, 1.6);
+        flex-shrink: 0;
+      }
+
+      .line-numbers span {
+        display: block;
+        padding: 0 0.75rem;
+        min-width: 2.5rem;
+      }
+
+      .line-numbers span.highlighted {
+        background: var(--cb-highlight-gutter, rgba(255, 235, 59, 0.3));
+        color: var(--cb-line-numbers-highlight-color, #24292e);
+      }
+
+      pre {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        overflow-x: auto;
+      }
+
+      code {
+        display: block;
+        font-family: inherit;
+        color: var(--cb-text-color, var(--_cb-text-color));
+        background: transparent;
+        padding: var(--cb-code-padding, 1rem);
+      }
+
+      .code-line {
+        display: block;
+        line-height: var(--cb-line-height, 1.6);
+        padding: 0 0.5rem;
+        margin: 0 -0.5rem;
+        white-space: pre;
+      }
+
+      .code-line.highlighted {
+        background: var(--cb-highlight-bg, rgba(255, 235, 59, 0.3));
+        border-left: 3px solid var(--cb-highlight-border, #f9a825);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: var(--cb-comment, var(--_cb-comment));
+        font-style: italic;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag,
+      .hljs-addition {
+        color: var(--cb-keyword, #d73a49);
+      }
+
+      .hljs-number,
+      .hljs-literal,
+      .hljs-doctag,
+      .hljs-regexp {
+        color: var(--cb-number, #005cc5);
+      }
+
+      .hljs-string,
+      .hljs-meta .hljs-meta-string {
+        color: var(--cb-string, #22863a);
+      }
+
+      .hljs-title,
+      .hljs-section,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: var(--cb-function, #6f42c1);
+      }
+
+      .hljs-attribute,
+      .hljs-attr,
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-class .hljs-title,
+      .hljs-type {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-symbol,
+      .hljs-bullet,
+      .hljs-subst,
+      .hljs-meta,
+      .hljs-meta .hljs-keyword,
+      .hljs-selector-attr,
+      .hljs-selector-pseudo,
+      .hljs-link {
+        color: var(--cb-meta, #e36209);
+      }
+
+      .hljs-built_in,
+      .hljs-deletion {
+        color: var(--cb-builtin, #d73a49);
+      }
+
+      .hljs-tag {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-name {
+        color: var(--cb-tag, #22863a);
+      }
+
+      .hljs-tag .hljs-attr {
+        color: var(--cb-attribute, #005cc5);
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: bold;
+      }
+
+      .code-line.diff-add {
+        background: var(--cb-diff-add-bg, rgba(46, 160, 67, 0.15));
+        border-left: 3px solid var(--cb-diff-add-border, #22863a);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .code-line.diff-remove {
+        background: var(--cb-diff-remove-bg, rgba(248, 81, 73, 0.15));
+        border-left: 3px solid var(--cb-diff-remove-border, #cb2431);
+        margin-left: calc(-0.5rem - 3px);
+        padding-left: calc(0.5rem + 3px);
+      }
+
+      .line-numbers span.diff-add {
+        background: var(--cb-diff-add-gutter, rgba(46, 160, 67, 0.1));
+        color: var(--cb-diff-add-color, #22863a);
+      }
+
+      .line-numbers span.diff-remove {
+        background: var(--cb-diff-remove-gutter, rgba(248, 81, 73, 0.1));
+        color: var(--cb-diff-remove-color, #cb2431);
+      }
+
+      .hljs-addition {
+        color: var(--cb-diff-add-text, #22863a);
+        background: transparent;
+      }
+
+      .hljs-deletion {
+        color: var(--cb-diff-remove-text, #cb2431);
+        background: transparent;
+      }
+
+      :host([collapsed]) .code-container {
+        position: relative;
+      }
+
+      :host([collapsed]) .code-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
+        pointer-events: none;
+      }
+
+      :host([collapsed]) pre {
+        overflow: hidden;
+      }
+
+      :host([collapsed]) code {
+        display: block;
+        overflow: hidden;
+      }
+
+      .expand-button {
+        display: none;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: var(--cb-expand-bg, #f6f8fa);
+        border: none;
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        color: var(--cb-expand-color, #0366d6);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+        transition: background 0.2s;
+      }
+
+      .expand-button:hover {
+        background: var(--cb-expand-hover-bg, #e1e4e8);
+      }
+
+      .expand-button:focus {
+        outline: 2px solid var(--cb-focus-color, #0366d6);
+        outline-offset: -2px;
+      }
+
+      :host([collapsed]) .expand-button,
+      :host([data-expandable]) .expand-button {
+        display: block;
+      }
+
+      :host([max-height]) .code-container {
+        max-height: var(--cb-max-height);
+        overflow-y: auto;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-track {
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb {
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
+        border-radius: var(--cb-button-radius, 4px);
+      }
+
+      :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
+        background: var(--cb-scrollbar-thumb-hover, #959da5);
+      }
+
+      :host([wrap]) code {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+
+      :host([wrap]) .code-line {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+    </style>
+      <div class="header">
+        <div class="label-container" id="code-label"><span class="label">Personas in a design system page</span></div>
+        <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
+      </div>
+      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+        
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-comment">&lt;!-- In your design system page&#x27;s Brand Identity section --&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Who We Design For<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">layout-grid</span> <span class="hljs-attr">data-layout-min</span>=<span class="hljs-string">&quot;16rem&quot;</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">user-persona</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Maria&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;Field Researcher&quot;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">&quot;58&quot;</span> <span class="hljs-attr">compact</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;goals&quot;</span>&gt;</span>Fast data entry in the field<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;/<span class="hljs-name">user-persona</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">user-persona</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Alex&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;Lab Analyst&quot;</span> <span class="hljs-attr">age</span>=<span class="hljs-string">&quot;29&quot;</span> <span class="hljs-attr">compact</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;goals&quot;</span>&gt;</span>Deep data exploration on desktop<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;/<span class="hljs-name">user-persona</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">layout-grid</span>&gt;</span></span><span class="code-line"> </span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Color System<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>High contrast chosen for Maria&#x27;s outdoor fieldwork needs.</span><span class="code-line">     Vibrant accent for Alex&#x27;s data visualization.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">color-palette</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;var(--color-primary),var(--color-accent)&quot;</span></span></span><span class="code-line"><span class="hljs-tag">    <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;Primary (trust),Accent (data)&quot;</span> <span class="hljs-attr">show-values</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">color-palette</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span></code></pre>
+      </div>
+      </template><textarea style="display:none">&lt;!-- In your design system page&#39;s Brand Identity section --&gt;
+&lt;section&gt;
+  &lt;h2&gt;Who We Design For&lt;/h2&gt;
+  &lt;layout-grid data-layout-min=&quot;16rem&quot;&gt;
+    &lt;user-persona name=&quot;Maria&quot; role=&quot;Field Researcher&quot; age=&quot;58&quot; compact&gt;
+      &lt;p slot=&quot;goals&quot;&gt;Fast data entry in the field&lt;/p&gt;
+    &lt;/user-persona&gt;
+    &lt;user-persona name=&quot;Alex&quot; role=&quot;Lab Analyst&quot; age=&quot;29&quot; compact&gt;
+      &lt;p slot=&quot;goals&quot;&gt;Deep data exploration on desktop&lt;/p&gt;
+    &lt;/user-persona&gt;
+  &lt;/layout-grid&gt;
+
+  &lt;h2&gt;Color System&lt;/h2&gt;
+  &lt;p&gt;High contrast chosen for Maria&#39;s outdoor fieldwork needs.
+     Vibrant accent for Alex&#39;s data visualization.&lt;/p&gt;
+  &lt;color-palette colors=&quot;var(--color-primary),var(--color-accent)&quot;
+    names=&quot;Primary (trust),Accent (data)&quot; show-values&gt;&lt;/color-palette&gt;
+&lt;/section&gt;</textarea></code-block>
+  </section>
+
+<!-- Section 6: The Full Pipeline -->
+  <section id="full-pipeline" data-layout="stack" data-layout-gap="l">
+    <h2>The Full Pipeline</h2>
+    <p class="step-intro">From user research to production design system in five steps.</p>
+
+    <ol>
+      <li><strong>Research</strong> — Create <code>&lt;user-persona&gt;</code> cards and <code>&lt;empathy-map&gt;</code> quadrants from user interviews</li>
+      <li><strong>Map</strong> — Build <code>&lt;user-journey&gt;</code> maps that identify emotional peaks, valleys, and friction points</li>
+      <li><strong>Decide</strong> — Translate research insights into design token choices (colors, fonts, spacing, motion)</li>
+      <li><strong>Build</strong> — Create a theme file (<code>.css</code>) with your token overrides. Use <a href="/vb-design-system/elements/palette-generator/">palette-generator</a>, <a href="/vb-design-system/elements/font-pairer/">font-pairer</a>, and <a href="/vb-design-system/elements/gradient-builder/">gradient-builder</a> to explore options</li>
+      <li><strong>Document</strong> — Generate a design system page with <code>/scaffold-design-system-page</code> or the <a href="/vb-design-system/tools/theme-lab/">Theme Lab</a> export. Embed your personas and empathy maps alongside the token documentation</li>
+    </ol>
+
+    <status-message data-variant="info">
+      <span data-content="">
+        <strong data-title="">Key Principle</strong>
+        <span data-description="">Every design token should be traceable to a user need. If you cannot explain <em>why</em> a color, font, or spacing value was chosen in terms of user goals or constraints, it is an aesthetic preference — not a design decision.</span>
+      </span>
+    </status-message>
+  </section>
+
+<!-- Section 7: Next Steps -->
+  <section id="next-steps" data-layout="stack" data-layout-gap="l">
+    <h2>Next Steps</h2>
+    <ul>
+      <li><a href="https://vanilla-breeze.com/docs/packs/ux-planning/">UX Planning Pack</a> — all research and planning components</li>
+      <li><a href="https://vanilla-breeze.com/docs/packs/design-system/">Design System Pack</a> — documentation and token display components</li>
+      <li><a href="/vb-design-system/guides/design-systems/">Building Design Systems</a> — theme creation workflow and maturity model</li>
+      <li><a href="/vb-design-system/showcase/meridian/">Meridian Labs Example</a> — complete design system reference page</li>
+      <li><a href="/vb-design-system/tools/theme-lab/">Theme Lab</a> — interactive playground with design system export</li>
+    </ul>
+  </section>
+        </heading-links>
+      </article>
+    </layout-sidebar>
+  </main>
+
+  <!-- Canonical VB-ecosystem footer — pattern: bg-wc docs/superpowers/specs/2026-06-10-vb-site-footer-pattern-design.md -->
+<footer class="minimal">
+  <a href="/vb-design-system/">
+    <brand-mark data-stack="">
+      VB Design System
+      <em>Design-system documentation components for Vanilla Breeze.</em>
+    </brand-mark>
+  </a>
+  <site-legal>
+    <span>© 2026 Thomas A. Powell</span>
+    <span>MIT License</span>
+    <span>Part of the <a href="https://vanilla-breeze.com">Vanilla Breeze</a> ecosystem</span>
+  </site-legal>
+  <nav aria-label="Footer links">
+    <a href="https://github.com/ProfPowell/vb-design-system" target="_blank" rel="noopener">
+      <icon-wc name="github" size="sm"></icon-wc> GitHub
+    </a>
+  </nav>
+</footer>
+
+
+  <fab-stack>
+    <settings-panel></settings-panel>
+    <a href="#" data-back-to-top="" aria-label="Back to top">↑</a>
+  </fab-stack>
+
+  <!-- Full Vanilla Breeze bundle: provides every component (specimens, theme
+       tools, brand-mark, icon-wc, page-toc, theme-picker, site-search…). -->
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr4bon1b"></script>
+  <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
+       that the full bundle omits; registerComponent is first-wins, so loading
+       both is safe (no double-registration). -->
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/color-picker.js?v=mr4bon1b"></script>
+  
+</body>
+</html>
