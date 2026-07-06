@@ -139,6 +139,16 @@ crumbLabel: Web Components
 </section>
 
 <section>
+  <h2>What happens to &ldquo;foreign&rdquo; DTCG</h2>
+  <p>The deserializer reverses the prefix mapping established by <code>&lt;theme-export format="dtcg"&gt;</code>. DTCG tokens that <em>don't</em> map to a known VB CSS-variable prefix land in an &ldquo;ignored&rdquo; panel rather than being silently dropped &mdash; the user always sees what was lost. The importer never writes new VB token names, only known-good ones from the prefix map. This preserves the &ldquo;themes override existing tokens only&rdquo; contract from Vanilla Breeze's core token layer.</p>
+</section>
+
+<section>
+  <h2>Composite typography unpacking</h2>
+  <p>DTCG's composite <code>typography</code> token bundles font-family, size, weight, line-height, and letter-spacing into one object. VB stores these as separate scalars. On import, composite typography unpacks into <code>--font-{name}</code>, <code>--font-size-{name}</code>, <code>--font-weight-{name}</code>, <code>--line-height-{name}</code>, and <code>--letter-spacing-{name}</code> as appropriate.</p>
+</section>
+
+<section>
   <h2>Design system workflow</h2>
   <p>Use <code>theme-import</code> alongside <a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a> and <a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a> to round-trip themes:</p>
   <ol>

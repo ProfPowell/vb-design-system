@@ -85,10 +85,10 @@
 
   <title>theme-import — VB Design System</title>
   <meta name="description" content="Apply a DTCG (Design Tokens Community Group) tokens.json file to a preview scope. Sibling of theme-export — paste, file, or URL input feeds a pure deserializer.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr4bon1b">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr4bon1b">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr4bon1b">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr4bon1b">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mr9pofp7">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mr9pofp7">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mr9pofp7">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mr9pofp7">
   
 </head>
 <body style="overflow-x: clip;">
@@ -1838,6 +1838,16 @@
 </section>
 
 <section>
+  <h2>What happens to “foreign” DTCG</h2>
+  <p>The deserializer reverses the prefix mapping established by <code>&lt;theme-export format="dtcg"&gt;</code>. DTCG tokens that <em>don't</em> map to a known VB CSS-variable prefix land in an “ignored” panel rather than being silently dropped — the user always sees what was lost. The importer never writes new VB token names, only known-good ones from the prefix map. This preserves the “themes override existing tokens only” contract from Vanilla Breeze's core token layer.</p>
+</section>
+
+<section>
+  <h2>Composite typography unpacking</h2>
+  <p>DTCG's composite <code>typography</code> token bundles font-family, size, weight, line-height, and letter-spacing into one object. VB stores these as separate scalars. On import, composite typography unpacks into <code>--font-{name}</code>, <code>--font-size-{name}</code>, <code>--font-weight-{name}</code>, <code>--line-height-{name}</code>, and <code>--letter-spacing-{name}</code> as appropriate.</p>
+</section>
+
+<section>
   <h2>Design system workflow</h2>
   <p>Use <code>theme-import</code> alongside <a href="/vb-design-system/elements/theme-export/"><code>&lt;theme-export&gt;</code></a> and <a href="/vb-design-system/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a> to round-trip themes:</p>
   <ol>
@@ -1904,10 +1914,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr4bon1b"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr4bon1b"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr4bon1b"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr4bon1b"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mr9pofp7"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mr9pofp7"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mr9pofp7"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mr9pofp7"></script>
   
 </body>
 </html>
