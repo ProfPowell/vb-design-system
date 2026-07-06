@@ -55,7 +55,7 @@ Nineteen documentation components, grouped by role.
 npm install @profpowell/vb-design-system
 ```
 
-Or load from a CDN (after publish):
+Or load from a CDN:
 
 ```html
 <script type="module" src="https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.js"></script>
