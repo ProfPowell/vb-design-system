@@ -4,18 +4,50 @@ Design-system documentation components for [Vanilla Breeze](https://github.com/P
 
 These are standalone Web Components extracted from Vanilla Breeze core. They render against Vanilla Breeze **design tokens** (CSS custom properties) but carry their own logic, so you can drop them into any page that loads VB tokens/themes.
 
+**Docs & live demos:** <https://profpowell.github.io/vb-design-system/>
+
 ## Components
+
+Nineteen documentation components, grouped by role.
+
+**Specimens & samplers**
 
 | Tag | Purpose |
 |-----|---------|
-| `<color-palette>` | Swatches for a color ramp with copy-to-clipboard |
-| `<semantic-palette>` | Semantic color roles (surface, text, accent…) derived from tokens |
-| `<type-specimen>` | Typography scale specimen |
-| `<spacing-specimen>` | Spacing scale specimen |
-| `<token-specimen>` | Generic design-token table specimen |
-| `<motion-specimen>` | Motion / easing / duration specimen |
-| `<component-sampler>` | Live sampler that renders a component across variants |
-| `<theme-export>` | Export the active theme as DTCG JSON or CSS |
+| `<type-specimen>` | Typography specimen: character grid, weight/type scales, editable text |
+| `<spacing-specimen>` | Spacing scale as a bar chart from tokens |
+| `<token-specimen>` | Token scale display (shadows, radii, borders, colors, sizes) |
+| `<motion-specimen>` | Easing curves + durations from motion tokens |
+| `<layout-specimen>` | VB layout primitives with labeled mini-examples + snippets |
+| `<breakpoint-specimen>` | Responsive breakpoint ruler with live width readout |
+| `<accessibility-specimen>` | WCAG contrast table with AA/AAA badges from color pairs |
+| `<component-sampler>` | Themed grid of native UI elements in the active theme |
+
+**Color & palette**
+
+| Tag | Purpose |
+|-----|---------|
+| `<color-palette>` | Color swatches with click-to-copy and layout modes |
+| `<semantic-palette>` | Preview a palette as VB semantic roles with WCAG chips |
+| `<palette-generator>` | Generate harmonious palettes from a seed color |
+| `<gradient-builder>` | CSS gradient builder with stops, angle, interpolation, export |
+| `<font-pairer>` | Font-pairing tool with live preview + CSS export |
+
+**Icons & brand**
+
+| Tag | Purpose |
+|-----|---------|
+| `<icon-set>` | Searchable icon-set grid with click-to-copy names |
+| `<icon-specimen>` | Curated icon specimen across the sizing scale |
+| `<brand-specimen>` | Brand-mark specimen: light/dark surfaces, size scale, clear-space |
+
+**Theming**
+
+| Tag | Purpose |
+|-----|---------|
+| `<theme-catalog>` | Browse + apply curated public token sets (Material, Carbon, Tailwind, …) |
+| `<theme-export>` | Export theme overrides as CSS or DTCG JSON |
+| `<theme-import>` | Apply a DTCG `tokens.json` to a preview scope |
 
 ## Install
 
