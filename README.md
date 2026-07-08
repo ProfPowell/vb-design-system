@@ -118,5 +118,6 @@ npm run build   # bundle dist/ (esm + minified, js + css) via esbuild
 A GitHub Pages demo site can depend on `vanilla-breeze` for tokens/themes and import this package directly.
 
 ## License
+MIT License
 
-MIT © Patrick Powell
+© 2026 Thomas A. Powell
