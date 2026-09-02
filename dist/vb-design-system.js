@@ -458,7 +458,7 @@ var ColorPalette = class extends VBElement {
 };
 registerComponent("color-palette", ColorPalette);
 
-// src/web-components/color-picker/_color-utils.js
+// src/lib/color-utils.js
 function hslToRgb(h, s, l) {
   s /= 100;
   l /= 100;
@@ -1500,9 +1500,11 @@ var SemanticPalette = class extends VBElement {
   /** @type {HTMLElement|null} */
   #probe = null;
   setup() {
-    this.#probe = document.createElement("span");
-    this.#probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
-    this.append(this.#probe);
+    if (this.#probe?.parentNode !== this) {
+      this.#probe = document.createElement("span");
+      this.#probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none";
+      this.append(this.#probe);
+    }
     this.#source = this.querySelector("color-palette, palette-generator");
     this.#resolveRoles();
     this.#readColors();
@@ -4380,7 +4382,7 @@ var IconSet = class extends VBElement {
           <span class="visually-hidden">Filter icons</span>
           <input type="search" placeholder="Filter ${this.set} icons\u2026">
         </label>
-        <ul class="icon-set__grid" role="list"></ul>
+        <ul class="icon-set__grid" data-layout="grid" role="list"></ul>
       </div>`;
     const input = (
       /** @type {HTMLInputElement} */
