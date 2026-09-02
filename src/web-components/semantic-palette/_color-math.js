@@ -5,7 +5,7 @@
  * - relativeLuminance + contrastRatio: WCAG 2.1 contrast for text-vs-background.
  * - pickContrastingHex: black-or-white pick by perceived luminance.
  */
-import { hexToRgb, rgbToHex } from '../color-picker/_color-utils.js';
+import { hexToRgb, rgbToHex } from '../../lib/color-utils.js';
 
 const srgbToLinear = (c) =>
   c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);

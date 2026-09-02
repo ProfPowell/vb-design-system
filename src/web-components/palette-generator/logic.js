@@ -29,7 +29,7 @@ import { registerComponent } from '../../lib/bundle-registry.js';
 import { VBElement } from '../../lib/vb-element.js';
 import { copyText } from '../../utils/copy-init.js';
 import { generatePalette } from './_palette-utils.js';
-import { hexToRgb } from '../color-picker/_color-utils.js';
+import { hexToRgb } from '../../lib/color-utils.js';
 
 class PaletteGenerator extends VBElement {
   static observedAttributes = ['seed', 'harmony', 'include-seed', 'show-export',

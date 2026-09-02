@@ -4,7 +4,7 @@
  * Uses hue rotation in HSL space — same principle as the OKLCH harmonics
  * in color-mix.css but computed in JS for dynamic generation.
  */
-import { hexToHsl, hslToHex } from '../color-picker/_color-utils.js';
+import { hexToHsl, hslToHex } from '../../lib/color-utils.js';
 
 /** Wrap hue to 0-360 range */
 const wrap = (h) => ((h % 360) + 360) % 360;
