@@ -4,3 +4,4 @@ node_modules/
 .idea/
 test-results/
 playwright-report/
+*.tgz
