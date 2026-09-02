@@ -63,9 +63,13 @@ class SemanticPalette extends VBElement {
   /** @type {HTMLElement|null} */ #probe = null;
 
   setup() {
-    this.#probe = document.createElement('span');
-    this.#probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none';
-    this.append(this.#probe);
+    // Reconnect guard: setup() re-runs after a disconnect/reconnect (the base
+    // class clears data-upgraded); the probe moved back with the host, so reuse it.
+    if (this.#probe?.parentNode !== this) {
+      this.#probe = document.createElement('span');
+      this.#probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none';
+      this.append(this.#probe);
+    }
 
     this.#source = this.querySelector('color-palette, palette-generator');
     this.#resolveRoles();
