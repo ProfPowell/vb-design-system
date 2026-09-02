@@ -78,7 +78,8 @@ import '@profpowell/vb-design-system/color-palette';
 ```
 
 ```html
-<color-palette ramp="--color-accent"></color-palette>
+<color-palette colors="#1d4ed8,#0f766e,#e11d48" names="Primary,Secondary,Accent"></color-palette>
+<token-specimen type="color"></token-specimen>
 <theme-export format="dtcg"></theme-export>
 ```
 
