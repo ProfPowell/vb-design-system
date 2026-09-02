@@ -9,3 +9,11 @@
 /* Footer chrome comes entirely from vanilla-breeze's footer.minimal recipe
    (see bg-wc docs/superpowers/specs/2026-06-10-vb-site-footer-pattern-design.md).
    No unlayered footer rules here — they would override VB's layered styles. */
+
+/* Home page: compact element chip lists inside the role cards */
+.element-chips { list-style: none; padding: 0; margin: 0; }
+.element-chips a { text-decoration: none; }
+.element-chips code { font-size: var(--font-size-sm, 0.85rem); padding-block: var(--size-3xs, 0.15rem); border: 1px solid var(--color-border, currentColor); }
+.element-chips a:hover code, .element-chips a:focus-visible code { border-color: var(--color-interactive, currentColor); color: var(--color-interactive, inherit); }
+/* Home page: two role cards per row on desktop, never wider than the viewport on mobile */
+.role-grid { grid-template-columns: repeat(auto-fit, minmax(min(25rem, 100%), 1fr)); }

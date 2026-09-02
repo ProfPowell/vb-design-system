@@ -1,39 +1,102 @@
 ---
 layout: base
 title: Overview
-description: Design-system documentation components for Vanilla Breeze.
+description: Nineteen token-driven Web Components that document, preview, and export a design system on Vanilla Breeze.
 ---
 
-  <section data-layout="stack" data-layout-gap="m" style="text-align: center; padding-block: var(--size-2xl);">
-    <h1>vb-design-system</h1>
-    <p class="lead" style="margin-inline: auto;">Web Components for documenting brand guidelines, design tokens, and visual standards — built on Vanilla Breeze and driven entirely by its theme tokens.</p>
-    <nav data-layout="cluster" data-layout-justify="center" data-layout-gap="s">
-      <a class="button" href="/showcase/meridian/">See the Meridian showcase</a>
-      <a class="button secondary" href="/elements/">Browse elements</a>
+<layout-stack data-gap="3xl">
+
+  <header data-layout="stack" data-layout-gap="m" style="text-align: center; padding-block-start: var(--size-xl);">
+    <p><code>@profpowell/vb-design-system</code></p>
+    <h1>VB Design System</h1>
+    <p class="lead" style="margin-inline: auto; max-inline-size: 60ch;">Nineteen Web Components that <strong>document</strong>, <strong>build</strong>, and <strong>export</strong> a design system. They read the Vanilla Breeze tokens already on the page and render whatever theme is active, so the same markup documents every brand.</p>
+    <nav data-layout="cluster" data-layout-justify="center" data-layout-gap="s" aria-label="Get started">
+      <a class="button" href="/elements/">Browse the 19 elements</a>
+      <a class="button secondary" href="/showcase/meridian/">See the Meridian showcase</a>
     </nav>
-    <color-palette colors="#6366f1,#ec4899,#22c55e,#eab308,#06b6d4" names="Indigo,Pink,Green,Amber,Cyan" show-names></color-palette>
+    <div data-layout="cluster" data-layout-justify="center" style="padding-block-start: var(--size-m);">
+      <token-specimen type="color" show-values="false" label="Active theme"></token-specimen>
+    </div>
+    <p style="color: var(--color-text-muted); font-size: var(--font-size-sm);">Live from the current theme. Switch it with the <strong>Theme</strong> picker in the header and every specimen on this site follows.</p>
+  </header>
+
+  <section data-layout="stack" data-layout-gap="m">
+    <h2>Elements by role</h2>
+    <p class="lead">Each element is a standalone light-DOM component with a no-JS fallback. Load the bundle, or import one at a time.</p>
+    <layout-grid class="role-grid">
+      <layout-card data-layout="stack" data-layout-gap="s">
+        <h3>Specimens &amp; samplers</h3>
+        <p>Show the system as it is: type, spacing, tokens, motion, layout primitives, breakpoints, and native UI in the active theme.</p>
+        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
+          <li><a href="/elements/type-specimen/"><code>type-specimen</code></a></li>
+          <li><a href="/elements/spacing-specimen/"><code>spacing-specimen</code></a></li>
+          <li><a href="/elements/token-specimen/"><code>token-specimen</code></a></li>
+          <li><a href="/elements/motion-specimen/"><code>motion-specimen</code></a></li>
+          <li><a href="/elements/layout-specimen/"><code>layout-specimen</code></a></li>
+          <li><a href="/elements/breakpoint-specimen/"><code>breakpoint-specimen</code></a></li>
+          <li><a href="/elements/accessibility-specimen/"><code>accessibility-specimen</code></a></li>
+          <li><a href="/elements/component-sampler/"><code>component-sampler</code></a></li>
+        </ul>
+      </layout-card>
+      <layout-card data-layout="stack" data-layout-gap="s">
+        <h3>Color &amp; palette</h3>
+        <p>Build the color system: generate palettes from a seed, map them to semantic roles with WCAG checks, build gradients, and pair fonts.</p>
+        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
+          <li><a href="/elements/color-palette/"><code>color-palette</code></a></li>
+          <li><a href="/elements/palette-generator/"><code>palette-generator</code></a></li>
+          <li><a href="/elements/semantic-palette/"><code>semantic-palette</code></a></li>
+          <li><a href="/elements/gradient-builder/"><code>gradient-builder</code></a></li>
+          <li><a href="/elements/font-pairer/"><code>font-pairer</code></a></li>
+        </ul>
+      </layout-card>
+      <layout-card data-layout="stack" data-layout-gap="s">
+        <h3>Icons &amp; brand</h3>
+        <p>Document identity: a searchable icon catalog, a curated icon specimen across the size scale, and the brand mark on light and dark surfaces with clear-space.</p>
+        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
+          <li><a href="/elements/icon-set/"><code>icon-set</code></a></li>
+          <li><a href="/elements/icon-specimen/"><code>icon-specimen</code></a></li>
+          <li><a href="/elements/brand-specimen/"><code>brand-specimen</code></a></li>
+        </ul>
+      </layout-card>
+      <layout-card data-layout="stack" data-layout-gap="s">
+        <h3>Theming</h3>
+        <p>Round-trip themes: browse curated public token sets, export the active theme as CSS or DTCG JSON, and apply a <code>tokens.json</code> to a preview scope.</p>
+        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
+          <li><a href="/elements/theme-catalog/"><code>theme-catalog</code></a></li>
+          <li><a href="/elements/theme-export/"><code>theme-export</code></a></li>
+          <li><a href="/elements/theme-import/"><code>theme-import</code></a></li>
+        </ul>
+      </layout-card>
+    </layout-grid>
+  </section>
+
+  <section data-layout="stack" data-layout-gap="m">
+    <h2>Tools</h2>
+    <p class="lead">The elements composed into working tools.</p>
+    <layout-grid data-layout-min="18rem">
+      <layout-card><a href="/tools/theme-composer/"><strong>Theme Composer</strong></a><p>Assemble a complete theme — colors, type, spacing, shape, motion, icons — by editing live specimens, then export a drop-in CSS block.</p></layout-card>
+      <layout-card><a href="/tools/theme-lab/"><strong>Theme Lab</strong></a><p>Playground for theme identity: border styles, icon sets, and color modes with full component previews.</p></layout-card>
+      <layout-card><a href="/tools/theme-library/"><strong>Theme Library</strong></a><p>Every Vanilla Breeze theme with downloadable CSS and DTCG artifacts and copyable CDN URLs.</p></layout-card>
+    </layout-grid>
   </section>
 
   <section data-layout="stack" data-layout-gap="m">
     <h2>Showcases</h2>
+    <p class="lead">Complete design systems documented with these elements.</p>
     <layout-grid data-layout-min="18rem">
       <layout-card><a href="/showcase/meridian/"><strong>Meridian Labs</strong></a><p>A complete example design system — identity, tokens, type, components, voice.</p></layout-card>
-      <layout-card><a href="/showcase/alpenglow/"><strong>Alpenglow Gear</strong></a><p>One site, four brand looks (Starbucks, IBM, Anthropic, McDonald’s) — VB replicating brands via themes.</p></layout-card>
+      <layout-card><a href="/showcase/alpenglow/"><strong>Alpenglow Gear</strong></a><p>One site, four brand looks (Starbucks, IBM, Anthropic, McDonald’s) — replicating brands via themes.</p></layout-card>
       <layout-card><a href="/showcase/mobile/"><strong>Mobile demos</strong></a><p>Nuvaris biosite + Luminary landing — mobile design systems in device frames.</p></layout-card>
     </layout-grid>
   </section>
 
   <section data-layout="stack" data-layout-gap="m">
-    <h2>Elements</h2>
-    <layout-grid data-layout-min="16rem">
-      <layout-card><a href="/elements/color-palette/"><code>&lt;color-palette&gt;</code></a><p>Color ramp swatches with copy.</p></layout-card>
-      <layout-card><a href="/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code></a><p>Semantic color roles from tokens.</p></layout-card>
-      <layout-card><a href="/elements/type-specimen/"><code>&lt;type-specimen&gt;</code></a><p>Typography scale specimen.</p></layout-card>
-      <layout-card><a href="/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code></a><p>Spacing scale specimen.</p></layout-card>
-      <layout-card><a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a><p>Design-token table specimen.</p></layout-card>
-      <layout-card><a href="/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code></a><p>Motion / easing specimen.</p></layout-card>
-      <layout-card><a href="/elements/component-sampler/"><code>&lt;component-sampler&gt;</code></a><p>Render a component across variants.</p></layout-card>
-      <layout-card><a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a><p>Export the active theme (DTCG / CSS).</p></layout-card>
+    <h2>Guides</h2>
+    <layout-grid data-layout-min="18rem">
+      <layout-card><a href="/guides/design-systems/"><strong>Building Design Systems</strong></a><p>From brand values to a documented, living design system.</p></layout-card>
+      <layout-card><a href="/guides/brand-to-design-system/"><strong>Brand to Design System</strong></a><p>Turn an existing brand into tokens, themes, and specimens.</p></layout-card>
+      <layout-card><a href="/guides/dtcg/"><strong>DTCG Tokens</strong></a><p>The Design Tokens Community Group format and round-tripping themes.</p></layout-card>
+      <layout-card><a href="/guides/pack/"><strong>Design System Pack</strong></a><p>What the pack includes and how to load it.</p></layout-card>
     </layout-grid>
   </section>
 
@@ -42,5 +105,7 @@ description: Design-system documentation components for Vanilla Breeze.
     <code-block language="bash" data-escape>npm install @profpowell/vb-design-system</code-block>
     <code-block language="js" data-escape>import '@profpowell/vb-design-system';
 import '@profpowell/vb-design-system/css';</code-block>
-    <p>Pair with Vanilla Breeze tokens/themes on the page — components inherit the active theme automatically. Try the <strong>Theme</strong> picker above.</p>
+    <p>The first import registers all 19 elements; the second loads their light-DOM styles. Load Vanilla Breeze tokens and a theme on the page (or your own compatible tokens) and the components adopt it. <code>vanilla-breeze</code> is an optional peer dependency. <a href="/guides/pack/">Read the pack guide</a> for CDN and per-element imports.</p>
   </section>
+
+</layout-stack>
