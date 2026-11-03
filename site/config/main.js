@@ -13,16 +13,19 @@ export default {
   // Inline scripts / data-* attributes use ${site.basePath} from data.js instead.
   basePath: '/vb-design-system',
   sitemap: { url: 'https://profpowell.github.io/vb-design-system' },
-  // Content-hash fingerprinting is OFF: cook 2.4.0's fingerprint plugin keys its
-  // manifest from distPath (/pages/assets/x.css) but HTML refs are siteRoot-
-  // relative (/assets/x.css), so it renames files and rewrites 0 references,
-  // breaking every page. Re-enable (excludePaths ['/cdn/', '/pagefind/'] — those
-  // are fetched by computed URL at runtime) once the plugin honours siteRoot.
-  // Until then publish-docs.js stamps ?v= on local CSS/JS refs.
-  fingerprint: { enabled: false },
+  // Content-hash CSS/JS and rewrite <link href> / <script src> (cook >= 2.5.0
+  // keys the manifest from siteRoot). cdn/ (themes, icons, catalog) is fetched
+  // by URLs computed at runtime and pagefind/ is built after cook, so both
+  // keep their plain names.
+  fingerprint: { enabled: true, excludePaths: ['/cdn/', '/pagefind/'] },
+  // HTML pages with front matter join collections by first folder
+  // (collections.elements, .guides, .tools, ...). plugins/element-groups.js
+  // turns collections.elements into the grouped lists the index and home
+  // page repeat over.
+  collections: { html: true },
   buildOnlyPaths: ['layouts', 'includes'],
   plugins: {
-    before: [],
+    before: ['element-groups'],
     default: ['generate-api-tables'],
     after: [],
   },

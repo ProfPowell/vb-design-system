@@ -33,6 +33,8 @@ function pkgMain(pkg) {
 
 console.log('Copying Vanilla Breeze assets…');
 cp(resolve(nm, 'vanilla-breeze/dist/cdn/vanilla-breeze.css'), resolve(vendor, 'vanilla-breeze.css'));
+// Labs effects (data-labs="hover-lift|texture-*|glass") used by the theme-lab interactive-components surface
+cp(resolve(nm, 'vanilla-breeze/dist/cdn/vanilla-breeze-labs.css'), resolve(vendor, 'vanilla-breeze-labs.css'));
 // Full VB bundle for the alpenglow brand-replication demo (does not load the pack, so no conflict)
 cp(resolve(nm, 'vanilla-breeze/dist/cdn/vanilla-breeze.js'), resolve(vendor, 'vanilla-breeze.js'));
 // Real VB theme picker (standalone, conflict-free — defines only <theme-picker>)

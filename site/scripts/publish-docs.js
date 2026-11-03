@@ -2,15 +2,15 @@
  * Publish the built site into <repo>/docs for GitHub Pages (deploy-from-branch).
  *
  * Cook owns the HTML side of sub-path hosting (config/main.js): `basePath`
- * prefixes root-relative href/src/srcset/url() in production builds, `<html data-base-path>`
- * (from `${site.basePath}` in config/data.js; cook does not interpolate inline
- * script text) feeds inline scripts, and `sitemap` writes sitemap.xml.
- * (cook `fingerprint` is off until it honours siteRoot.)
+ * prefixes root-relative href/src/srcset/url() in production builds, `<html
+ * data-base-path>` (from `${site.basePath}` in config/data.js; cook does not
+ * interpolate inline script text) feeds inline scripts, `fingerprint`
+ * content-hashes CSS/JS and rewrites their <link>/<script> refs, and `sitemap`
+ * writes sitemap.xml.
  *
  * What is left for this script:
  *  - copy dist/pages -> docs and add .nojekyll
  *  - prefix the few root-absolute paths that live inside JS (cook leaves JS alone)
- *  - stamp ?v= on local CSS/JS refs (cache-busting)
  *  - build the Pagefind search index over the final output
  *
  * Usage: node scripts/publish-docs.js /<repo>     (e.g. /vb-design-system)
@@ -39,7 +39,9 @@ writeFileSync(join(to, '.nojekyll'), '');
 // site-search dynamically imports '/pagefind/pagefind.js' and needs a baseUrl
 // so result links resolve under the subpath. icon-wc builds its path from
 // "/cdn/icons" (no trailing slash), so prefix any "/cdn/". (jsdelivr/cartocdn
-// use "cdn." not "/cdn/", so they are unaffected.)
+// use "cdn." not "/cdn/", so they are unaffected.) Fingerprinted files keep
+// their hashed names; the patch is deterministic so the hash still changes
+// exactly when the source does.
 function patchJs(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
@@ -54,22 +56,6 @@ function patchJs(dir) {
   }
 }
 if (BASE) patchJs(to);
-
-// Cache-bust local CSS/JS references. Stand-in for cook fingerprinting (see
-// config/main.js): GitHub Pages serves with max-age=600, so without a changing
-// URL a redeployed bundle can be served stale.
-const STAMP = Date.now().toString(36);
-function stampHtml(dir) {
-  for (const name of readdirSync(dir)) {
-    const p = join(dir, name);
-    if (statSync(p).isDirectory()) { stampHtml(p); continue; }
-    if (extname(p) !== '.html') continue;
-    const html = readFileSync(p, 'utf8').replace(/(href|src)="([^"]+\.(?:js|css))(\?[^"]*)?"/g, (m, attr, url, q) =>
-      /^https?:/.test(url) ? m : `${attr}="${url}${q ? q + '&' : '?'}v=${STAMP}"`);
-    writeFileSync(p, html);
-  }
-}
-stampHtml(to);
 console.log(`Published ${from} -> ${to}${BASE ? ` (base ${BASE}, JS paths prefixed)` : ' (no base prefix)'}`);
 
 // Build the Pagefind search index over the published output (powers <site-search>).

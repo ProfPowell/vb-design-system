@@ -880,7 +880,11 @@ description: "Unified playground for theme identity — border styles, icon sets
     const themeSelect = document.querySelector('[name="theme"]');
     const themeName = themeSelect?.selectedOptions[0]?.textContent?.trim() || 'My Brand';
     const themeId = themeSelect?.value || '';
-    const themeLink = themeId ? `\n  <link rel="stylesheet" href="/cdn/themes/${themeId}.css"/>` : '';
+    // The download is a standalone file, so it links the public CDN builds
+    // (same hosts as the README), not this site's hashed, sub-path assets.
+    const VB_CDN = 'https://unpkg.com/vanilla-breeze@0.4/dist/cdn';
+    const PACK_CDN = 'https://unpkg.com/@profpowell/vb-design-system@0.2/dist';
+    const themeLink = themeId ? `\n  <link rel="stylesheet" href="${VB_CDN}/themes/${themeId}.css"/>` : '';
     const themeAttr = themeId ? ` data-theme="${themeId}"` : '';
 
     const html = `<!doctype html>
@@ -889,10 +893,10 @@ description: "Unified playground for theme identity — border styles, icon sets
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <${'title'}>${themeName} — Design System</${'title'}>
-  <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css"/>
-  <link rel="stylesheet" href="/assets/pack/vb-design-system.css"/>${themeLink}
-  <script type="module" src="/assets/vendor/vanilla-breeze.js"><\/script>
-  <script type="module" src="/assets/pack/vb-design-system.js"><\/script>
+  <link rel="stylesheet" href="${VB_CDN}/vanilla-breeze.css"/>
+  <link rel="stylesheet" href="${PACK_CDN}/vb-design-system.min.css"/>${themeLink}
+  <script type="module" src="${VB_CDN}/vanilla-breeze.js"><\/script>
+  <script type="module" src="${PACK_CDN}/vb-design-system.min.js"><\/script>
   <style>
     html { scroll-behavior: smooth; }
     body { background: var(--color-background); color: var(--color-text); }

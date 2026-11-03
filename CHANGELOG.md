@@ -3,6 +3,31 @@
 All notable changes to `@profpowell/vb-design-system` are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Internal
+
+- Docs site built with cook-ssg 2.5: `fingerprint` is on (content-hashed
+  CSS/JS, `<link>`/`<script>` refs rewritten; `cdn/` and `pagefind/` excluded),
+  replacing the `?v=` cache-buster that `publish-docs.js` used to stamp.
+- Docs site uses cook HTML collections: the elements index, the home-page
+  role chips and every "19 elements" count are generated from each element
+  page's front matter (`group`, `order`) via `site/plugins/element-groups.js`
+  and the role groups declared in `site/config/data.js`. Stale VB-port front
+  matter (`currentPath`, `crumbHref`, `crumbLabel`, `category`) removed.
+- Alpenglow showcase: the "Add Vanilla Breeze" switcher loaded the VB bundle
+  from a root-absolute JS string, which 404s on the Pages subpath. The bundle
+  URL now comes from a `<link rel="modulepreload">` on the page so the build
+  can prefix and hash it. Dead `_vb-toggle.js` removed.
+- Theme Lab: the "Export design-system page" download linked this site's
+  root-relative assets, so the saved file had no styles or scripts anywhere
+  but the site root. It now links the unpkg CDN builds of Vanilla Breeze 0.4
+  and this pack 0.2 (the README's convention), themes included.
+- Theme Lab: the interactive-components surface linked `/src/labs/labs.css`,
+  a Vanilla Breeze repo path that never existed here (404, so the `data-labs`
+  hover and texture effects were unstyled). The labs stylesheet is now
+  vendored from the VB package like the other assets.
+
 ## [0.2.0] - 2026-11-02
 
 Tracks Vanilla Breeze 0.4. The peer dependency is now `vanilla-breeze >=0.4.0`.

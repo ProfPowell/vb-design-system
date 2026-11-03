@@ -1,7 +1,7 @@
 ---
 layout: base
 title: Overview
-description: Nineteen token-driven Web Components that document, preview, and export a design system on Vanilla Breeze.
+description: Token-driven Web Components that document, preview, and export a design system on Vanilla Breeze.
 ---
 
 <layout-stack data-layout-gap="3xl">
@@ -9,9 +9,9 @@ description: Nineteen token-driven Web Components that document, preview, and ex
   <header data-layout="stack" data-layout-gap="m" style="text-align: center; padding-block-start: var(--size-xl);">
     <p><code>@profpowell/vb-design-system</code></p>
     <h1>VB Design System</h1>
-    <p class="lead" style="margin-inline: auto; max-inline-size: 60ch;">Nineteen Web Components that <strong>document</strong>, <strong>build</strong>, and <strong>export</strong> a design system. They read the Vanilla Breeze tokens already on the page and render whatever theme is active, so the same markup documents every brand.</p>
+    <p class="lead" style="margin-inline: auto; max-inline-size: 60ch;">A set of ${elementCount} Web Components that <strong>document</strong>, <strong>build</strong>, and <strong>export</strong> a design system. They read the Vanilla Breeze tokens already on the page and render whatever theme is active, so the same markup documents every brand.</p>
     <nav data-layout="cluster" data-layout-justify="center" data-layout-gap="s" aria-label="Get started">
-      <a class="button" href="/elements/">Browse the 19 elements</a>
+      <a class="button" href="/elements/">Browse the ${elementCount} elements</a>
       <a class="button secondary" href="/showcase/meridian/">See the Meridian showcase</a>
     </nav>
     <div data-layout="cluster" data-layout-justify="center" style="padding-block-start: var(--size-m);">
@@ -24,47 +24,11 @@ description: Nineteen token-driven Web Components that document, preview, and ex
     <h2>Elements by role</h2>
     <p class="lead">Each element is a standalone light-DOM component with a no-JS fallback. Load the bundle, or import one at a time.</p>
     <layout-grid class="role-grid">
-      <layout-card data-layout="stack" data-layout-gap="s">
-        <h3>Specimens &amp; samplers</h3>
-        <p>Show the system as it is: type, spacing, tokens, motion, layout primitives, breakpoints, and native UI in the active theme.</p>
+      <layout-card data-layout="stack" data-layout-gap="s" data-repeat="elementGroups as group">
+        <h3>${group.title}</h3>
+        <p>${group.blurb}</p>
         <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
-          <li><a href="/elements/type-specimen/"><code>type-specimen</code></a></li>
-          <li><a href="/elements/spacing-specimen/"><code>spacing-specimen</code></a></li>
-          <li><a href="/elements/token-specimen/"><code>token-specimen</code></a></li>
-          <li><a href="/elements/motion-specimen/"><code>motion-specimen</code></a></li>
-          <li><a href="/elements/layout-specimen/"><code>layout-specimen</code></a></li>
-          <li><a href="/elements/breakpoint-specimen/"><code>breakpoint-specimen</code></a></li>
-          <li><a href="/elements/accessibility-specimen/"><code>accessibility-specimen</code></a></li>
-          <li><a href="/elements/component-sampler/"><code>component-sampler</code></a></li>
-        </ul>
-      </layout-card>
-      <layout-card data-layout="stack" data-layout-gap="s">
-        <h3>Color &amp; palette</h3>
-        <p>Build the color system: generate palettes from a seed, map them to semantic roles with WCAG checks, build gradients, and pair fonts.</p>
-        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
-          <li><a href="/elements/color-palette/"><code>color-palette</code></a></li>
-          <li><a href="/elements/palette-generator/"><code>palette-generator</code></a></li>
-          <li><a href="/elements/semantic-palette/"><code>semantic-palette</code></a></li>
-          <li><a href="/elements/gradient-builder/"><code>gradient-builder</code></a></li>
-          <li><a href="/elements/font-pairer/"><code>font-pairer</code></a></li>
-        </ul>
-      </layout-card>
-      <layout-card data-layout="stack" data-layout-gap="s">
-        <h3>Icons &amp; brand</h3>
-        <p>Document identity: a searchable icon catalog, a curated icon specimen across the size scale, and the brand mark on light and dark surfaces with clear-space.</p>
-        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
-          <li><a href="/elements/icon-set/"><code>icon-set</code></a></li>
-          <li><a href="/elements/icon-specimen/"><code>icon-specimen</code></a></li>
-          <li><a href="/elements/brand-specimen/"><code>brand-specimen</code></a></li>
-        </ul>
-      </layout-card>
-      <layout-card data-layout="stack" data-layout-gap="s">
-        <h3>Theming</h3>
-        <p>Round-trip themes: browse curated public token sets, export the active theme as CSS or DTCG JSON, and apply a <code>tokens.json</code> to a preview scope.</p>
-        <ul data-layout="cluster" data-layout-gap="2xs" role="list" class="element-chips">
-          <li><a href="/elements/theme-catalog/"><code>theme-catalog</code></a></li>
-          <li><a href="/elements/theme-export/"><code>theme-export</code></a></li>
-          <li><a href="/elements/theme-import/"><code>theme-import</code></a></li>
+          <li data-repeat="group.items as el"><a href="${el.url}"><code>${el.elementName}</code></a></li>
         </ul>
       </layout-card>
     </layout-grid>
@@ -105,7 +69,7 @@ description: Nineteen token-driven Web Components that document, preview, and ex
     <code-block language="bash" data-escape>npm install @profpowell/vb-design-system</code-block>
     <code-block language="js" data-escape>import '@profpowell/vb-design-system';
 import '@profpowell/vb-design-system/css';</code-block>
-    <p>The first import registers all 19 elements; the second loads their light-DOM styles. Load Vanilla Breeze tokens and a theme on the page (or your own compatible tokens) and the components adopt it. <code>vanilla-breeze</code> is an optional peer dependency. <a href="/guides/pack/">Read the pack guide</a> for CDN and per-element imports.</p>
+    <p>The first import registers all ${elementCount} elements; the second loads their light-DOM styles. Load Vanilla Breeze tokens and a theme on the page (or your own compatible tokens) and the components adopt it. <code>vanilla-breeze</code> is an optional peer dependency. <a href="/guides/pack/">Read the pack guide</a> for CDN and per-element imports.</p>
   </section>
 
 </layout-stack>

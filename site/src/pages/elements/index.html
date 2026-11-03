@@ -1,31 +1,22 @@
 ---
 layout: base
 title: Elements
-description: All components in the VB Design System pack.
+description: All components in the VB Design System pack, grouped by role.
 ---
+
+<layout-stack data-layout-gap="2xl">
 
   <header data-layout="stack" data-layout-gap="s">
     <h1>Elements</h1>
-    <p class="lead">Nineteen design-system documentation components. Each page has a live, themeable example and its full API.</p>
+    <p class="lead">${elementCount} design-system documentation components. Each page has a live, themeable example and its full API.</p>
   </header>
-  <layout-grid data-layout-min="16rem">
-    <layout-card><a href="/elements/brand-specimen/"><code>&lt;brand-specimen&gt;</code></a><p>Brand mark on light/dark surfaces, size scale, and clear-space box.</p></layout-card>
-    <layout-card><a href="/elements/color-palette/"><code>&lt;color-palette&gt;</code></a><p>Color ramp swatches with copy.</p></layout-card>
-    <layout-card><a href="/elements/palette-generator/"><code>&lt;palette-generator&gt;</code></a><p>Generate harmonious palettes from a seed color.</p></layout-card>
-    <layout-card><a href="/elements/semantic-palette/"><code>&lt;semantic-palette&gt;</code></a><p>Semantic color roles from tokens.</p></layout-card>
-    <layout-card><a href="/elements/type-specimen/"><code>&lt;type-specimen&gt;</code></a><p>Typography scale specimen.</p></layout-card>
-    <layout-card><a href="/elements/spacing-specimen/"><code>&lt;spacing-specimen&gt;</code></a><p>Spacing scale specimen.</p></layout-card>
-    <layout-card><a href="/elements/token-specimen/"><code>&lt;token-specimen&gt;</code></a><p>Design-token table specimen.</p></layout-card>
-    <layout-card><a href="/elements/motion-specimen/"><code>&lt;motion-specimen&gt;</code></a><p>Motion / easing specimen.</p></layout-card>
-    <layout-card><a href="/elements/component-sampler/"><code>&lt;component-sampler&gt;</code></a><p>Render a component across variants.</p></layout-card>
-    <layout-card><a href="/elements/theme-export/"><code>&lt;theme-export&gt;</code></a><p>Export the active theme (DTCG / CSS).</p></layout-card>
-    <layout-card><a href="/elements/accessibility-specimen/"><code>&lt;accessibility-specimen&gt;</code></a><p>WCAG contrast table and accessibility checklist.</p></layout-card>
-    <layout-card><a href="/elements/breakpoint-specimen/"><code>&lt;breakpoint-specimen&gt;</code></a><p>Responsive breakpoint ruler with live width readout.</p></layout-card>
-    <layout-card><a href="/elements/layout-specimen/"><code>&lt;layout-specimen&gt;</code></a><p>VB layout primitives, live examples + snippets.</p></layout-card>
-    <layout-card><a href="/elements/font-pairer/"><code>&lt;font-pairer&gt;</code></a><p>Interactive font pairing tool with Google Fonts loading + CSS export.</p></layout-card>
-    <layout-card><a href="/elements/gradient-builder/"><code>&lt;gradient-builder&gt;</code></a><p>Interactive CSS gradient tool with color stops, angle, and color-space controls.</p></layout-card>
-    <layout-card><a href="/elements/theme-import/"><code>&lt;theme-import&gt;</code></a><p>Apply a DTCG tokens.json file via paste, file, or URL import.</p></layout-card>
-    <layout-card><a href="/elements/theme-catalog/"><code>&lt;theme-catalog&gt;</code></a><p>Browse and apply curated public design-system token sets.</p></layout-card>
-    <layout-card><a href="/elements/icon-set/"><code>&lt;icon-set&gt;</code></a><p>Searchable icon catalog with click-to-copy names.</p></layout-card>
-    <layout-card><a href="/elements/icon-specimen/"><code>&lt;icon-specimen&gt;</code></a><p>Curated icon set across the sizing scale.</p></layout-card>
-  </layout-grid>
+
+  <section data-layout="stack" data-layout-gap="m" data-repeat="elementGroups as group">
+    <h2>${group.title}</h2>
+    <p>${group.blurb}</p>
+    <layout-grid data-layout-min="16rem">
+      <layout-card data-repeat="group.items as el"><a href="${el.url}"><code>&lt;${el.elementName}&gt;</code></a><p>${el.description}</p></layout-card>
+    </layout-grid>
+  </section>
+
+</layout-stack>
