@@ -36,7 +36,7 @@ breakpoint-specimen {
   }
 
   .bps-active {
-    font-size: var(--font-size-sm, 0.875rem);
+    font-size: var(--font-size-s, 0.875rem);
     padding: var(--size-3xs, 0.125rem) var(--size-xs, 0.5rem);
     border-radius: var(--radius-s, 0.25rem);
     background: var(--color-surface-raised, oklch(96% 0 0));
@@ -111,7 +111,7 @@ breakpoint-specimen {
     grid-template-columns: max-content 1fr;
     gap: var(--size-2xs, 0.25rem) var(--size-m, 1rem);
     margin: 0;
-    font-size: var(--font-size-sm, 0.875rem);
+    font-size: var(--font-size-s, 0.875rem);
   }
 
   .bps-row {

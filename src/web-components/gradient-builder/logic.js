@@ -70,7 +70,7 @@ class GradientBuilder extends VBElement {
     const surface = 'var(--color-surface, #fff)';
     const muted = 'var(--color-text-muted, #666)';
     const mono = 'var(--font-mono, monospace)';
-    const smFont = 'var(--font-size-sm, 0.875rem)';
+    const smFont = 'var(--font-size-s, 0.875rem)';
     const xsFont = 'var(--font-size-xs, 0.75rem)';
 
     // Preview strip

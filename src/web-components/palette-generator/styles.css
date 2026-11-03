@@ -9,7 +9,7 @@ palette-generator {
 
 palette-generator .pg-seed-label {
   display: block;
-  font-size: var(--font-size-sm, 0.875rem);
+  font-size: var(--font-size-s, 0.875rem);
   font-weight: 600;
   color: var(--color-text-muted, #666);
   margin-block-end: var(--size-2xs, 0.25rem);

@@ -34,7 +34,7 @@ spacing-specimen .scale-step {
 
 spacing-specimen .scale-name {
   font-family: var(--font-mono, monospace);
-  font-size: var(--font-size-sm, 0.875rem);
+  font-size: var(--font-size-s, 0.875rem);
   color: var(--color-text-muted, #666);
   text-align: end;
 }

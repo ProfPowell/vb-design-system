@@ -84,7 +84,7 @@ class MotionSpecimen extends VBElement {
   }
 
   #nameStyle() {
-    return `font-family:${MONO};font-size:var(--font-size-sm,0.875rem);color:${MUTED};text-align:end`;
+    return `font-family:${MONO};font-size:var(--font-size-s,0.875rem);color:${MUTED};text-align:end`;
   }
 
   #valueStyle() {

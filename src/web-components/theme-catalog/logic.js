@@ -74,13 +74,13 @@ class ThemeCatalog extends VBElement {
     const card  = `border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);background:var(--color-surface,#fff);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-2xs,0.375rem);min-block-size:0`;
     const grid  = `display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:var(--size-s,0.75rem)`;
     const muted = `font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666)`;
-    const title = `margin:0;font-size:var(--font-size-md,1rem);font-weight:600;color:var(--color-text,#222)`;
+    const title = `margin:0;font-size:var(--font-size-m,1rem);font-weight:600;color:var(--color-text,#222)`;
     const btn   = `align-self:flex-start;padding:0.375rem 0.75rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-primary,#0066cc);color:var(--color-text-on-primary,#fff);cursor:pointer;font:inherit;font-size:var(--font-size-xs,0.75rem)`;
     const tag   = `display:inline-block;padding:0.125rem 0.375rem;border-radius:0.25rem;background:var(--color-surface-raised,#f3f3f3);${muted};margin-inline-end:0.25rem`;
 
     this.innerHTML = `
       <div class="tc-head" style="display:flex;align-items:baseline;gap:var(--size-s,0.75rem);margin-block-end:var(--size-s,0.75rem);flex-wrap:wrap">
-        <strong style="font-size:var(--font-size-sm,0.875rem)">Start from a known system</strong>
+        <strong style="font-size:var(--font-size-s,0.875rem)">Start from a known system</strong>
         <span class="tc-target" style="${muted}"></span>
       </div>
       <div class="tc-grid" style="${grid}" role="list"></div>
@@ -129,7 +129,7 @@ class ThemeCatalog extends VBElement {
     const grid = this.querySelector('.tc-grid');
     if (!grid || !this.#entries) return;
     const card = `border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);background:var(--color-surface,#fff);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-2xs,0.375rem)`;
-    const title = `margin:0;font-size:var(--font-size-md,1rem);font-weight:600;color:var(--color-text,#222)`;
+    const title = `margin:0;font-size:var(--font-size-m,1rem);font-weight:600;color:var(--color-text,#222)`;
     const btn   = `align-self:flex-start;margin-block-start:auto;padding:0.375rem 0.75rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-primary,#0066cc);color:var(--color-text-on-primary,#fff);cursor:pointer;font:inherit;font-size:var(--font-size-xs,0.75rem)`;
     const muted = `font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666)`;
     const tag   = `display:inline-block;padding:0.125rem 0.375rem;border-radius:0.25rem;background:var(--color-surface-raised,#f3f3f3);${muted};margin-inline-end:0.25rem`;

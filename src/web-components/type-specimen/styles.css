@@ -59,7 +59,7 @@ type-specimen .char-row {
   flex-wrap: wrap;
   gap: 2px;
   align-items: center;
-  font-size: var(--font-size-sm, 0.875rem);
+  font-size: var(--font-size-s, 0.875rem);
 }
 
 type-specimen .char-label {

@@ -197,7 +197,7 @@ class SemanticPalette extends VBElement {
     return `<article class="sp-card" data-role="${role}" aria-label="${roleLabel} role preview" style="${cardStyle}">
       <header style="display:flex;align-items:center;justify-content:space-between;gap:var(--size-s,0.75rem)">
         <div>
-          <code style="font-family:${MONO};font-size:var(--font-size-sm,0.875rem);font-weight:600">${role}</code>
+          <code style="font-family:${MONO};font-size:var(--font-size-s,0.875rem);font-weight:600">${role}</code>
           <span style="display:block;font-size:var(--font-size-xs,0.75rem);color:${MUTED}">${roleLabel}</span>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem">
@@ -217,11 +217,11 @@ class SemanticPalette extends VBElement {
 
     return [
       this.#sample({
-        render: `<button type="button" tabindex="-1" style="all:unset;display:inline-block;padding:0.375rem 0.875rem;border-radius:${RADIUS_S};background:${hex};color:${textOnRole};font-family:inherit;font-size:var(--font-size-sm,0.875rem);font-weight:600;cursor:default">Button</button>`,
+        render: `<button type="button" tabindex="-1" style="all:unset;display:inline-block;padding:0.375rem 0.875rem;border-radius:${RADIUS_S};background:${hex};color:${textOnRole};font-family:inherit;font-size:var(--font-size-s,0.875rem);font-weight:600;cursor:default">Button</button>`,
         fg: textOnRole, bg: hex, caption: 'On role',
       }),
       this.#sample({
-        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-sm,0.875rem);font-weight:500;text-decoration:underline">Linked text</span>`,
+        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-s,0.875rem);font-weight:500;text-decoration:underline">Linked text</span>`,
         fg: hex, bg: surface || '#ffffff', caption: 'On surface',
       }),
       this.#sample({
@@ -239,7 +239,7 @@ class SemanticPalette extends VBElement {
 
     return [
       this.#sample({
-        render: `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-radius:${RADIUS_S};background:${subtleBg};color:${statusText};border:1px solid ${hex};font-size:var(--font-size-sm,0.875rem);max-inline-size:100%">
+        render: `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-radius:${RADIUS_S};background:${subtleBg};color:${statusText};border:1px solid ${hex};font-size:var(--font-size-s,0.875rem);max-inline-size:100%">
           <span style="display:inline-block;inline-size:0.5rem;block-size:0.5rem;border-radius:50%;background:${hex};flex-shrink:0"></span>
           <span><strong>${ROLE_LABELS[role] || role}</strong> — message text</span>
         </div>`,
@@ -250,7 +250,7 @@ class SemanticPalette extends VBElement {
         fg: onRole, bg: hex, caption: 'Badge',
       }),
       this.#sample({
-        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-sm,0.875rem);font-weight:600">Inline status</span>`,
+        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-s,0.875rem);font-weight:600">Inline status</span>`,
         fg: hex, bg: surface || '#ffffff', caption: 'On surface',
       }),
     ].join('');
@@ -274,7 +274,7 @@ class SemanticPalette extends VBElement {
 
   #renderExport() {
     const toolbar = `display:flex;gap:var(--size-2xs,0.375rem);padding-block-start:var(--size-xs,0.5rem);border-block-start:1px solid ${BORDER}`;
-    const btn = `padding:0.375rem 0.875rem;border:1px solid ${BORDER};border-radius:${RADIUS_S};background:${SURFACE};color:${TEXT};cursor:pointer;font:inherit;font-size:var(--font-size-sm,0.875rem)`;
+    const btn = `padding:0.375rem 0.875rem;border:1px solid ${BORDER};border-radius:${RADIUS_S};background:${SURFACE};color:${TEXT};cursor:pointer;font:inherit;font-size:var(--font-size-s,0.875rem)`;
     return `<div class="sp-export" role="toolbar" aria-label="Export semantic palette" style="${toolbar}">
       <button type="button" class="sp-copy-css" style="${btn}">Copy Theme CSS</button>
       <button type="button" class="sp-copy-json" style="${btn}">Copy JSON</button>

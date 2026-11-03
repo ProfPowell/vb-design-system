@@ -57,7 +57,7 @@ class TypeSpecimen extends VBElement {
 
     // Header with font name and large sample
     const labelHTML = editable
-      ? `<input type="text" class="specimen-font-input" value="${fontFamily.replace(/"/g, '&quot;')}" aria-label="Font family" style="font:inherit;padding:0.25rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);min-inline-size:18rem;max-inline-size:100%;font-family:${fontFamily};font-size:var(--font-size-sm,0.875rem)">
+      ? `<input type="text" class="specimen-font-input" value="${fontFamily.replace(/"/g, '&quot;')}" aria-label="Font family" style="font:inherit;padding:0.25rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);min-inline-size:18rem;max-inline-size:100%;font-family:${fontFamily};font-size:var(--font-size-s,0.875rem)">
           <span class="specimen-quick" style="display:inline-flex;flex-wrap:wrap;gap:0.25rem;margin-inline-start:0.5rem">
             ${QUICK_FONTS.map((f) => `<button type="button" class="specimen-quick-btn" data-font="${f.replace(/"/g, '&quot;')}" style="font:inherit;font-size:var(--font-size-xs,0.75rem);padding:0.125rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:999px;background:var(--color-surface,#fff);color:var(--color-text,#222);cursor:pointer">${f.split(',')[0].replace(/["']/g, '')}</button>`).join('')}
           </span>`
@@ -94,9 +94,9 @@ class TypeSpecimen extends VBElement {
     if (showScale) {
       const scale = [
         { name: 'xs', rem: 0.75 },
-        { name: 'sm', rem: 0.875 },
-        { name: 'md', rem: 1 },
-        { name: 'lg', rem: 1.125 },
+        { name: 's', rem: 0.875 },
+        { name: 'm', rem: 1 },
+        { name: 'l', rem: 1.125 },
         { name: 'xl', rem: 1.25 },
         { name: '2xl', rem: 1.5 },
         { name: '3xl', rem: 1.875 },

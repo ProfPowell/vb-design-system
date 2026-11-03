@@ -34,11 +34,11 @@ const PREVIEWS = {
     render: (f, t) => `
       <p style="font-family:${f.display};font-size:var(--font-size-3xl,2rem);font-weight:800;margin:0;line-height:1.15"
         ${E(f.display,'p','heading')}>${t.heading}</p>
-      <h3 style="font-family:${f.heading};font-size:var(--font-size-lg,1.125rem);font-weight:600;margin:0"
+      <h3 style="font-family:${f.heading};font-size:var(--font-size-l,1.125rem);font-weight:600;margin:0"
         ${E(f.heading,'h3','subheading')}>${t.subheading}</h3>
-      <p style="font-family:${f.body};font-size:var(--font-size-md,1rem);line-height:1.65;margin:0;color:var(--color-text-muted,#666)"
+      <p style="font-family:${f.body};font-size:var(--font-size-m,1rem);line-height:1.65;margin:0;color:var(--color-text-muted,#666)"
         ${E(f.body,'p','body')}>${t.body}</p>
-      <pre style="font-family:${f.code};font-size:var(--font-size-sm,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code,'code','code')}>${t.code}</code></pre>`,
+      <pre style="font-family:${f.code};font-size:var(--font-size-s,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code,'code','code')}>${t.code}</code></pre>`,
   },
   article: {
     label: 'Article',
@@ -47,31 +47,31 @@ const PREVIEWS = {
         ${E(f.body,'small','eyebrow')}>${t.eyebrow}</small>
       <h2 style="font-family:${f.heading};font-size:var(--font-size-2xl,1.75rem);font-weight:700;margin:0;line-height:1.2"
         ${E(f.heading,'h2','heading')}>${t.heading}</h2>
-      <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0"
+      <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0"
         ${E(f.body,'p','byline')}>${t.byline}</p>
       <p style="font-family:${f.body};line-height:1.7;margin:0" ${E(f.body,'p','body')}>${t.body}</p>
-      <h3 style="font-family:${f.heading};font-size:var(--font-size-lg,1.125rem);font-weight:600;margin:0"
+      <h3 style="font-family:${f.heading};font-size:var(--font-size-l,1.125rem);font-weight:600;margin:0"
         ${E(f.heading,'h3','subheading')}>${t.subheading}</h3>
       <p style="font-family:${f.body};line-height:1.7;margin:0" ${E(f.body,'p','body2')}>${t.body2}</p>
-      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-lg,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)"
+      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-l,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)"
         ${E(f.display,'blockquote','quote')}>${t.quote}</blockquote>
-      <pre style="font-family:${f.code};font-size:var(--font-size-sm,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code,'code','code')}>${t.code}</code></pre>`,
+      <pre style="font-family:${f.code};font-size:var(--font-size-s,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code,'code','code')}>${t.code}</code></pre>`,
   },
   'long-article': {
     label: 'Long Article',
     render: (f, t) => `
       <small style="font-family:${f.body};font-size:var(--font-size-xs,0.75rem);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-interactive,oklch(55% .2 260));font-weight:600">${t.eyebrow}</small>
       <h1 style="font-family:${f.display};font-size:var(--font-size-3xl,2rem);font-weight:800;margin:0;line-height:1.15">${t.heading}</h1>
-      <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0">${t.byline}</p>
-      <p style="font-family:${f.body};font-size:var(--font-size-lg,1.125rem);line-height:1.6;margin:0;color:var(--color-text-muted,#666)">${t.lead}</p>
+      <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0">${t.byline}</p>
+      <p style="font-family:${f.body};font-size:var(--font-size-l,1.125rem);line-height:1.6;margin:0;color:var(--color-text-muted,#666)">${t.lead}</p>
       <h2 style="font-family:${f.heading};font-size:var(--font-size-xl,1.375rem);font-weight:700;margin:0">${t.subheading}</h2>
       <p style="font-family:${f.body};line-height:1.7;margin:0">${t.body}</p>
       <p style="font-family:${f.body};line-height:1.7;margin:0">${t.body2}</p>
-      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-lg,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)">${t.quote}</blockquote>
+      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-l,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)">${t.quote}</blockquote>
       <h2 style="font-family:${f.heading};font-size:var(--font-size-xl,1.375rem);font-weight:700;margin:0">Implementation Details</h2>
       <p style="font-family:${f.body};line-height:1.7;margin:0">Design tokens form the atomic layer of any visual system. Colors, spacing, typography, and motion are expressed as named variables that cascade through every component. When a token changes, every surface that references it updates automatically — no find-and-replace, no missed instances.</p>
-      <pre style="font-family:${f.code};font-size:var(--font-size-sm,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code>${t.code}</code></pre>
-      <h3 style="font-family:${f.heading};font-size:var(--font-size-lg,1.125rem);font-weight:600;margin:0">Key Takeaways</h3>
+      <pre style="font-family:${f.code};font-size:var(--font-size-s,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code>${t.code}</code></pre>
+      <h3 style="font-family:${f.heading};font-size:var(--font-size-l,1.125rem);font-weight:600;margin:0">Key Takeaways</h3>
       <ul style="font-family:${f.body};line-height:1.7;margin:0;padding-inline-start:1.5rem">
         <li>Typography sets the emotional tone before a single word is read</li>
         <li>Pair contrast with harmony — serif headings with sans-serif body</li>
@@ -86,13 +86,13 @@ const PREVIEWS = {
         <div style="border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-xs,0.5rem)">
           <h4 style="font-family:${f.heading};font-weight:600;margin:0" ${E(f.heading,'h4','cardTitle')}>Premium Plan</h4>
           <p style="font-family:${f.display};font-size:var(--font-size-2xl,1.75rem);font-weight:700;margin:0">$49<small style="font-size:0.5em;font-weight:400">/mo</small></p>
-          <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0" ${E(f.body,'p','cardBody')}>Everything you need to build faster.</p>
+          <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0" ${E(f.body,'p','cardBody')}>Everything you need to build faster.</p>
           <code style="font-family:${f.code};font-size:var(--font-size-xs,0.75rem);background:var(--color-surface-sunken,#eee);padding:0.2rem 0.4rem;border-radius:0.25rem" ${E(f.code,'code','cardCode')}>npm install acme</code>
         </div>
         <div style="border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-xs,0.5rem)">
           <h4 style="font-family:${f.heading};font-weight:600;margin:0">Enterprise</h4>
           <p style="font-family:${f.display};font-size:var(--font-size-2xl,1.75rem);font-weight:700;margin:0">Custom</p>
-          <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0">Dedicated support and SLA guarantees.</p>
+          <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0">Dedicated support and SLA guarantees.</p>
           <code style="font-family:${f.code};font-size:var(--font-size-xs,0.75rem);background:var(--color-surface-sunken,#eee);padding:0.2rem 0.4rem;border-radius:0.25rem">contact@acme.dev</code>
         </div>
       </div>`,
@@ -105,7 +105,7 @@ const PREVIEWS = {
           ${E(f.body,'p','eyebrow')}>${t.eyebrow}</p>
         <h1 style="font-family:${f.display};font-size:clamp(2rem,5vw,3rem);font-weight:800;margin:0;line-height:1.1"
           ${E(f.display,'h1','heading')}>${t.heading}</h1>
-        <p style="font-family:${f.body};font-size:var(--font-size-lg,1.125rem);color:var(--color-text-muted,#666);margin:var(--size-s,0.75rem) auto 0;max-width:40ch"
+        <p style="font-family:${f.body};font-size:var(--font-size-l,1.125rem);color:var(--color-text-muted,#666);margin:var(--size-s,0.75rem) auto 0;max-width:40ch"
           ${E(f.body,'p','body')}>${t.body}</p>
       </div>`,
   },
@@ -170,7 +170,7 @@ class FontPairer extends VBElement {
     const surface = 'var(--color-surface, #fff)';
     const raised = 'var(--color-surface-raised, #f5f5f5)';
     const muted = 'var(--color-text-muted, #666)';
-    const smFont = 'var(--font-size-sm, 0.875rem)';
+    const smFont = 'var(--font-size-s, 0.875rem)';
     const xsFont = 'var(--font-size-xs, 0.75rem)';
     const selectStyle = `font:inherit;font-size:${smFont};padding:0.35rem 0.5rem;border:1px solid ${border};border-radius:4px;background:${surface}`;
 
