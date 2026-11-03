@@ -4,7 +4,7 @@
  * Modes: raw | vb | anthropic | mcdonalds | ibm
  *
  * Manages VB CSS, brand theme CSS, data-theme attribute, and lazy JS loading.
- * Uses a theme-switcher custom element to avoid VB style interference.
+ * Uses a <theme-switcher> custom element to avoid VB style interference.
  */
 (function () {
   var STORAGE_KEY = 'alpenglow-theme';
@@ -137,7 +137,7 @@
   ].join('\n');
   document.head.appendChild(styleEl);
 
-  /* ── Ensure brand-theme link elements exist ── */
+  /* ── Ensure brand-theme <link> elements exist ── */
   BRAND_THEMES.forEach(function (name) {
     if (!document.getElementById('theme-' + name)) {
       var link = document.createElement('link');

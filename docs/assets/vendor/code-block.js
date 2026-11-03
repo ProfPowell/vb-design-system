@@ -1225,11 +1225,11 @@ function pt(a) {
     isTrulyOpeningTag: (k, ee) => {
       const ne = k[0].length + k.index, le = k.input[ne];
       if (
-        // HTML should not include another raw `` inside a tag
+        // HTML should not include another raw `<` inside a tag
         // nested type?
-        // `Array<Array<number>`, etc.
+        // `<Array<Array<number>>`, etc.
         le === "<" || // the , gives away that this is not HTML
-        // `T, A extends keyof T, V`
+        // `<T, A extends keyof T, V>`
         le === ","
       ) {
         ee.ignoreMatch();
@@ -1605,7 +1605,7 @@ function pt(a) {
           {
             className: "function",
             // we have to count the parens to make sure we actually have the
-            // correct bounding ( ) before the =.  There could be any number of
+            // correct bounding ( ) before the =>.  There could be any number of
             // sub-expressions inside also surrounded by parens.
             begin: Y,
             returnBegin: !0,
@@ -2766,7 +2766,7 @@ function we(a) {
         className: "tag",
         /*
         The lookahead pattern (?=...) ensures that 'begin' only matches
-        'style' as a single word, followed by a whitespace or an
+        '<style' as a single word, followed by a whitespace or an
         ending bracket.
         */
         begin: /<style(?=\s|>)/,
@@ -2784,7 +2784,7 @@ function we(a) {
       },
       {
         className: "tag",
-        // See the comment in the style tag about the lookahead pattern
+        // See the comment in the <style tag about the lookahead pattern
         begin: /<script(?=\s|>)/,
         end: />/,
         keywords: { name: "script" },
@@ -2811,9 +2811,9 @@ function we(a) {
           /</,
           e.lookahead(e.concat(
             n,
-            // tag/
-            // tag
-            // tag ...
+            // <tag/>
+            // <tag>
+            // <tag ...
             e.either(/\/>/, />/, /\s/)
           ))
         ),
@@ -2989,7 +2989,7 @@ function ft(a) {
     },
     {
       // multi line string
-      // Blocks start with a | or  followed by a newline
+      // Blocks start with a | or > followed by a newline
       //
       // Indentation of subsequent lines must be the same to
       // be considered part of the block
@@ -3145,7 +3145,7 @@ function $n(a) {
     "true"
   ], $ = [
     // Magic constants:
-    // https://www.php.net/manual/en/language.constants.predefined.php
+    // <https://www.php.net/manual/en/language.constants.predefined.php>
     "__CLASS__",
     "__DIR__",
     "__FILE__",
@@ -3168,8 +3168,8 @@ function $n(a) {
     // These are not language construct (function) but operate on the currently-executing function and can access the current symbol table
     // 'compact extract func_get_arg func_get_args func_num_args get_called_class get_parent_class ' +
     // Other keywords:
-    // https://www.php.net/manual/en/reserved.php
-    // https://www.php.net/manual/en/language.types.type-juggling.php
+    // <https://www.php.net/manual/en/reserved.php>
+    // <https://www.php.net/manual/en/language.types.type-juggling.php>
     "array",
     "abstract",
     "and",
@@ -3245,7 +3245,7 @@ function $n(a) {
     "yield"
   ], P = [
     // Standard PHP library:
-    // https://www.php.net/manual/en/book.spl.php
+    // <https://www.php.net/manual/en/book.spl.php>
     "Error|0",
     "AppendIterator",
     "ArgumentCountError",
@@ -3314,7 +3314,7 @@ function $n(a) {
     "UnexpectedValueException",
     "UnhandledMatchError",
     // Reserved interfaces:
-    // https://www.php.net/manual/en/reserved.interfaces.php
+    // <https://www.php.net/manual/en/reserved.interfaces.php>
     "ArrayAccess",
     "BackedEnum",
     "Closure",
@@ -3330,7 +3330,7 @@ function $n(a) {
     "WeakReference",
     "WeakMap",
     // Reserved classes:
-    // https://www.php.net/manual/en/reserved.classes.php
+    // <https://www.php.net/manual/en/reserved.classes.php>
     "Directory",
     "__PHP_Incomplete_Class",
     "parent",
@@ -4707,11 +4707,11 @@ function Pn(a) {
     isTrulyOpeningTag: (k, ee) => {
       const ne = k[0].length + k.index, le = k.input[ne];
       if (
-        // HTML should not include another raw `` inside a tag
+        // HTML should not include another raw `<` inside a tag
         // nested type?
-        // `Array<Array<number>`, etc.
+        // `<Array<Array<number>>`, etc.
         le === "<" || // the , gives away that this is not HTML
-        // `T, A extends keyof T, V`
+        // `<T, A extends keyof T, V>`
         le === ","
       ) {
         ee.ignoreMatch();
@@ -5087,7 +5087,7 @@ function Pn(a) {
           {
             className: "function",
             // we have to count the parens to make sure we actually have the
-            // correct bounding ( ) before the =.  There could be any number of
+            // correct bounding ( ) before the =>.  There could be any number of
             // sub-expressions inside also surrounded by parens.
             begin: Y,
             returnBegin: !0,

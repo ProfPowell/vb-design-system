@@ -2,7 +2,7 @@
  * Do/Don't and Pro/Con list patterns
  *
  * Usage:
- *   ul data-list="do-dont"
+ *   <ul data-list="do-dont">
  *     <li data-do>Use the full logo on light backgrounds.</li>
  *     <li data-dont>Don't stretch or rotate the logo.</li>
  *   </ul>

@@ -497,7 +497,7 @@
   },
   "effect": {
     "shadow": {
-      "sm": {
+      "s": {
         "$type": "shadow",
         "$value": {
           "offsetX": {
@@ -523,7 +523,7 @@
           }
         }
       },
-      "md": {
+      "m": {
         "$type": "shadow",
         "$value": {
           "offsetX": {
@@ -549,7 +549,7 @@
           }
         }
       },
-      "lg": {
+      "l": {
         "$type": "shadow",
         "$value": {
           "offsetX": {
@@ -580,7 +580,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.3.1",
+      "vbVersion": "0.4.1",
       "unmapped": [
         "--focus-ring-width",
         "--focus-ring-offset",

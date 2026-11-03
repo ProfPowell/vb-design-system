@@ -249,7 +249,7 @@
           }
         }
       },
-      "sm": {
+      "s": {
         "$type": "shadow",
         "$value": [
           {
@@ -300,7 +300,7 @@
           }
         ]
       },
-      "md": {
+      "m": {
         "$type": "shadow",
         "$value": [
           {
@@ -351,7 +351,7 @@
           }
         ]
       },
-      "lg": {
+      "l": {
         "$type": "shadow",
         "$value": [
           {
@@ -509,7 +509,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.3.1",
+      "vbVersion": "0.4.1",
       "unmapped": [
         "--cb-header-bg",
         "--cb-keyword",

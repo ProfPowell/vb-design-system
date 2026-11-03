@@ -98,7 +98,7 @@ palette-generator {
 }
 palette-generator .pg-seed-label {
   display: block;
-  font-size: var(--font-size-sm, 0.875rem);
+  font-size: var(--font-size-s, 0.875rem);
   font-weight: 600;
   color: var(--color-text-muted, #666);
   margin-block-end: var(--size-2xs, 0.25rem);
@@ -171,7 +171,7 @@ type-specimen .char-row {
   flex-wrap: wrap;
   gap: 2px;
   align-items: center;
-  font-size: var(--font-size-sm, 0.875rem);
+  font-size: var(--font-size-s, 0.875rem);
 }
 type-specimen .char-label {
   font-family: var(--font-sans, system-ui);
@@ -261,7 +261,7 @@ spacing-specimen .scale-step {
 }
 spacing-specimen .scale-name {
   font-family: var(--font-mono, monospace);
-  font-size: var(--font-size-sm, 0.875rem);
+  font-size: var(--font-size-s, 0.875rem);
   color: var(--color-text-muted, #666);
   text-align: end;
 }
@@ -517,7 +517,7 @@ breakpoint-specimen {
     font-weight: 600;
   }
   .bps-active {
-    font-size: var(--font-size-sm, 0.875rem);
+    font-size: var(--font-size-s, 0.875rem);
     padding: var(--size-3xs, 0.125rem) var(--size-xs, 0.5rem);
     border-radius: var(--radius-s, 0.25rem);
     background: var(--color-surface-raised, oklch(96% 0 0));
@@ -583,7 +583,7 @@ breakpoint-specimen {
     grid-template-columns: max-content 1fr;
     gap: var(--size-2xs, 0.25rem) var(--size-m, 1rem);
     margin: 0;
-    font-size: var(--font-size-sm, 0.875rem);
+    font-size: var(--font-size-s, 0.875rem);
   }
   .bps-row {
     display: contents;

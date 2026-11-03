@@ -353,11 +353,11 @@
         },
         "$extensions": {
           "com.vanilla-breeze": {
-            "literal": "3px 3px 6px var(--_neu-dark),\n    -3px -3px 6px var(--_neu-light)"
+            "literal": "3px 3px 6px var(--_neu-dark),\n      -3px -3px 6px var(--_neu-light)"
           }
         }
       },
-      "sm": {
+      "s": {
         "$type": "shadow",
         "$value": {
           "offsetX": {
@@ -383,11 +383,11 @@
         },
         "$extensions": {
           "com.vanilla-breeze": {
-            "literal": "5px 5px 10px var(--_neu-dark),\n    -5px -5px 10px var(--_neu-light)"
+            "literal": "5px 5px 10px var(--_neu-dark),\n      -5px -5px 10px var(--_neu-light)"
           }
         }
       },
-      "md": {
+      "m": {
         "$type": "shadow",
         "$value": {
           "offsetX": {
@@ -413,11 +413,11 @@
         },
         "$extensions": {
           "com.vanilla-breeze": {
-            "literal": "7px 7px 14px var(--_neu-dark),\n    -7px -7px 14px var(--_neu-light)"
+            "literal": "7px 7px 14px var(--_neu-dark),\n      -7px -7px 14px var(--_neu-light)"
           }
         }
       },
-      "lg": {
+      "l": {
         "$type": "shadow",
         "$value": {
           "offsetX": {
@@ -443,7 +443,7 @@
         },
         "$extensions": {
           "com.vanilla-breeze": {
-            "literal": "10px 10px 20px var(--_neu-dark),\n    -10px -10px 20px var(--_neu-light)"
+            "literal": "10px 10px 20px var(--_neu-dark),\n      -10px -10px 20px var(--_neu-light)"
           }
         }
       },
@@ -473,7 +473,7 @@
         },
         "$extensions": {
           "com.vanilla-breeze": {
-            "literal": "14px 14px 28px var(--_neu-dark),\n    -14px -14px 28px var(--_neu-light)"
+            "literal": "14px 14px 28px var(--_neu-dark),\n      -14px -14px 28px var(--_neu-light)"
           }
         }
       },
@@ -503,7 +503,7 @@
         },
         "$extensions": {
           "com.vanilla-breeze": {
-            "literal": "20px 20px 40px var(--_neu-dark),\n    -20px -20px 40px var(--_neu-light)"
+            "literal": "20px 20px 40px var(--_neu-dark),\n      -20px -20px 40px var(--_neu-light)"
           }
         }
       }
@@ -564,7 +564,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.3.1",
+      "vbVersion": "0.4.1",
       "unmapped": [
         "--theme-border-style",
         "--theme-icon-set",

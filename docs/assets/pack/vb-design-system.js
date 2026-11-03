@@ -396,7 +396,7 @@ var ColorPalette = class extends VBElement {
     const toHex = (n) => Math.round(Number(n)).toString(16).padStart(2, "0");
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
   }
-  /** Ensure a color string is a #rrggbb hex suitable for input type="color". */
+  /** Ensure a color string is a #rrggbb hex suitable for <input type="color">. */
   #ensureHex(color) {
     if (/^#[0-9a-f]{6}$/i.test(color)) return color.toLowerCase();
     if (/^#[0-9a-f]{3}$/i.test(color)) {
@@ -886,7 +886,7 @@ var TypeSpecimen = class extends VBElement {
     const weights = weightsAttr.split(",").map((w) => w.trim());
     let html = "";
     const editable = this.hasAttribute("editable");
-    const labelHTML = editable ? `<input type="text" class="specimen-font-input" value="${fontFamily.replace(/"/g, "&quot;")}" aria-label="Font family" style="font:inherit;padding:0.25rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);min-inline-size:18rem;max-inline-size:100%;font-family:${fontFamily};font-size:var(--font-size-sm,0.875rem)">
+    const labelHTML = editable ? `<input type="text" class="specimen-font-input" value="${fontFamily.replace(/"/g, "&quot;")}" aria-label="Font family" style="font:inherit;padding:0.25rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);min-inline-size:18rem;max-inline-size:100%;font-family:${fontFamily};font-size:var(--font-size-s,0.875rem)">
           <span class="specimen-quick" style="display:inline-flex;flex-wrap:wrap;gap:0.25rem;margin-inline-start:0.5rem">
             ${QUICK_FONTS.map((f) => `<button type="button" class="specimen-quick-btn" data-font="${f.replace(/"/g, "&quot;")}" style="font:inherit;font-size:var(--font-size-xs,0.75rem);padding:0.125rem 0.5rem;border:1px solid var(--color-border,#ccc);border-radius:999px;background:var(--color-surface,#fff);color:var(--color-text,#222);cursor:pointer">${f.split(",")[0].replace(/["']/g, "")}</button>`).join("")}
           </span>` : `<span class="specimen-label">${label}</span>`;
@@ -915,9 +915,9 @@ var TypeSpecimen = class extends VBElement {
     if (showScale) {
       const scale = [
         { name: "xs", rem: 0.75 },
-        { name: "sm", rem: 0.875 },
-        { name: "md", rem: 1 },
-        { name: "lg", rem: 1.125 },
+        { name: "s", rem: 0.875 },
+        { name: "m", rem: 1 },
+        { name: "l", rem: 1.125 },
         { name: "xl", rem: 1.25 },
         { name: "2xl", rem: 1.5 },
         { name: "3xl", rem: 1.875 },
@@ -1613,7 +1613,7 @@ var SemanticPalette = class extends VBElement {
     return `<article class="sp-card" data-role="${role}" aria-label="${roleLabel} role preview" style="${cardStyle}">
       <header style="display:flex;align-items:center;justify-content:space-between;gap:var(--size-s,0.75rem)">
         <div>
-          <code style="font-family:${MONO};font-size:var(--font-size-sm,0.875rem);font-weight:600">${role}</code>
+          <code style="font-family:${MONO};font-size:var(--font-size-s,0.875rem);font-weight:600">${role}</code>
           <span style="display:block;font-size:var(--font-size-xs,0.75rem);color:${MUTED}">${roleLabel}</span>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem">
@@ -1631,13 +1631,13 @@ var SemanticPalette = class extends VBElement {
     const subtleFg = this.#darken(hex);
     return [
       this.#sample({
-        render: `<button type="button" tabindex="-1" style="all:unset;display:inline-block;padding:0.375rem 0.875rem;border-radius:${RADIUS_S};background:${hex};color:${textOnRole};font-family:inherit;font-size:var(--font-size-sm,0.875rem);font-weight:600;cursor:default">Button</button>`,
+        render: `<button type="button" tabindex="-1" style="all:unset;display:inline-block;padding:0.375rem 0.875rem;border-radius:${RADIUS_S};background:${hex};color:${textOnRole};font-family:inherit;font-size:var(--font-size-s,0.875rem);font-weight:600;cursor:default">Button</button>`,
         fg: textOnRole,
         bg: hex,
         caption: "On role"
       }),
       this.#sample({
-        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-sm,0.875rem);font-weight:500;text-decoration:underline">Linked text</span>`,
+        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-s,0.875rem);font-weight:500;text-decoration:underline">Linked text</span>`,
         fg: hex,
         bg: surface || "#ffffff",
         caption: "On surface"
@@ -1657,7 +1657,7 @@ var SemanticPalette = class extends VBElement {
     const onRole = pickContrastingHex(hex);
     return [
       this.#sample({
-        render: `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-radius:${RADIUS_S};background:${subtleBg};color:${statusText};border:1px solid ${hex};font-size:var(--font-size-sm,0.875rem);max-inline-size:100%">
+        render: `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-radius:${RADIUS_S};background:${subtleBg};color:${statusText};border:1px solid ${hex};font-size:var(--font-size-s,0.875rem);max-inline-size:100%">
           <span style="display:inline-block;inline-size:0.5rem;block-size:0.5rem;border-radius:50%;background:${hex};flex-shrink:0"></span>
           <span><strong>${ROLE_LABELS[role] || role}</strong> \u2014 message text</span>
         </div>`,
@@ -1672,7 +1672,7 @@ var SemanticPalette = class extends VBElement {
         caption: "Badge"
       }),
       this.#sample({
-        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-sm,0.875rem);font-weight:600">Inline status</span>`,
+        render: `<span style="color:${hex};background:${surface};padding:0.25rem 0.5rem;border-radius:${RADIUS_S};font-size:var(--font-size-s,0.875rem);font-weight:600">Inline status</span>`,
         fg: hex,
         bg: surface || "#ffffff",
         caption: "On surface"
@@ -1696,7 +1696,7 @@ var SemanticPalette = class extends VBElement {
   }
   #renderExport() {
     const toolbar = `display:flex;gap:var(--size-2xs,0.375rem);padding-block-start:var(--size-xs,0.5rem);border-block-start:1px solid ${BORDER}`;
-    const btn = `padding:0.375rem 0.875rem;border:1px solid ${BORDER};border-radius:${RADIUS_S};background:${SURFACE};color:${TEXT};cursor:pointer;font:inherit;font-size:var(--font-size-sm,0.875rem)`;
+    const btn = `padding:0.375rem 0.875rem;border:1px solid ${BORDER};border-radius:${RADIUS_S};background:${SURFACE};color:${TEXT};cursor:pointer;font:inherit;font-size:var(--font-size-s,0.875rem)`;
     return `<div class="sp-export" role="toolbar" aria-label="Export semantic palette" style="${toolbar}">
       <button type="button" class="sp-copy-css" style="${btn}">Copy Theme CSS</button>
       <button type="button" class="sp-copy-json" style="${btn}">Copy JSON</button>
@@ -1874,7 +1874,7 @@ var MotionSpecimen = class extends VBElement {
     return `display:grid;grid-template-columns:5rem 1fr auto;align-items:center;gap:var(--size-s,0.75rem);min-block-size:1.75rem`;
   }
   #nameStyle() {
-    return `font-family:${MONO2};font-size:var(--font-size-sm,0.875rem);color:${MUTED2};text-align:end`;
+    return `font-family:${MONO2};font-size:var(--font-size-s,0.875rem);color:${MUTED2};text-align:end`;
   }
   #valueStyle() {
     return `font-family:${MONO2};font-size:var(--font-size-xs,0.75rem);color:${MUTED2};font-variant-numeric:tabular-nums;white-space:nowrap`;
@@ -2708,7 +2708,7 @@ var BreakpointSpecimen = class extends VBElement {
     }
     return n;
   }
-  /** @type {Array{name: string, raw: string, px: number}} */
+  /** @type {Array<{name: string, raw: string, px: number}>} */
   #stops = [];
   #max = 1;
   /** @type {ResizeObserver | null} */
@@ -2983,11 +2983,11 @@ var PREVIEWS = {
     render: (f, t) => `
       <p style="font-family:${f.display};font-size:var(--font-size-3xl,2rem);font-weight:800;margin:0;line-height:1.15"
         ${E(f.display, "p", "heading")}>${t.heading}</p>
-      <h3 style="font-family:${f.heading};font-size:var(--font-size-lg,1.125rem);font-weight:600;margin:0"
+      <h3 style="font-family:${f.heading};font-size:var(--font-size-l,1.125rem);font-weight:600;margin:0"
         ${E(f.heading, "h3", "subheading")}>${t.subheading}</h3>
-      <p style="font-family:${f.body};font-size:var(--font-size-md,1rem);line-height:1.65;margin:0;color:var(--color-text-muted,#666)"
+      <p style="font-family:${f.body};font-size:var(--font-size-m,1rem);line-height:1.65;margin:0;color:var(--color-text-muted,#666)"
         ${E(f.body, "p", "body")}>${t.body}</p>
-      <pre style="font-family:${f.code};font-size:var(--font-size-sm,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code, "code", "code")}>${t.code}</code></pre>`
+      <pre style="font-family:${f.code};font-size:var(--font-size-s,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code, "code", "code")}>${t.code}</code></pre>`
   },
   article: {
     label: "Article",
@@ -2996,31 +2996,31 @@ var PREVIEWS = {
         ${E(f.body, "small", "eyebrow")}>${t.eyebrow}</small>
       <h2 style="font-family:${f.heading};font-size:var(--font-size-2xl,1.75rem);font-weight:700;margin:0;line-height:1.2"
         ${E(f.heading, "h2", "heading")}>${t.heading}</h2>
-      <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0"
+      <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0"
         ${E(f.body, "p", "byline")}>${t.byline}</p>
       <p style="font-family:${f.body};line-height:1.7;margin:0" ${E(f.body, "p", "body")}>${t.body}</p>
-      <h3 style="font-family:${f.heading};font-size:var(--font-size-lg,1.125rem);font-weight:600;margin:0"
+      <h3 style="font-family:${f.heading};font-size:var(--font-size-l,1.125rem);font-weight:600;margin:0"
         ${E(f.heading, "h3", "subheading")}>${t.subheading}</h3>
       <p style="font-family:${f.body};line-height:1.7;margin:0" ${E(f.body, "p", "body2")}>${t.body2}</p>
-      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-lg,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)"
+      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-l,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)"
         ${E(f.display, "blockquote", "quote")}>${t.quote}</blockquote>
-      <pre style="font-family:${f.code};font-size:var(--font-size-sm,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code, "code", "code")}>${t.code}</code></pre>`
+      <pre style="font-family:${f.code};font-size:var(--font-size-s,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code ${E(f.code, "code", "code")}>${t.code}</code></pre>`
   },
   "long-article": {
     label: "Long Article",
     render: (f, t) => `
       <small style="font-family:${f.body};font-size:var(--font-size-xs,0.75rem);text-transform:uppercase;letter-spacing:0.08em;color:var(--color-interactive,oklch(55% .2 260));font-weight:600">${t.eyebrow}</small>
       <h1 style="font-family:${f.display};font-size:var(--font-size-3xl,2rem);font-weight:800;margin:0;line-height:1.15">${t.heading}</h1>
-      <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0">${t.byline}</p>
-      <p style="font-family:${f.body};font-size:var(--font-size-lg,1.125rem);line-height:1.6;margin:0;color:var(--color-text-muted,#666)">${t.lead}</p>
+      <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0">${t.byline}</p>
+      <p style="font-family:${f.body};font-size:var(--font-size-l,1.125rem);line-height:1.6;margin:0;color:var(--color-text-muted,#666)">${t.lead}</p>
       <h2 style="font-family:${f.heading};font-size:var(--font-size-xl,1.375rem);font-weight:700;margin:0">${t.subheading}</h2>
       <p style="font-family:${f.body};line-height:1.7;margin:0">${t.body}</p>
       <p style="font-family:${f.body};line-height:1.7;margin:0">${t.body2}</p>
-      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-lg,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)">${t.quote}</blockquote>
+      <blockquote style="font-family:${f.display};font-style:italic;font-size:var(--font-size-l,1.125rem);border-inline-start:3px solid var(--color-interactive,oklch(55% .2 260));padding-inline-start:var(--size-m,1rem);margin:0;color:var(--color-text-muted,#666)">${t.quote}</blockquote>
       <h2 style="font-family:${f.heading};font-size:var(--font-size-xl,1.375rem);font-weight:700;margin:0">Implementation Details</h2>
       <p style="font-family:${f.body};line-height:1.7;margin:0">Design tokens form the atomic layer of any visual system. Colors, spacing, typography, and motion are expressed as named variables that cascade through every component. When a token changes, every surface that references it updates automatically \u2014 no find-and-replace, no missed instances.</p>
-      <pre style="font-family:${f.code};font-size:var(--font-size-sm,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code>${t.code}</code></pre>
-      <h3 style="font-family:${f.heading};font-size:var(--font-size-lg,1.125rem);font-weight:600;margin:0">Key Takeaways</h3>
+      <pre style="font-family:${f.code};font-size:var(--font-size-s,0.875rem);line-height:1.5;margin:0;padding:var(--size-s,0.75rem);background:var(--color-surface-sunken,#eee);border-radius:var(--radius-s,0.25rem);overflow-x:auto"><code>${t.code}</code></pre>
+      <h3 style="font-family:${f.heading};font-size:var(--font-size-l,1.125rem);font-weight:600;margin:0">Key Takeaways</h3>
       <ul style="font-family:${f.body};line-height:1.7;margin:0;padding-inline-start:1.5rem">
         <li>Typography sets the emotional tone before a single word is read</li>
         <li>Pair contrast with harmony \u2014 serif headings with sans-serif body</li>
@@ -3035,13 +3035,13 @@ var PREVIEWS = {
         <div style="border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-xs,0.5rem)">
           <h4 style="font-family:${f.heading};font-weight:600;margin:0" ${E(f.heading, "h4", "cardTitle")}>Premium Plan</h4>
           <p style="font-family:${f.display};font-size:var(--font-size-2xl,1.75rem);font-weight:700;margin:0">$49<small style="font-size:0.5em;font-weight:400">/mo</small></p>
-          <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0" ${E(f.body, "p", "cardBody")}>Everything you need to build faster.</p>
+          <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0" ${E(f.body, "p", "cardBody")}>Everything you need to build faster.</p>
           <code style="font-family:${f.code};font-size:var(--font-size-xs,0.75rem);background:var(--color-surface-sunken,#eee);padding:0.2rem 0.4rem;border-radius:0.25rem" ${E(f.code, "code", "cardCode")}>npm install acme</code>
         </div>
         <div style="border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-xs,0.5rem)">
           <h4 style="font-family:${f.heading};font-weight:600;margin:0">Enterprise</h4>
           <p style="font-family:${f.display};font-size:var(--font-size-2xl,1.75rem);font-weight:700;margin:0">Custom</p>
-          <p style="font-family:${f.body};font-size:var(--font-size-sm,0.875rem);color:var(--color-text-muted,#666);margin:0">Dedicated support and SLA guarantees.</p>
+          <p style="font-family:${f.body};font-size:var(--font-size-s,0.875rem);color:var(--color-text-muted,#666);margin:0">Dedicated support and SLA guarantees.</p>
           <code style="font-family:${f.code};font-size:var(--font-size-xs,0.75rem);background:var(--color-surface-sunken,#eee);padding:0.2rem 0.4rem;border-radius:0.25rem">contact@acme.dev</code>
         </div>
       </div>`
@@ -3054,7 +3054,7 @@ var PREVIEWS = {
           ${E(f.body, "p", "eyebrow")}>${t.eyebrow}</p>
         <h1 style="font-family:${f.display};font-size:clamp(2rem,5vw,3rem);font-weight:800;margin:0;line-height:1.1"
           ${E(f.display, "h1", "heading")}>${t.heading}</h1>
-        <p style="font-family:${f.body};font-size:var(--font-size-lg,1.125rem);color:var(--color-text-muted,#666);margin:var(--size-s,0.75rem) auto 0;max-width:40ch"
+        <p style="font-family:${f.body};font-size:var(--font-size-l,1.125rem);color:var(--color-text-muted,#666);margin:var(--size-s,0.75rem) auto 0;max-width:40ch"
           ${E(f.body, "p", "body")}>${t.body}</p>
       </div>`
   }
@@ -3112,7 +3112,7 @@ var FontPairer = class extends VBElement {
     const surface = "var(--color-surface, #fff)";
     const raised = "var(--color-surface-raised, #f5f5f5)";
     const muted = "var(--color-text-muted, #666)";
-    const smFont = "var(--font-size-sm, 0.875rem)";
+    const smFont = "var(--font-size-s, 0.875rem)";
     const xsFont = "var(--font-size-xs, 0.75rem)";
     const selectStyle = `font:inherit;font-size:${smFont};padding:0.35rem 0.5rem;border:1px solid ${border};border-radius:4px;background:${surface}`;
     const roles = [
@@ -3397,7 +3397,7 @@ var GradientBuilder = class extends VBElement {
     const surface = "var(--color-surface, #fff)";
     const muted = "var(--color-text-muted, #666)";
     const mono = "var(--font-mono, monospace)";
-    const smFont = "var(--font-size-sm, 0.875rem)";
+    const smFont = "var(--font-size-s, 0.875rem)";
     const xsFont = "var(--font-size-xs, 0.75rem)";
     const preview = `<div class="gb-preview" style="height:4rem;border-radius:${radius};background:${css};border:1px solid ${border}"></div>`;
     const selectStyle = `font:inherit;font-size:${smFont};padding:0.25rem 0.5rem;border:1px solid ${border};border-radius:4px;background:${surface}`;
@@ -4087,7 +4087,7 @@ var ThemeImport = class extends VBElement {
 };
 function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, (ch) => (
-    /** @type {Recordstring,string} */
+    /** @type {Record<string,string>} */
     {
       "&": "&amp;",
       "<": "&lt;",
@@ -4150,12 +4150,12 @@ var ThemeCatalog = class extends VBElement {
     const card = `border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);background:var(--color-surface,#fff);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-2xs,0.375rem);min-block-size:0`;
     const grid = `display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:var(--size-s,0.75rem)`;
     const muted = `font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666)`;
-    const title = `margin:0;font-size:var(--font-size-md,1rem);font-weight:600;color:var(--color-text,#222)`;
+    const title = `margin:0;font-size:var(--font-size-m,1rem);font-weight:600;color:var(--color-text,#222)`;
     const btn = `align-self:flex-start;padding:0.375rem 0.75rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-primary,#0066cc);color:var(--color-text-on-primary,#fff);cursor:pointer;font:inherit;font-size:var(--font-size-xs,0.75rem)`;
     const tag = `display:inline-block;padding:0.125rem 0.375rem;border-radius:0.25rem;background:var(--color-surface-raised,#f3f3f3);${muted};margin-inline-end:0.25rem`;
     this.innerHTML = `
       <div class="tc-head" style="display:flex;align-items:baseline;gap:var(--size-s,0.75rem);margin-block-end:var(--size-s,0.75rem);flex-wrap:wrap">
-        <strong style="font-size:var(--font-size-sm,0.875rem)">Start from a known system</strong>
+        <strong style="font-size:var(--font-size-s,0.875rem)">Start from a known system</strong>
         <span class="tc-target" style="${muted}"></span>
       </div>
       <div class="tc-grid" style="${grid}" role="list"></div>
@@ -4200,7 +4200,7 @@ var ThemeCatalog = class extends VBElement {
     const grid = this.querySelector(".tc-grid");
     if (!grid || !this.#entries) return;
     const card = `border:1px solid var(--color-border,#ddd);border-radius:var(--radius-m,0.5rem);background:var(--color-surface,#fff);padding:var(--size-m,1rem);display:flex;flex-direction:column;gap:var(--size-2xs,0.375rem)`;
-    const title = `margin:0;font-size:var(--font-size-md,1rem);font-weight:600;color:var(--color-text,#222)`;
+    const title = `margin:0;font-size:var(--font-size-m,1rem);font-weight:600;color:var(--color-text,#222)`;
     const btn = `align-self:flex-start;margin-block-start:auto;padding:0.375rem 0.75rem;border:1px solid var(--color-border,#ccc);border-radius:var(--radius-s,0.25rem);background:var(--color-primary,#0066cc);color:var(--color-text-on-primary,#fff);cursor:pointer;font:inherit;font-size:var(--font-size-xs,0.75rem)`;
     const muted = `font-size:var(--font-size-xs,0.75rem);color:var(--color-text-muted,#666)`;
     const tag = `display:inline-block;padding:0.125rem 0.375rem;border-radius:0.25rem;background:var(--color-surface-raised,#f3f3f3);${muted};margin-inline-end:0.25rem`;
@@ -4293,7 +4293,7 @@ var ThemeCatalog = class extends VBElement {
 };
 function escapeHTML2(s) {
   return String(s).replace(/[&<>"']/g, (ch) => (
-    /** @type {Recordstring,string} */
+    /** @type {Record<string,string>} */
     {
       "&": "&amp;",
       "<": "&lt;",

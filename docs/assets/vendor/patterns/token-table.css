@@ -2,7 +2,7 @@
  * Design System Token Table
  *
  * Usage:
- *   table class="ds-token-table"
+ *   <table class="ds-token-table">
  *     <thead><tr><th>Token</th><th>Preview</th><th>Value</th></tr></thead>
  *     <tbody>
  *       <tr>
