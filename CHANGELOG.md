@@ -11,6 +11,11 @@ This project follows [Semantic Versioning](https://semver.org/).
   `data-token-sample`, so an `editable` specimen of those types updates the
   sample live like shadow, radius and size already did.
 - `<component-sampler>` doc page had code samples but no live demo.
+- 23 links and two embedded demos still pointed at vanilla-breeze.com pages
+  for things that moved out of VB core (the pack elements, the pack guide,
+  the three tools, the Meridian showcase, the brand guide, the project
+  planning pack). Theme Composer's "How this page is built" was all 404s.
+  They now point at this site (and profpowell.github.io/vb-project-planning).
 
 ### Internal
 
