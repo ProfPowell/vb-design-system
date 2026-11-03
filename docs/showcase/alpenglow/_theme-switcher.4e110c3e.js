@@ -300,7 +300,11 @@
     var script = document.createElement('script');
     script.id = 'vb-js';
     script.type = 'module';
-    script.src = '/assets/vendor/vanilla-breeze.js';
+    /* The page declares the bundle URL in <link id="vb-js-src" rel="modulepreload">
+       so the build (base path, content hash) can rewrite it; JS strings are
+       not rewritten. The preload also makes the toggle to VB instant. */
+    var src = document.getElementById('vb-js-src');
+    script.src = src ? src.href : '/assets/vendor/vanilla-breeze.js';
     document.head.appendChild(script);
 
     /* Restore original vb-theme after ThemeManager has initialized.
