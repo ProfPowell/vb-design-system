@@ -177,8 +177,8 @@ description: "Every Vanilla Breeze theme with downloadable CSS and DTCG (Design 
 <script type="module">
   // Render the library table from the manifest. Pure DOM, no framework.
   // CDN base is base-path-aware so the page works both at the site root and
-  // under the GitHub Pages project subpath (%BASE_PATH% is substituted at publish).
-  const CDN_THEMES = '%BASE_PATH%/cdn/themes';
+  // under the GitHub Pages project subpath (read from <html data-base-path>).
+  const CDN_THEMES = (document.documentElement.dataset.basePath || '') + '/cdn/themes';
   const tableEl  = document.getElementById('lib-table');
   const tbody    = tableEl?.querySelector('tbody');
   const status   = document.getElementById('lib-status');

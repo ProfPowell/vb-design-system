@@ -642,9 +642,10 @@ description: "Unified playground for theme identity — border styles, icon sets
   // Theme CSS Loader (for vignettes section)
   // ========================================
 
-  // Base-path-aware CDN root (%BASE_PATH% is substituted at publish time; empty
+  // Base-path-aware CDN root (<html data-base-path> is set by cook from config/data.js; empty
   // string for the local root, "/vb-design-system" under GitHub Pages).
-  const CDN_BASE = '%BASE_PATH%/cdn';
+  const BASE = document.documentElement.dataset.basePath || '';
+  const CDN_BASE = BASE + '/cdn';
   const loadedThemes = new Set();
 
   async function ensureThemeCSS(themeName) {
@@ -748,7 +749,7 @@ description: "Unified playground for theme identity — border styles, icon sets
 
   // Surfaces are published as foldered pages (…/surfaces/<name>/index.html),
   // so the request path uses the trailing-slash form, not "<name>.html".
-  const SURFACE_BASE = '%BASE_PATH%/tools/theme-lab/surfaces/';
+  const SURFACE_BASE = BASE + '/tools/theme-lab/surfaces/';
   const frame = document.getElementById('surface-frame');
   const pickerButtons = document.querySelectorAll('.surface-picker button');
   let activeSurface = 'typography-prose';
@@ -867,7 +868,7 @@ description: "Unified playground for theme identity — border styles, icon sets
     btn.addEventListener('click', () => {
       const themeId = btn.dataset.composerTheme;
       localStorage.setItem('vb-composer-load-theme', themeId);
-      window.location.href = '%BASE_PATH%/tools/theme-composer/';
+      window.location.href = BASE + '/tools/theme-composer/';
     });
   });
 

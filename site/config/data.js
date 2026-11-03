@@ -9,6 +9,10 @@ export default {
     vbDocs: 'https://vanilla-breeze.com/docs/',
     packCss: 'vb-design-system.css',
     packJs: 'vb-design-system.js',
+    // Pages subpath for inline scripts and data-* attributes, which cook's
+    // basePath pass (HTML href/src only) does not rewrite. Empty under
+    // `cook dev` (NODE_ENV=development) so the site still runs at '/'.
+    basePath: process.env.NODE_ENV === 'development' ? '' : '/vb-design-system',
   },
   defaultTheme: 'modern',
 };

@@ -36,7 +36,7 @@ Full change loop for a component: edit `src/` → `npm run build` → `cd site &
 - Icons via the `[data-icon]` primitive; `<icon-wc>`, `<brand-mark>`, `<color-picker>`, `<drag-surface>`, `<theme-picker>` stay in VB core and are runtime peers, not bundled.
 - Every component ships with a doc page in `site/src/pages/elements/<name>.html` (`<browser-window>` + `<code-block>` demos), an `api.json`, and a Playwright spec. Never defer the doc page.
 - Doc pages and demos: semantic elements or VB custom elements, no bare `<div>`.
-- Root-absolute URLs in site pages (`/elements/...`, `/cdn/...`) are prefixed with the Pages base at publish time. Do not hardcode `/vb-design-system/`.
+- Root-absolute URLs in site pages (`/elements/...`, `/cdn/...`) are prefixed with the Pages base by cook (`basePath` in `site/config/main.js`, production builds only). Inline scripts and `data-*` attributes use `${site.basePath}` (from `site/config/data.js`, empty under `cook dev`). Do not hardcode `/vb-design-system/`. CSS/JS are content-hashed by cook `fingerprint`; files under `cdn/` and `pagefind/` are excluded because they are fetched by computed URL at runtime.
 
 ## Shared with VB core (keep in sync)
 

@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-base-path="${site.basePath}" data-icon-path="${site.basePath}/cdn/icons">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Home Preview — Theme Lab Surface</title>
-  <script>window.__VB_THEME_BASE="%BASE_PATH%/cdn";document.documentElement.dataset.iconPath="%BASE_PATH%/cdn/icons";</script>
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <link rel="stylesheet" href="/assets/vendor/vanilla-breeze.css" />
   <style>
 body { padding: var(--size-l); }
