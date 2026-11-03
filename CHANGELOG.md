@@ -5,6 +5,13 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `<token-specimen>` color swatches and border samples now carry
+  `data-token-sample`, so an `editable` specimen of those types updates the
+  sample live like shadow, radius and size already did.
+- `<component-sampler>` doc page had code samples but no live demo.
+
 ### Internal
 
 - Docs site built with cook-ssg 2.5: `fingerprint` is on (content-hashed
@@ -27,6 +34,9 @@ This project follows [Semantic Versioning](https://semver.org/).
   a Vanilla Breeze repo path that never existed here (404, so the `data-labs`
   hover and texture effects were unstyled). The labs stylesheet is now
   vendored from the VB package like the other assets.
+- Playwright specs for the seven components that had none: color-palette,
+  component-sampler, motion-specimen, spacing-specimen, theme-export,
+  token-specimen, type-specimen. Every component is now covered.
 
 ## [0.2.0] - 2026-11-02
 

@@ -202,7 +202,7 @@ function renderBorder(tokens, prefix, showValues) {
   for (const name of tokens) {
     html += `<div role="listitem" style="display:grid;grid-template-columns:4rem 1fr auto;align-items:center;gap:0.75rem">
       <span style="font-family:var(--font-mono,monospace);font-size:0.875rem;color:var(--color-text-muted,#666);text-align:end">${name}</span>
-      <div style="border-block-start:var(${prefix}${name}) solid var(--color-text,#333);min-inline-size:4rem" aria-hidden="true"></div>
+      <div data-token-sample="${name}" style="border-block-start:var(${prefix}${name}) solid var(--color-text,#333);min-inline-size:4rem" aria-hidden="true"></div>
       ${showValues ? `<span data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.75rem;color:var(--color-text-muted,#666);font-variant-numeric:tabular-nums"></span>` : ''}
     </div>`;
   }
@@ -214,7 +214,7 @@ function renderColor(tokens, prefix, showValues) {
   let html = `<div role="list" style="display:flex;flex-wrap:wrap;gap:0.75rem">`;
   for (const name of tokens) {
     html += `<div role="listitem" style="text-align:center">
-      <div style="width:4rem;height:3rem;background:var(${prefix}${name});border-radius:var(--radius-s,0.25rem);border:1px solid var(--color-border,#ddd)" aria-hidden="true"></div>
+      <div data-token-sample="${name}" style="width:4rem;height:3rem;background:var(${prefix}${name});border-radius:var(--radius-s,0.25rem);border:1px solid var(--color-border,#ddd)" aria-hidden="true"></div>
       <p style="font-family:var(--font-mono,monospace);font-size:0.625rem;color:var(--color-text-muted,#666);margin-block-start:0.25rem">${name}</p>
       ${showValues ? `<p data-token-value="${name}" style="font-family:var(--font-mono,monospace);font-size:0.5625rem;color:var(--color-text-muted,#999);max-width:4rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></p>` : ''}
     </div>`;
