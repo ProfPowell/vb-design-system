@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). -->
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -85,10 +85,10 @@
 
   <title>type-specimen — VB Design System</title>
   <meta name="description" content="Typography specimen web component with character grid, weight scale, type scale, and editable sample text.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -262,7 +262,7 @@
     <type-specimen font-family="Georgia" label="Georgia" show-characters="" show-weights=""></type-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Basic specimen" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Basic specimen" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -743,9 +743,9 @@
         <div class="label-container" id="code-label"><span class="label">Basic specimen</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">"Georgia"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">"Georgia"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;type-specimen
   font-family=&quot;Georgia&quot;
@@ -828,7 +828,7 @@
   <div class="example">
     <type-specimen font-family="system-ui" label="System UI" show-scale=""></type-specimen>
   </div>
-  <code-block language="html" data-ssr label="Type scale only" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Type scale only" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1309,9 +1309,9 @@
         <div class="label-container" id="code-label"><span class="label">Type scale only</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;system-ui&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;System UI&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">"system-ui"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">"System UI"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;type-specimen
   font-family=&quot;system-ui&quot;
@@ -1330,7 +1330,7 @@
   <div class="example">
     <type-specimen font-family="system-ui" label="System UI" show-characters="" show-weights="" show-scale="" weights="300,400,500,600,700"></type-specimen>
   </div>
-  <code-block language="html" data-ssr label="Full specimen" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Full specimen" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1811,9 +1811,9 @@
         <div class="label-container" id="code-label"><span class="label">Full specimen</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;system-ui&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;System UI&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">weights</span>=<span class="hljs-string">&quot;300,400,500,600,700&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">"system-ui"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">"System UI"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">weights</span>=<span class="hljs-string">"300,400,500,600,700"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;type-specimen
   font-family=&quot;system-ui&quot;
@@ -1830,7 +1830,7 @@
   <div class="example">
     <type-specimen font-family="'Courier New', monospace" label="Courier New" sample="Pack my box with five dozen liquor jugs" show-characters="" weights="400,700"></type-specimen>
   </div>
-  <code-block language="html" data-ssr label="Custom sample" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Custom sample" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -2311,9 +2311,9 @@
         <div class="label-container" id="code-label"><span class="label">Custom sample</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;&#x27;Courier New&#x27;, monospace&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Courier New&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">sample</span>=<span class="hljs-string">&quot;Pack my box with five dozen liquor jugs&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">weights</span>=<span class="hljs-string">&quot;400,700&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">"'Courier New', monospace"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">"Courier New"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">sample</span>=<span class="hljs-string">"Pack my box with five dozen liquor jugs"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">weights</span>=<span class="hljs-string">"400,700"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;type-specimen
   font-family=&quot;&#39;Courier New&#39;, monospace&quot;
@@ -2332,7 +2332,7 @@
     <type-specimen font-family="Georgia" editable="" show-characters="" show-weights=""></type-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Live font editing" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Live font editing" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -2813,9 +2813,9 @@
         <div class="label-container" id="code-label"><span class="label">Live font editing</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">"Georgia"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-characters</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-weights</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;type-specimen
   font-family=&quot;Georgia&quot;
@@ -2826,7 +2826,7 @@
 
   <p>Restrict overrides to a scoped subtree by pointing <code>target</code> at any selector:</p>
 
-  <code-block language="html" data-ssr label="Scoped target" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Scoped target" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -3307,9 +3307,9 @@
         <div class="label-container" id="code-label"><span class="label">Scoped target</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span><span class="">10</span><span class="">11</span><span class="">12</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;preview-scope&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Preview<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Edits only affect this block.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">&quot;Georgia&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;#preview-scope&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">token</span>=<span class="hljs-string">&quot;font-family-base&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"preview-scope"</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Preview<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Edits only affect this block.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">font-family</span>=<span class="hljs-string">"Georgia"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">editable</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">target</span>=<span class="hljs-string">"#preview-scope"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">token</span>=<span class="hljs-string">"font-family-base"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-scale</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;div id=&quot;preview-scope&quot;&gt;
   &lt;h2&gt;Preview&lt;/h2&gt;
@@ -3325,7 +3325,7 @@
 &lt;/type-specimen&gt;</textarea></code-block>
 
   <p>Listen for <code>type-specimen:change</code> events to collect the edits elsewhere:</p>
-  <code-block language="javascript" data-ssr label="Collecting edits" show-lines><template shadowrootmode="open"><style>
+  <code-block language="javascript" data-ssr="" label="Collecting edits" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -3806,9 +3806,9 @@
         <div class="label-container" id="code-label"><span class="label">Collecting edits</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-javascript" tabindex="0"><span class="code-line"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;type-specimen&#x27;</span>)</span><span class="code-line">  .<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;type-specimen:change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {</span><span class="code-line">    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">detail</span>);</span><span class="code-line">    <span class="hljs-comment">// { fontFamily: &quot;Inter, sans-serif&quot;, token: &quot;font-family-base&quot;, target: &quot;:root&quot; }</span></span><span class="code-line">  });</span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        <pre><code class="language-javascript" tabindex="0"><span class="code-line"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">'type-specimen'</span>)</span><span class="code-line">  .<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">'type-specimen:change'</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {</span><span class="code-line">    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">detail</span>);</span><span class="code-line">    <span class="hljs-comment">// { fontFamily: "Inter, sans-serif", token: "font-family-base", target: ":root" }</span></span><span class="code-line">  });</span></code></pre>
       </div>
       </template><textarea style="display:none">document.querySelector(&#39;type-specimen&#39;)
   .addEventListener(&#39;type-specimen:change&#39;, (e) =&gt; {
@@ -3881,10 +3881,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>

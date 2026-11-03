@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where /cdn lives under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). Runtime config
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). Runtime config
        beats patching minified paths. -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -86,10 +86,10 @@
 
   <title>Elements — VB Design System</title>
   <meta name="description" content="All components in the VB Design System pack.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -218,10 +218,10 @@
     <a href="#" data-back-to-top="" aria-label="Back to top">↑</a>
   </fab-stack>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>

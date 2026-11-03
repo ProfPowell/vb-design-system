@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). -->
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -85,10 +85,10 @@
 
   <title>icon-set — VB Design System</title>
   <meta name="description" content="Searchable grid of icons in a set, with click-to-copy names.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -263,7 +263,7 @@
   <div class="example">
     <icon-set set="lucide"></icon-set>
   </div>
-  <code-block language="html" data-ssr label="Full set" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Full set" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -744,9 +744,9 @@
         <div class="label-container" id="code-label"><span class="label">Full set</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">icon-set</span> <span class="hljs-attr">set</span>=<span class="hljs-string">&quot;lucide&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">icon-set</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">icon-set</span> <span class="hljs-attr">set</span>=<span class="hljs-string">"lucide"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">icon-set</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;icon-set set=&quot;lucide&quot;&gt;&lt;/icon-set&gt;</textarea></code-block>
 
@@ -755,7 +755,7 @@
   <div class="example">
     <icon-set names="star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"></icon-set>
   </div>
-  <code-block language="html" data-ssr label="Curated subset" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Curated subset" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1236,9 +1236,9 @@
         <div class="label-container" id="code-label"><span class="label">Curated subset</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">icon-set</span> <span class="hljs-attr">names</span>=<span class="hljs-string">&quot;star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">icon-set</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">icon-set</span> <span class="hljs-attr">names</span>=<span class="hljs-string">"star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">icon-set</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;icon-set names=&quot;star home search settings heart check x menu user bell calendar mail file folder image link lock trash download upload&quot;&gt;&lt;/icon-set&gt;</textarea></code-block>
 </section>
@@ -1344,10 +1344,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>

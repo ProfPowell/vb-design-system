@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). -->
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -85,10 +85,10 @@
 
   <title>theme-export — VB Design System</title>
   <meta name="description" content="Collects VB custom property overrides from a scope and emits them as a theme.css block or JSON. The assembly glue for the Theme Composer.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -266,7 +266,7 @@
     <spacing-specimen editable="" tokens="xs,s,m,l" label="Spacing"></spacing-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Live export with editable specimen" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Live export with editable specimen" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -747,9 +747,9 @@
         <div class="label-container" id="code-label"><span class="label">Live export with editable specimen</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span> <span class="hljs-attr">live</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Live Theme Output&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;xs,s,m,l&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Spacing&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span> <span class="hljs-attr">live</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Live Theme Output"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">"xs,s,m,l"</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Spacing"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;theme-export live label=&quot;Live Theme Output&quot;&gt;&lt;/theme-export&gt;
 
@@ -812,7 +812,7 @@
   <h2>Scoping to a Subtree</h2>
   <p>Pass <code>scope</code> and <code>selector</code> to collect overrides from a subtree and emit them targeting a different selector — useful for building theme stylesheets from a preview block.</p>
 
-  <code-block language="html" data-ssr label="Scoped collection" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Scoped collection" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1293,9 +1293,9 @@
         <div class="label-container" id="code-label"><span class="label">Scoped collection</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span><span class="">10</span><span class="">11</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;preview&quot;</span> <span class="hljs-attr">data-theme</span>=<span class="hljs-string">&quot;custom&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;#preview&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;#preview&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;#preview&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">selector</span>=<span class="hljs-string">&quot;[data-theme=&#x27;custom&#x27;]&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">live</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Custom Theme CSS&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"preview"</span> <span class="hljs-attr">data-theme</span>=<span class="hljs-string">"custom"</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">type-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"#preview"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">type-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">spacing-specimen</span> <span class="hljs-attr">editable</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"#preview"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">spacing-specimen</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><span class="code-line"> </span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">scope</span>=<span class="hljs-string">"#preview"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">selector</span>=<span class="hljs-string">"[data-theme='custom']"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">live</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">label</span>=<span class="hljs-string">"Custom Theme CSS"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;div id=&quot;preview&quot; data-theme=&quot;custom&quot;&gt;
   &lt;type-specimen editable target=&quot;#preview&quot;&gt;&lt;/type-specimen&gt;
@@ -1314,7 +1314,7 @@
   <h2>JSON Format</h2>
   <p>Switch to <code>format="json"</code> for a design tokens pipeline.</p>
 
-  <code-block language="html" data-ssr label="JSON output" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="JSON output" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1795,9 +1795,9 @@
         <div class="label-container" id="code-label"><span class="label">JSON output</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span> <span class="hljs-attr">format</span>=<span class="hljs-string">&quot;json&quot;</span> <span class="hljs-attr">live</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">theme-export</span> <span class="hljs-attr">format</span>=<span class="hljs-string">"json"</span> <span class="hljs-attr">live</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">theme-export</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;theme-export format=&quot;json&quot; live&gt;&lt;/theme-export&gt;</textarea></code-block>
 </section>
@@ -1870,10 +1870,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>

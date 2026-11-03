@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -83,10 +83,10 @@
 
   <title>Design System Pack — VB Design System</title>
   <meta name="description" content="Components and CSS patterns for documenting brand guidelines, design tokens, and visual standards.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -208,7 +208,7 @@
 <section>
   <h2>Loading</h2>
 
-  <code-block language="html" data-ssr label="CDN loading"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="CDN loading"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -689,14 +689,14 @@
         <div class="label-container" id="code-label"><span class="label">CDN loading</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/cdn/packs/design-system.full.css&quot;</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/cdn/packs/design-system.full.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/cdn/packs/design-system.full.css"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"module"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/cdn/packs/design-system.full.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;link rel=&quot;stylesheet&quot; href=&quot;/cdn/packs/design-system.full.css&quot;&gt;
 &lt;script type=&quot;module&quot; src=&quot;/cdn/packs/design-system.full.js&quot;&gt;&lt;/script&gt;</textarea></code-block>
 
-  <code-block language="js" data-ssr label="Runtime activation"><template shadowrootmode="open"><style>
+  <code-block language="js" data-ssr="" label="Runtime activation"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1177,9 +1177,9 @@
         <div class="label-container" id="code-label"><span class="label">Runtime activation</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> { activateBundle } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;/cdn/vanilla-breeze.js&#x27;</span></span><span class="code-line"><span class="hljs-keyword">await</span> <span class="hljs-title function_">activateBundle</span>(<span class="hljs-string">&#x27;design-system&#x27;</span>)</span></code></pre>
+        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> { activateBundle } <span class="hljs-keyword">from</span> <span class="hljs-string">'/cdn/vanilla-breeze.js'</span></span><span class="code-line"><span class="hljs-keyword">await</span> <span class="hljs-title function_">activateBundle</span>(<span class="hljs-string">'design-system'</span>)</span></code></pre>
       </div>
       </template><textarea style="display:none">import { activateBundle } from &#39;/cdn/vanilla-breeze.js&#39;
 await activateBundle(&#39;design-system&#39;)</textarea></code-block>
@@ -1193,7 +1193,7 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
   <h2>Token Specimen Types</h2>
   <p>One component, five rendering modes. The <code>type</code> attribute controls what's displayed while sharing the same core API.</p>
 
-  <code-block language="html" data-ssr label="Shadow scale"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Shadow scale"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1674,13 +1674,13 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Shadow scale</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;shadow&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Elevation Scale&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"shadow"</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Elevation Scale"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;token-specimen type=&quot;shadow&quot; label=&quot;Elevation Scale&quot;&gt;&lt;/token-specimen&gt;</textarea></code-block>
 
-  <code-block language="html" data-ssr label="Radius scale"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Radius scale"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -2161,13 +2161,13 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Radius scale</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radius&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Corner Radius&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"radius"</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Corner Radius"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;token-specimen type=&quot;radius&quot; label=&quot;Corner Radius&quot;&gt;&lt;/token-specimen&gt;</textarea></code-block>
 
-  <code-block language="html" data-ssr label="Border widths"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Border widths"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -2648,13 +2648,13 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Border widths</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;border&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Border Widths&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"border"</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Border Widths"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;token-specimen type=&quot;border&quot; label=&quot;Border Widths&quot;&gt;&lt;/token-specimen&gt;</textarea></code-block>
 
-  <code-block language="html" data-ssr label="Color tokens"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Color tokens"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -3135,13 +3135,13 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Color tokens</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;color&quot;</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;primary,secondary,accent,success,error&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Brand Colors&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"color"</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">"primary,secondary,accent,success,error"</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Brand Colors"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;token-specimen type=&quot;color&quot; tokens=&quot;primary,secondary,accent,success,error&quot; label=&quot;Brand Colors&quot;&gt;&lt;/token-specimen&gt;</textarea></code-block>
 
-  <code-block language="html" data-ssr label="Size scale"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Size scale"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -3622,9 +3622,9 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Size scale</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;size&quot;</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">&quot;xs,s,m,l,xl&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Spacing&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">token-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"size"</span> <span class="hljs-attr">tokens</span>=<span class="hljs-string">"xs,s,m,l,xl"</span> <span class="hljs-attr">label</span>=<span class="hljs-string">"Spacing"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">token-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;token-specimen type=&quot;size&quot; tokens=&quot;xs,s,m,l,xl&quot; label=&quot;Spacing&quot;&gt;&lt;/token-specimen&gt;</textarea></code-block>
 
@@ -3635,7 +3635,7 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
   <h2>Do/Don't Lists</h2>
   <p>A CSS-only pattern on native <code>&lt;ul&gt;</code> elements. No JavaScript required.</p>
 
-  <code-block language="html" data-ssr label="Do/Don&#39;t list"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Do/Don't list"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -4113,12 +4113,12 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Do/Don&#39;t list</span></div>
+        <div class="label-container" id="code-label"><span class="label">Do/Don't list</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">data-list</span>=<span class="hljs-string">&quot;do-dont&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-do</span>&gt;</span>Use the full logo at minimum 32px height.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-dont</span>&gt;</span>Don&#x27;t stretch or rotate the logo.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-do</span>&gt;</span>Use the monochrome variant for single-color contexts.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-dont</span>&gt;</span>Don&#x27;t add drop shadows or gradients.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">data-list</span>=<span class="hljs-string">"do-dont"</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-do</span>&gt;</span>Use the full logo at minimum 32px height.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-dont</span>&gt;</span>Don't stretch or rotate the logo.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-do</span>&gt;</span>Use the monochrome variant for single-color contexts.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-dont</span>&gt;</span>Don't add drop shadows or gradients.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;ul data-list=&quot;do-dont&quot;&gt;
   &lt;li data-do&gt;Use the full logo at minimum 32px height.&lt;/li&gt;
@@ -4127,7 +4127,7 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
   &lt;li data-dont&gt;Don&#39;t add drop shadows or gradients.&lt;/li&gt;
 &lt;/ul&gt;</textarea></code-block>
 
-  <code-block language="html" data-ssr label="Pro/Con list"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Pro/Con list"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -4608,9 +4608,9 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Pro/Con list</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">data-list</span>=<span class="hljs-string">&quot;pro-con&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-pro</span>&gt;</span>Fast initial load time.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-con</span>&gt;</span>Requires JavaScript for interactivity.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">data-list</span>=<span class="hljs-string">"pro-con"</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-pro</span>&gt;</span>Fast initial load time.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-con</span>&gt;</span>Requires JavaScript for interactivity.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;ul data-list=&quot;pro-con&quot;&gt;
   &lt;li data-pro&gt;Fast initial load time.&lt;/li&gt;
@@ -4622,7 +4622,7 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
   <h2>Token Reference Table</h2>
   <p>A CSS-styled table for documenting individual tokens with inline color previews.</p>
 
-  <code-block language="html" data-ssr label="Token table"><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Token table"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -5103,9 +5103,9 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
         <div class="label-container" id="code-label"><span class="label">Token table</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ds-token-table&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Token<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Preview<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Value<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>--color-primary<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ds-swatch&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;background:var(--color-primary)&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>oklch(50% 0.2 260)<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"ds-token-table"</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Token<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Preview<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Value<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>--color-primary<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"ds-swatch"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"background:var(--color-primary)"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><span class="code-line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>oklch(50% 0.2 260)<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;table class=&quot;ds-token-table&quot;&gt;
   &lt;thead&gt;
@@ -5195,14 +5195,14 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
 
   <!-- Full Vanilla Breeze bundle: provides every component (specimens, theme
        tools, brand-mark, icon-wc, page-toc, theme-picker, site-search…). -->
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
   <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
        that the full bundle omits; registerComponent is first-wins, so loading
        both is safe (no double-registration). -->
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/color-picker.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/color-picker.js?v=mw00lawf"></script>
   
 </body>
 </html>

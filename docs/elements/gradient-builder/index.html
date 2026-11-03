@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). -->
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -85,10 +85,10 @@
 
   <title>gradient-builder — VB Design System</title>
   <meta name="description" content="Interactive CSS gradient builder with color stops, angle control, interpolation space selection, and one-click CSS export.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -262,7 +262,7 @@
     <gradient-builder colors="#6366f1,#ec4899" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="Basic usage" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Basic usage" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -743,9 +743,9 @@
         <div class="label-container" id="code-label"><span class="label">Basic usage</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#6366f1,#ec4899&quot;</span> <span class="hljs-attr">show-export</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span> <span class="hljs-attr">colors</span>=<span class="hljs-string">"#6366f1,#ec4899"</span> <span class="hljs-attr">show-export</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;gradient-builder colors=&quot;#6366f1,#ec4899&quot; show-export&gt;&lt;/gradient-builder&gt;</textarea></code-block>
 </section>
@@ -819,7 +819,7 @@
     <gradient-builder colors="#f59e0b,#ef4444,#8b5cf6" angle="135" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="Three-stop sunset gradient" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Three-stop sunset gradient" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1300,9 +1300,9 @@
         <div class="label-container" id="code-label"><span class="label">Three-stop sunset gradient</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#f59e0b,#ef4444,#8b5cf6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">angle</span>=<span class="hljs-string">&quot;135&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">"#f59e0b,#ef4444,#8b5cf6"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">angle</span>=<span class="hljs-string">"135"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;gradient-builder
   colors=&quot;#f59e0b,#ef4444,#8b5cf6&quot;
@@ -1314,7 +1314,7 @@
     <gradient-builder colors="#06b6d4,#3b82f6,#8b5cf6" type="radial" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="Radial gradient" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Radial gradient" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1795,9 +1795,9 @@
         <div class="label-container" id="code-label"><span class="label">Radial gradient</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#06b6d4,#3b82f6,#8b5cf6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radial&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">"#06b6d4,#3b82f6,#8b5cf6"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">type</span>=<span class="hljs-string">"radial"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;gradient-builder
   colors=&quot;#06b6d4,#3b82f6,#8b5cf6&quot;
@@ -1809,7 +1809,7 @@
     <gradient-builder colors="#ef4444,#3b82f6" interpolation="oklch" show-export=""></gradient-builder>
   </div>
 
-  <code-block language="html" data-ssr label="OKLCH interpolation for vivid hue shift" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="OKLCH interpolation for vivid hue shift" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -2290,9 +2290,9 @@
         <div class="label-container" id="code-label"><span class="label">OKLCH interpolation for vivid hue shift</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">&quot;#ef4444,#3b82f6&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">interpolation</span>=<span class="hljs-string">&quot;oklch&quot;</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">gradient-builder</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">colors</span>=<span class="hljs-string">"#ef4444,#3b82f6"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">interpolation</span>=<span class="hljs-string">"oklch"</span></span></span><span class="code-line"><span class="hljs-tag">  <span class="hljs-attr">show-export</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">gradient-builder</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;gradient-builder
   colors=&quot;#ef4444,#3b82f6&quot;
@@ -2390,10 +2390,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>

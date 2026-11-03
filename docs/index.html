@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where /cdn lives under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). Runtime config
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). Runtime config
        beats patching minified paths. -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -86,10 +86,10 @@
 
   <title>Overview — VB Design System</title>
   <meta name="description" content="Nineteen token-driven Web Components that document, preview, and export a design system on Vanilla Breeze.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -262,7 +262,7 @@
 
   <section data-layout="stack" data-layout-gap="s">
     <h2>Install</h2>
-    <code-block language="bash" data-ssr><template shadowrootmode="open"><style>
+    <code-block language="bash" data-ssr=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -743,12 +743,12 @@
         <div class="label-container" id="code-label"><span class="label">BASH</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
         <pre><code class="language-bash" tabindex="0"><span class="code-line">npm install @profpowell/vb-design-system</span></code></pre>
       </div>
       </template><textarea style="display:none">npm install @profpowell/vb-design-system</textarea></code-block>
-    <code-block language="js" data-ssr><template shadowrootmode="open"><style>
+    <code-block language="js" data-ssr=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1229,9 +1229,9 @@
         <div class="label-container" id="code-label"><span class="label">JS</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
+      <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@profpowell/vb-design-system&#x27;</span>;</span><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@profpowell/vb-design-system/css&#x27;</span>;</span></code></pre>
+        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">'@profpowell/vb-design-system'</span>;</span><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">'@profpowell/vb-design-system/css'</span>;</span></code></pre>
       </div>
       </template><textarea style="display:none">import &#39;@profpowell/vb-design-system&#39;;
 import &#39;@profpowell/vb-design-system/css&#39;;</textarea></code-block>
@@ -1268,10 +1268,10 @@ import &#39;@profpowell/vb-design-system/css&#39;;</textarea></code-block>
     <a href="#" data-back-to-top="" aria-label="Back to top">↑</a>
   </fab-stack>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>

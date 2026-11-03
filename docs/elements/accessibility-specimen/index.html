@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-icon-path="/vb-design-system/cdn/icons">
+<html lang="en" data-page="docs" data-fluid="" data-sticky="" data-base-path="/vb-design-system" data-icon-path="/vb-design-system/cdn/icons">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Tell VB's theme-loader / icon-wc where things live under the Pages subpath
-       (/vb-design-system is replaced at publish; empty for local root). -->
-  <script>window.__VB_THEME_BASE="/vb-design-system/cdn";document.documentElement.dataset.iconPath="/vb-design-system/cdn/icons";</script>
+       (data-base-path is interpolated by cook from site.basePath in config/data.js: empty under cook dev, the Pages subpath in production). -->
+  <script>window.__VB_THEME_BASE=(document.documentElement.dataset.basePath||"")+"/cdn";</script>
   <!-- Theme boot — prevents the flash of the wrong theme (FOUC).
 
      Mirrors vanilla-breeze/site/src/includes/head.html. The doc pages used to
@@ -85,10 +85,10 @@
 
   <title>accessibility-specimen — VB Design System</title>
   <meta name="description" content="WCAG contrast-ratio table and accessibility checklist web component for design-system docs. Computes AA/AAA pass/fail badges from authored foreground/background color pairs.">
-  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw0043hl">
-  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw0043hl">
+  <link rel="stylesheet" href="/vb-design-system/assets/vendor/vanilla-breeze.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/pack/vb-design-system.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/docs.css?v=mw00lawf">
+  <link rel="stylesheet" href="/vb-design-system/assets/site.css?v=mw00lawf">
   
 </head>
 <body style="overflow-x: clip;">
@@ -267,7 +267,7 @@
     </accessibility-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="WCAG contrast table" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="WCAG contrast table" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -748,9 +748,9 @@
         <div class="label-container" id="code-label"><span class="label">WCAG contrast table</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">accessibility-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">&quot;#000000&quot;</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">&quot;#ffffff&quot;</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">&quot;Black on white&quot;</span>&gt;</span>Default text<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">&quot;#666666&quot;</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">&quot;#ffffff&quot;</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">&quot;Mid-gray on white&quot;</span>&gt;</span>Muted text<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">&quot;#ffffff&quot;</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">&quot;#0066cc&quot;</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">&quot;White on accent blue&quot;</span>&gt;</span>Action button<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">&quot;#ffffff&quot;</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">&quot;#dddddd&quot;</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">&quot;White on light-gray&quot;</span>&gt;</span>Bad pairing<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">accessibility-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">accessibility-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">"#000000"</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">"#ffffff"</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">"Black on white"</span>&gt;</span>Default text<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">"#666666"</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">"#ffffff"</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">"Mid-gray on white"</span>&gt;</span>Muted text<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">"#ffffff"</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">"#0066cc"</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">"White on accent blue"</span>&gt;</span>Action button<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">"#ffffff"</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">"#dddddd"</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">"White on light-gray"</span>&gt;</span>Bad pairing<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">accessibility-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;accessibility-specimen&gt;
   &lt;button data-fg=&quot;#000000&quot; data-bg=&quot;#ffffff&quot; data-label=&quot;Black on white&quot;&gt;Default text&lt;/button&gt;
@@ -833,7 +833,7 @@
     </accessibility-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Accessibility checklist" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Accessibility checklist" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1314,9 +1314,9 @@
         <div class="label-container" id="code-label"><span class="label">Accessibility checklist</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span><span class="">5</span><span class="">6</span><span class="">7</span><span class="">8</span><span class="">9</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">accessibility-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checklist&quot;</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">&quot;pass&quot;</span>&gt;</span>Form inputs have associated labels.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">&quot;pass&quot;</span>&gt;</span>Focus indicators are visible at 2px width minimum.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">&quot;warn&quot;</span>&gt;</span>Some images may be missing alt text.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">&quot;fail&quot;</span>&gt;</span>Color contrast on muted text fails AA.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">&quot;na&quot;</span>&gt;</span>No videos in this component (captions N/A).<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">accessibility-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">accessibility-specimen</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"checklist"</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">"pass"</span>&gt;</span>Form inputs have associated labels.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">"pass"</span>&gt;</span>Focus indicators are visible at 2px width minimum.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">"warn"</span>&gt;</span>Some images may be missing alt text.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">"fail"</span>&gt;</span>Color contrast on muted text fails AA.<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">data-status</span>=<span class="hljs-string">"na"</span>&gt;</span>No videos in this component (captions N/A).<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">accessibility-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;accessibility-specimen type=&quot;checklist&quot;&gt;
   &lt;ul&gt;
@@ -1357,7 +1357,7 @@
     </accessibility-specimen>
   </div>
 
-  <code-block language="html" data-ssr label="Named / functional colors also parse" show-lines><template shadowrootmode="open"><style>
+  <code-block language="html" data-ssr="" label="Named / functional colors also parse" show-lines=""><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1838,9 +1838,9 @@
         <div class="label-container" id="code-label"><span class="label">Named / functional colors also parse</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
-      <div class="code-container" role="region" aria-labelledby="code-label" style="">
-        <div class="line-numbers" aria-hidden="true"><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div>
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">accessibility-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">&quot;#333333&quot;</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">&quot;#f5f5f5&quot;</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">&quot;Dark gray on off-white&quot;</span>&gt;</span>Body copy<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">&quot;oklch(70% 0.15 145)&quot;</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">&quot;#ffffff&quot;</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">&quot;Success green on white&quot;</span>&gt;</span>Status text<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">accessibility-specimen</span>&gt;</span></span></code></pre>
+      <div class="code-container" role="region" aria-labelledby="code-label">
+        <div class="line-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">accessibility-specimen</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">"#333333"</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">"#f5f5f5"</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">"Dark gray on off-white"</span>&gt;</span>Body copy<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line">  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-fg</span>=<span class="hljs-string">"oklch(70% 0.15 145)"</span> <span class="hljs-attr">data-bg</span>=<span class="hljs-string">"#ffffff"</span> <span class="hljs-attr">data-label</span>=<span class="hljs-string">"Success green on white"</span>&gt;</span>Status text<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;/<span class="hljs-name">accessibility-specimen</span>&gt;</span></span></code></pre>
       </div>
       </template><textarea style="display:none">&lt;accessibility-specimen&gt;
   &lt;button data-fg=&quot;#333333&quot; data-bg=&quot;#f5f5f5&quot; data-label=&quot;Dark gray on off-white&quot;&gt;Body copy&lt;/button&gt;
@@ -1906,10 +1906,10 @@
   })();
   </script>
 
-  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw0043hl"></script>
-  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw0043hl"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/vanilla-breeze.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/browser-window.js?v=mw00lawf"></script>
+  <script type="module" src="/vb-design-system/assets/vendor/code-block.js?v=mw00lawf"></script>
   
 </body>
 </html>
