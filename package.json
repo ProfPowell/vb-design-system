@@ -1,6 +1,6 @@
 {
   "name": "@profpowell/vb-design-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Design-system documentation components for Vanilla Breeze: type, spacing, token, motion, layout, breakpoint, accessibility, icon and brand specimens; color palette, semantic palette, palette generator, gradient builder, font pairer; component sampler; theme catalog, export and import.",
   "license": "MIT",
   "author": "Thomas A. Powell",
@@ -64,7 +64,7 @@
     "test:components": "playwright test"
   },
   "peerDependencies": {
-    "vanilla-breeze": ">=0.1.0"
+    "vanilla-breeze": ">=0.4.0"
   },
   "peerDependenciesMeta": {
     "vanilla-breeze": {
@@ -72,7 +72,7 @@
     }
   },
   "devDependencies": {
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "^1.64.1",
     "esbuild": "^0.28.2"
   }
 }

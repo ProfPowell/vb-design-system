@@ -40,7 +40,7 @@ Full change loop for a component: edit `src/` → `npm run build` → `cd site &
 
 ## Shared with VB core (keep in sync)
 
-These files are copies of VB core and must not drift. Diff against `~/src/vanilla-breeze` when bumping VB:
+These files are copies of VB core and must not drift. The npm package does not ship `src/`, and the local `~/src/vanilla-breeze` working tree is usually ahead of the release, so diff against the **git tag** of the version you are vendoring (`git -C ~/src/vanilla-breeze show vX.Y.Z:<path>`):
 
 - `src/lib/vb-element.js` ← `src/lib/vb-element.js`
 - `src/web-components/theme-import/dtcg-deserialize.js`, `theme-export/dtcg-serialize.js`, `theme-export/theme-css-parse.js` ← `src/lib/dtcg/`
