@@ -100,15 +100,13 @@ This package was decomposed out of `vanilla-breeze` core so the framework stays 
 
 ## Runtime peers
 
-The following components are provided by **Vanilla Breeze** (VB core) and are used at runtime by DS components but are NOT bundled with this package:
+Three elements use a component from **Vanilla Breeze** (VB core) at runtime. These are not bundled with this package:
 
-- `<color-picker>` — Used by color-tool components (`semantic-palette`, `palette-generator`, `gradient-builder`). These tools degrade gracefully without it.
-- `<drag-surface>` — Interactive drag patterns.
-- `<icon-wc>` — Icon system.
-- `<brand-mark>` — Brand mark component.
-- `<theme-picker>` — Theme switcher.
+- `<color-picker>`: used by `<palette-generator>`.
+- `<icon-wc>`: used by `<token-specimen>`.
+- `<brand-mark>`: used by `<brand-specimen>`.
 
-These are declared as optional peer dependencies in `package.json`. Load `vanilla-breeze` and its token/theme CSS on the page for full functionality.
+`vanilla-breeze` is an optional peer dependency in `package.json`. Load it and its token/theme CSS on the page for full functionality.
 
 ## Development
 

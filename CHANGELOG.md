@@ -7,6 +7,22 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `<theme-export format="dtcg">` writes computed values: relative colors,
+  `color-mix()`, `calc()`, named colors and easing keywords are worked out, a
+  lone `var(--token)` becomes a DTCG alias, and `em` or `%` lengths are
+  `number` tokens with the unit in the extension. Nothing is written as
+  placeholder black, `0px` or a linear curve; a value with no DTCG form is
+  listed under `$extensions["com.vanilla-breeze"].cssOnly`.
+- `<theme-import>` and `<theme-catalog>` restore the original CSS for every
+  computed value (`literal` and `cssOnly`, as well as `expression` and
+  `lightDark`). The DTCG files are re-vendored from Vanilla Breeze core
+  ahead of its next release.
+- The DTCG guide's table of which values convert matches that behaviour.
+- The pack guide documented `/cdn/packs/design-system.full.js` and
+  `activateBundle('design-system')`, which no longer exist. It now shows the
+  npm package and its per-element entries.
+- README: the runtime peers are the three the source uses (`<color-picker>`,
+  `<icon-wc>`, `<brand-mark>`), each with the element that uses it.
 - `<token-specimen>` color swatches and border samples now carry
   `data-token-sample`, so an `editable` specimen of those types updates the
   sample live like shadow, radius and size already did.

@@ -1933,9 +1933,11 @@ var SPEC = "2025.10";
 function serializeDTCG(entries, options = {}) {
   const root = {};
   const unmapped = [];
+  const cssOnly = {};
   let seedDerivation = false;
-  for (const [name, rawValue] of entries) {
-    const value = String(rawValue).trim();
+  const own = new Map(entries.map(([n, v]) => [n, String(v).trim()]));
+  const build = createBuilder(own, new Map((options.context || []).map(([n, v]) => [n, String(v).trim()])));
+  for (const name of own.keys()) {
     const target = mapPrefix(name);
     if (!target) {
       unmapped.push(name);
@@ -1944,13 +1946,16 @@ function serializeDTCG(entries, options = {}) {
     if (target.path[0] === "color" && target.path[1] === "seeds") {
       seedDerivation = true;
     }
-    const token = buildToken(name, value, target);
-    insertAt(root, target.path, target.name, token);
+    const token = build(name);
+    if (token) insertAt(root, target.path, target.name, token);
+    else cssOnly[name] = /** @type {string} */
+    own.get(name);
   }
   const meta = { spec: SPEC };
   if (options.vbVersion) meta.vbVersion = options.vbVersion;
   if (seedDerivation) meta.seedDerivation = true;
   if (unmapped.length) meta.unmapped = unmapped;
+  if (Object.keys(cssOnly).length) meta.cssOnly = cssOnly;
   root.$extensions = { [VB_NS]: meta };
   return root;
 }
@@ -1987,151 +1992,480 @@ function mapPrefix(name) {
   }
   return null;
 }
-function buildToken(_name, value, target) {
-  switch (target.type) {
-    case "color":
-      return buildColorToken(value);
-    case "fontFamily":
-      return { $type: "fontFamily", $value: parseFontFamily(value) };
-    case "fontWeight":
-      return { $type: "fontWeight", $value: parseNumber(value) };
-    case "number":
-      return buildNumberToken(value);
-    case "dimension":
-      return buildDimensionToken(value);
-    case "duration":
-      return { $type: "duration", $value: parseDuration(value) };
-    case "cubicBezier":
-      return buildCubicBezierToken(value);
-    case "shadow":
-      return buildShadowToken(value);
-    default:
-      return { $value: value };
+var EASING = {
+  linear: [0, 0, 1, 1],
+  ease: [0.25, 0.1, 0.25, 1],
+  "ease-in": [0.42, 0, 1, 1],
+  "ease-out": [0, 0, 0.58, 1],
+  "ease-in-out": [0.42, 0, 0.58, 1]
+};
+var COLOR_FUNCTION_SPACES = /* @__PURE__ */ new Set([
+  "srgb",
+  "srgb-linear",
+  "display-p3",
+  "a98-rgb",
+  "prophoto-rgb",
+  "rec2020",
+  "xyz-d65",
+  "xyz-d50"
+]);
+var NAMED_COLORS = Object.fromEntries("aliceblue:f0f8ff,antiquewhite:faebd7,aqua:00ffff,aquamarine:7fffd4,azure:f0ffff,beige:f5f5dc,bisque:ffe4c4,black:000000,blanchedalmond:ffebcd,blue:0000ff,blueviolet:8a2be2,brown:a52a2a,burlywood:deb887,cadetblue:5f9ea0,chartreuse:7fff00,chocolate:d2691e,coral:ff7f50,cornflowerblue:6495ed,cornsilk:fff8dc,crimson:dc143c,cyan:00ffff,darkblue:00008b,darkcyan:008b8b,darkgoldenrod:b8860b,darkgray:a9a9a9,darkgreen:006400,darkgrey:a9a9a9,darkkhaki:bdb76b,darkmagenta:8b008b,darkolivegreen:556b2f,darkorange:ff8c00,darkorchid:9932cc,darkred:8b0000,darksalmon:e9967a,darkseagreen:8fbc8f,darkslateblue:483d8b,darkslategray:2f4f4f,darkslategrey:2f4f4f,darkturquoise:00ced1,darkviolet:9400d3,deeppink:ff1493,deepskyblue:00bfff,dimgray:696969,dimgrey:696969,dodgerblue:1e90ff,firebrick:b22222,floralwhite:fffaf0,forestgreen:228b22,fuchsia:ff00ff,gainsboro:dcdcdc,ghostwhite:f8f8ff,gold:ffd700,goldenrod:daa520,gray:808080,green:008000,greenyellow:adff2f,grey:808080,honeydew:f0fff0,hotpink:ff69b4,indianred:cd5c5c,indigo:4b0082,ivory:fffff0,khaki:f0e68c,lavender:e6e6fa,lavenderblush:fff0f5,lawngreen:7cfc00,lemonchiffon:fffacd,lightblue:add8e6,lightcoral:f08080,lightcyan:e0ffff,lightgoldenrodyellow:fafad2,lightgray:d3d3d3,lightgreen:90ee90,lightgrey:d3d3d3,lightpink:ffb6c1,lightsalmon:ffa07a,lightseagreen:20b2aa,lightskyblue:87cefa,lightslategray:778899,lightslategrey:778899,lightsteelblue:b0c4de,lightyellow:ffffe0,lime:00ff00,limegreen:32cd32,linen:faf0e6,magenta:ff00ff,maroon:800000,mediumaquamarine:66cdaa,mediumblue:0000cd,mediumorchid:ba55d3,mediumpurple:9370db,mediumseagreen:3cb371,mediumslateblue:7b68ee,mediumspringgreen:00fa9a,mediumturquoise:48d1cc,mediumvioletred:c71585,midnightblue:191970,mintcream:f5fffa,mistyrose:ffe4e1,moccasin:ffe4b5,navajowhite:ffdead,navy:000080,oldlace:fdf5e6,olive:808000,olivedrab:6b8e23,orange:ffa500,orangered:ff4500,orchid:da70d6,palegoldenrod:eee8aa,palegreen:98fb98,paleturquoise:afeeee,palevioletred:db7093,papayawhip:ffefd5,peachpuff:ffdab9,peru:cd853f,pink:ffc0cb,plum:dda0dd,powderblue:b0e0e6,purple:800080,rebeccapurple:663399,red:ff0000,rosybrown:bc8f8f,royalblue:4169e1,saddlebrown:8b4513,salmon:fa8072,sandybrown:f4a460,seagreen:2e8b57,seashell:fff5ee,sienna:a0522d,silver:c0c0c0,skyblue:87ceeb,slateblue:6a5acd,slategray:708090,slategrey:708090,snow:fffafa,springgreen:00ff7f,steelblue:4682b4,tan:d2b48c,teal:008080,thistle:d8bfd8,tomato:ff6347,turquoise:40e0d0,violet:ee82ee,wheat:f5deb3,white:ffffff,whitesmoke:f5f5f5,yellow:ffff00,yellowgreen:9acd32".split(",").map((pair) => pair.split(":")));
+function createBuilder(own, context) {
+  const built = /* @__PURE__ */ new Map();
+  const building = /* @__PURE__ */ new Set();
+  let exact = true;
+  function build(name) {
+    if (built.has(name)) return built.get(name) ?? null;
+    if (building.has(name)) return null;
+    building.add(name);
+    const token = buildToken(name);
+    building.delete(name);
+    built.set(name, token);
+    return token;
   }
-}
-function buildColorToken(value) {
-  const ld = parseLightDark(value);
-  if (ld) {
-    return {
-      $root: { $type: "color", $value: parseColorValue(ld.light) ?? opaque(ld.light) },
-      light: { $type: "color", $value: parseColorValue(ld.light) ?? opaque(ld.light) },
-      dark: { $type: "color", $value: parseColorValue(ld.dark) ?? opaque(ld.dark) },
-      $extensions: { [VB_NS]: { lightDark: value } }
-    };
-  }
-  if (/\bfrom\b/.test(value) && /^oklch\(/i.test(value)) {
-    return {
-      $type: "color",
-      $value: { colorSpace: "srgb", components: [0, 0, 0] },
-      $extensions: { [VB_NS]: { expression: value } }
-    };
-  }
-  const parsed = parseColorValue(value);
-  if (parsed) return { $type: "color", $value: parsed };
-  return { $type: "color", $value: { colorSpace: "srgb", components: [0, 0, 0] }, $extensions: { [VB_NS]: { literal: value } } };
-}
-function opaque(value) {
-  return { colorSpace: "srgb", components: [0, 0, 0], $vbLiteral: value };
-}
-function parseColorValue(raw) {
-  const value = String(raw).trim();
-  let m = value.match(/^oklch\(\s*([^)]+)\)\s*$/i);
-  if (m) {
-    const [comps, alpha] = splitAlpha(m[1]);
-    const parts = comps.trim().split(/\s+/);
-    if (parts.length < 3) return null;
-    const L = parsePercentOrNumber(parts[0]);
-    const C = parseNumber(parts[1]);
-    const H = parseNumber(parts[2]);
-    if ([L, C, H].some(Number.isNaN)) return null;
-    const out = {
-      colorSpace: "oklch",
-      // OKLCH lightness is 0–1; VB writes 55%.
-      components: [normalizeLightness(parts[0], L), C, H]
-    };
-    if (alpha != null) out.alpha = alpha;
-    return out;
-  }
-  m = value.match(/^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
-  if (m) {
-    const hex = m[1];
-    let r, g, b, a;
-    if (hex.length === 3 || hex.length === 4) {
-      r = parseInt(hex[0] + hex[0], 16) / 255;
-      g = parseInt(hex[1] + hex[1], 16) / 255;
-      b = parseInt(hex[2] + hex[2], 16) / 255;
-      if (hex.length === 4) a = parseInt(hex[3] + hex[3], 16) / 255;
-    } else {
-      r = parseInt(hex.slice(0, 2), 16) / 255;
-      g = parseInt(hex.slice(2, 4), 16) / 255;
-      b = parseInt(hex.slice(4, 6), 16) / 255;
-      if (hex.length === 8) a = parseInt(hex.slice(6, 8), 16) / 255;
+  function buildToken(name) {
+    const source = (
+      /** @type {string} */
+      own.get(name)
+    );
+    const target = (
+      /** @type {Target} */
+      mapPrefix(name)
+    );
+    const ref = source.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+    if (ref && own.has(ref[1])) {
+      const to = mapPrefix(ref[1]);
+      const tok = to && to.type === target.type ? build(ref[1]) : null;
+      if (to && tok && "$value" in tok) {
+        return { $type: tok.$type, $value: `{${[...to.path, to.name].join(".")}}` };
+      }
     }
+    exact = true;
+    const text = substituteVars(source, /* @__PURE__ */ new Set([name]));
+    if (text == null || text === "") return null;
+    if (text !== source) exact = false;
+    const token = target.type === "color" ? colorToken(text) : scalarToken(text, target.type);
+    if (!token) return null;
+    const key = token.$root ? "lightDark" : exact ? null : /\(\s*from\s/i.test(source) ? "expression" : "literal";
+    if (key) {
+      token.$extensions = { [VB_NS]: { ...token.$extensions?.[VB_NS], [key]: source } };
+    }
+    return token;
+  }
+  function substituteVars(text, seen) {
+    let out = "";
+    let i = 0;
+    for (; ; ) {
+      const at = text.indexOf("var(", i);
+      if (at === -1) return out + text.slice(i);
+      const end = closeParen(text, at + 3);
+      if (end === -1) return null;
+      const inner = text.slice(at + 4, end);
+      const comma = topLevelIndex(inner, ",");
+      const ref = (comma === -1 ? inner : inner.slice(0, comma)).trim();
+      const raw = own.get(ref) ?? context.get(ref);
+      let value = raw != null && !seen.has(ref) ? substituteVars(raw, new Set(seen).add(ref)) : null;
+      if (value == null && comma !== -1) value = substituteVars(inner.slice(comma + 1).trim(), seen);
+      if (value == null) return null;
+      out += text.slice(i, at) + value;
+      i = end + 1;
+    }
+  }
+  function numeric(raw, env) {
+    const t = raw.trim();
+    const m = t.match(/^([-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?)(%|[a-z]+)?$/i);
+    if (m) return { n: parseFloat(m[1]), unit: (m[2] || "").toLowerCase() };
+    if (env && Object.hasOwn(env, t.toLowerCase())) {
+      exact = false;
+      return { n: env[t.toLowerCase()], unit: "" };
+    }
+    if (/^calc\(/i.test(t) && closeParen(t, 4) === t.length - 1) {
+      exact = false;
+      const q = evalCalc(t.slice(5, -1), env);
+      return q && Number.isFinite(q.n) ? { n: round(q.n), unit: q.unit } : null;
+    }
+    return null;
+  }
+  function channel(raw, ref, env) {
+    if (raw == null) return NaN;
+    if (/^none$/i.test(raw.trim())) {
+      exact = false;
+      return 0;
+    }
+    const q = numeric(raw, env);
+    if (!q) return NaN;
+    if (q.unit === "%") return q.n * ref / 100;
+    return q.unit === "" ? q.n : NaN;
+  }
+  function hue(raw, env) {
+    if (raw == null) return NaN;
+    if (/^none$/i.test(raw.trim())) {
+      exact = false;
+      return 0;
+    }
+    const q = numeric(raw, env);
+    if (!q) return NaN;
+    if (q.unit === "" || q.unit === "deg") return q.n;
+    if (q.unit === "turn") return q.n * 360;
+    if (q.unit === "grad") return q.n * 0.9;
+    if (q.unit === "rad") return q.n * 180 / Math.PI;
+    return NaN;
+  }
+  function colorToken(text) {
+    if (/light-dark\(/i.test(text)) {
+      const light = colorValue(pickLightDark(text, 0));
+      const dark = colorValue(pickLightDark(text, 1));
+      if (!light || !dark) return null;
+      return {
+        $root: { $type: "color", $value: light },
+        light: { $type: "color", $value: light },
+        dark: { $type: "color", $value: dark }
+      };
+    }
+    const value = colorValue(text);
+    return value ? { $type: "color", $value: value } : null;
+  }
+  function colorValue(text) {
+    const color = parseColor2(text);
+    if (!color || color.c.some((n) => !Number.isFinite(n))) return null;
+    if (color.alpha != null && !Number.isFinite(color.alpha)) return null;
+    const out = { colorSpace: color.space, components: color.c };
+    if (color.hex) out.hex = color.hex;
+    if (color.alpha != null) out.alpha = color.alpha;
+    return out;
+  }
+  function parseColor2(raw) {
+    const value = String(raw).trim();
+    const lower = value.toLowerCase();
+    const hexMatch = lower.match(/^#([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/);
+    if (hexMatch) return fromHex(hexMatch[1]);
+    if (lower === "transparent") {
+      exact = false;
+      return { space: "srgb", c: [0, 0, 0], alpha: 0 };
+    }
+    if (Object.hasOwn(NAMED_COLORS, lower)) {
+      exact = false;
+      return fromHex(NAMED_COLORS[lower]);
+    }
+    const open = value.indexOf("(");
+    if (open < 1 || closeParen(value, open) !== value.length - 1) return null;
+    const fn = lower.slice(0, open);
+    const inner = value.slice(open + 1, -1).trim();
+    if (fn === "color-mix") return mixColors(inner);
+    if (/^from\s/i.test(inner)) return fn === "oklch" ? relativeOklch(inner) : null;
+    const slash = topLevelIndex(inner, "/");
+    const main = slash === -1 ? inner : inner.slice(0, slash);
+    let alphaText = slash === -1 ? null : inner.slice(slash + 1);
+    const parts = main.includes(",") ? splitTopLevelCommas(main).map((p) => p.trim()) : splitSpaces(main);
+    if (fn === "color") {
+      const space = (parts.shift() || "").toLowerCase().replace(/^xyz$/, "xyz-d65");
+      if (!COLOR_FUNCTION_SPACES.has(space) || parts.length !== 3) return null;
+      exact = false;
+      return withAlpha({ space, c: parts.map((p) => channel(p, 1)) }, alphaText);
+    }
+    if (parts.length === 4 && alphaText == null) alphaText = /** @type {string} */
+    parts.pop();
+    if (parts.length !== 3) return null;
+    switch (fn) {
+      case "oklch":
+        return withAlpha({ space: "oklch", c: [channel(parts[0], 1), channel(parts[1], 0.4), hue(parts[2])] }, alphaText);
+      case "oklab":
+        exact = false;
+        return withAlpha({ space: "oklab", c: [channel(parts[0], 1), channel(parts[1], 0.4), channel(parts[2], 0.4)] }, alphaText);
+      case "rgb":
+      case "rgba":
+        return withAlpha({ space: "srgb", c: parts.map((p) => channel(p, 255) / 255) }, alphaText);
+      case "hsl":
+      case "hsla":
+        exact = false;
+        return withAlpha({
+          space: "srgb",
+          c: hslToSrgb(hue(parts[0]), channel(parts[1], 100) / 100, channel(parts[2], 100) / 100).map(round)
+        }, alphaText);
+      default:
+        return null;
+    }
+  }
+  function withAlpha(color, alphaText) {
+    if (alphaText != null) color.alpha = channel(alphaText, 1);
+    return color;
+  }
+  function relativeOklch(inner) {
+    exact = false;
+    const rest = inner.replace(/^from\s+/i, "");
+    const originText = splitSpaces(rest)[0];
+    if (!originText) return null;
+    const origin = toSpace(parseColor2(originText), "oklch");
+    if (!origin) return null;
+    const spec = rest.slice(rest.indexOf(originText) + originText.length);
+    const slash = topLevelIndex(spec, "/");
+    const parts = splitSpaces(slash === -1 ? spec : spec.slice(0, slash));
+    if (parts.length !== 3) return null;
+    const env = { l: origin.c[0], c: origin.c[1], h: origin.c[2], alpha: origin.alpha ?? 1 };
+    const alpha = slash === -1 ? env.alpha : channel(spec.slice(slash + 1), 1, env);
+    return finish("oklch", [channel(parts[0], 1, env), channel(parts[1], 0.4, env), hue(parts[2], env)], alpha);
+  }
+  function mixColors(inner) {
+    exact = false;
+    const args = splitTopLevelCommas(inner).map((a2) => a2.trim());
+    const method = (args[0] || "").toLowerCase().match(/^in\s+(srgb|oklab|oklch)(\s+shorter\s+hue)?$/);
+    if (args.length !== 3 || !method) return null;
+    const space = method[1];
+    const sides = args.slice(1).map((arg) => {
+      const tokens = splitSpaces(arg);
+      const at = tokens.findIndex((t) => /^[\d.]+%$/.test(t));
+      const pct = at === -1 ? null : parseFloat(tokens.splice(at, 1)[0]);
+      return { pct, color: toSpace(parseColor2(tokens.join(" ")), space) };
+    });
+    const [a, b] = sides;
+    if (!a.color || !b.color) return null;
+    let pa = a.pct ?? (b.pct == null ? 50 : 100 - b.pct);
+    let pb = b.pct ?? 100 - pa;
+    const sum = pa + pb;
+    if (!(sum > 0)) return null;
+    pa /= sum;
+    pb /= sum;
+    const ca = [...a.color.c];
+    const cb = [...b.color.c];
+    const wa = (a.color.alpha ?? 1) * pa;
+    const wb = (b.color.alpha ?? 1) * pb;
+    const alpha = wa + wb;
+    if (space === "oklch") {
+      if (ca[1] < 1e-4) ca[2] = cb[2];
+      if (cb[1] < 1e-4) cb[2] = ca[2];
+      let delta = cb[2] - ca[2];
+      if (delta > 180) delta -= 360;
+      if (delta < -180) delta += 360;
+      cb[2] = ca[2] + delta;
+    }
+    const c = ca.map((n, i) => {
+      if (space === "oklch" && i === 2) return ((n * pa + cb[i] * pb) % 360 + 360) % 360;
+      return alpha ? (n * wa + cb[i] * wb) / alpha : 0;
+    });
+    return finish(space, c, alpha * Math.min(sum / 100, 1));
+  }
+  function scalarToken(text, type) {
+    switch (type) {
+      case "fontFamily": {
+        const families = parseFontFamily(text);
+        return families.length ? { $type: "fontFamily", $value: families } : null;
+      }
+      case "cubicBezier":
+        return cubicBezierToken(text);
+      case "shadow":
+        return shadowToken(text);
+      default:
+        return numberToken(text, type);
+    }
+  }
+  function numberToken(text, type) {
+    if (type === "fontWeight" && /^(normal|bold)$/i.test(text)) {
+      return { $type: "fontWeight", $value: text.toLowerCase() };
+    }
+    const q = numeric(text);
+    if (!q) return null;
+    if (type === "duration") {
+      if (q.unit !== "" && q.unit !== "ms" && q.unit !== "s") return null;
+      return { $type: "duration", $value: { value: q.n, unit: q.unit || "ms" } };
+    }
+    if (type === "fontWeight") {
+      return q.unit === "" ? { $type: "fontWeight", $value: q.n } : null;
+    }
+    if (type === "dimension") {
+      const length = dtcgLength(q);
+      if (length) return { $type: "dimension", $value: length };
+    }
+    const tok = { $type: "number", $value: q.n };
+    if (q.unit) tok.$extensions = { [VB_NS]: { unit: q.unit } };
+    return tok;
+  }
+  function dtcgLength(q) {
+    if (q.unit === "px" || q.unit === "rem") return { value: q.n, unit: q.unit };
+    if (q.unit === "" && q.n === 0) return { value: 0, unit: "px" };
+    return null;
+  }
+  function cubicBezierToken(text) {
+    const keyword = text.toLowerCase();
+    if (Object.hasOwn(EASING, keyword)) {
+      exact = false;
+      return { $type: "cubicBezier", $value: [...EASING[keyword]] };
+    }
+    const m = text.match(/^cubic-bezier\(([^()]*)\)$/i);
+    if (!m) return null;
+    const parts = m[1].split(",").map((p) => numeric(p));
+    if (parts.length !== 4 || parts.some((q) => !q || q.unit !== "")) return null;
+    return { $type: "cubicBezier", $value: parts.map((q) => (
+      /** @type {Quantity} */
+      q.n
+    )) };
+  }
+  function shadowToken(text) {
+    if (/^none$/i.test(text)) {
+      exact = false;
+      const zero = { value: 0, unit: "px" };
+      return {
+        $type: "shadow",
+        $value: { offsetX: zero, offsetY: zero, blur: zero, color: { colorSpace: "srgb", components: [0, 0, 0], alpha: 0 } }
+      };
+    }
+    const stops = splitTopLevelCommas(text).map(shadowStop);
+    if (!stops.length || stops.some((s) => s == null)) return null;
+    return { $type: "shadow", $value: stops.length === 1 ? stops[0] : stops };
+  }
+  function shadowStop(raw) {
+    const lengths = [];
+    const colorParts = [];
+    let inset = false;
+    for (const part of splitSpaces(raw)) {
+      if (/^inset$/i.test(part)) {
+        inset = true;
+        exact = false;
+        continue;
+      }
+      const q = /^[-+.\d]|^calc\(/i.test(part) ? numeric(part) : null;
+      if (!q) {
+        colorParts.push(part);
+        continue;
+      }
+      const length = dtcgLength(q);
+      if (!length) return null;
+      if (colorParts.length) exact = false;
+      lengths.push(length);
+    }
+    if (lengths.length < 2 || lengths.length > 4 || !colorParts.length) return null;
+    const color = colorValue(colorParts.join(" "));
+    if (!color) return null;
+    if (lengths.length === 2) exact = false;
     const out = {
-      colorSpace: "srgb",
-      components: [r, g, b],
-      hex: "#" + (hex.length <= 4 ? hex.slice(0, 3).split("").map((c) => c + c).join("") : hex.slice(0, 6)).toLowerCase()
+      offsetX: lengths[0],
+      offsetY: lengths[1],
+      blur: lengths[2] ?? { value: 0, unit: "px" },
+      color
     };
-    if (a != null) out.alpha = a;
+    if (lengths[3]) out.spread = lengths[3];
+    if (inset) out.inset = true;
     return out;
   }
-  m = value.match(/^rgba?\(\s*([^)]+)\)\s*$/i);
-  if (m) {
-    const parts = m[1].split(/\s*,\s*|\s+/).filter(Boolean);
-    if (parts.length < 3) return null;
-    const r = parseRGBChannel(parts[0]);
-    const g = parseRGBChannel(parts[1]);
-    const b = parseRGBChannel(parts[2]);
-    const out = { colorSpace: "srgb", components: [r, g, b] };
-    if (parts[3] != null) out.alpha = parsePercentOrNumber(parts[3]);
-    return out;
+  return build;
+}
+function evalCalc(source, env) {
+  const tokens = source.match(/(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?(?:%|[a-z]+)?|[a-z]+|[-+*/()]|\S/gi) || [];
+  let pos = 0;
+  function sum() {
+    let left = product();
+    while (left && (tokens[pos] === "+" || tokens[pos] === "-")) {
+      const sign = tokens[pos++] === "+" ? 1 : -1;
+      const right = product();
+      if (!right || right.unit !== left.unit) return null;
+      left = { n: left.n + sign * right.n, unit: left.unit };
+    }
+    return left;
   }
-  return null;
-}
-function normalizeLightness(raw, parsed) {
-  if (typeof raw === "string" && raw.endsWith("%")) return parsed / 100;
-  return parsed;
-}
-function splitAlpha(inner) {
-  const idx = inner.indexOf("/");
-  if (idx < 0) return [inner, null];
-  const comps = inner.slice(0, idx);
-  const alpha = parsePercentOrNumber(inner.slice(idx + 1).trim());
-  return [comps, alpha];
-}
-function parseRGBChannel(s) {
-  const v = s.trim();
-  if (v.endsWith("%")) return parseFloat(v) / 100;
-  return parseFloat(v) / 255;
-}
-function buildNumberToken(value) {
-  const n = parsePercentOrNumber(value);
-  const tok = { $type: "number", $value: n };
-  if (typeof value === "string" && value.trim().endsWith("%")) {
-    tok.$extensions = { [VB_NS]: { unit: "%" } };
+  function product() {
+    let left = factor();
+    while (left && (tokens[pos] === "*" || tokens[pos] === "/")) {
+      const divide = tokens[pos++] === "/";
+      const right = factor();
+      if (!right) return null;
+      if (divide) {
+        if (right.unit !== "" || right.n === 0) return null;
+        left = { n: left.n / right.n, unit: left.unit };
+      } else {
+        if (left.unit !== "" && right.unit !== "") return null;
+        left = { n: left.n * right.n, unit: left.unit || right.unit };
+      }
+    }
+    return left;
   }
-  return tok;
-}
-function buildDimensionToken(value) {
-  const v = String(value).trim();
-  const m = v.match(/^(-?[\d.]+)(px|rem|em|%)?$/);
-  if (!m) return { $type: "dimension", $value: { value: 0, unit: "px" }, $extensions: { [VB_NS]: { literal: v } } };
-  const n = parseFloat(m[1]);
-  const unit = m[2] || "px";
-  const dtcgUnit = unit === "px" || unit === "rem" ? unit : "rem";
-  const tok = { $type: "dimension", $value: { value: n, unit: dtcgUnit } };
-  if (unit !== "px" && unit !== "rem") {
-    tok.$extensions = { [VB_NS]: { unit } };
+  function factor() {
+    let token = tokens[pos++];
+    if (token === "-" || token === "+") {
+      const value = factor();
+      return value && { n: token === "-" ? -value.n : value.n, unit: value.unit };
+    }
+    if (token && token.toLowerCase() === "calc" && tokens[pos] === "(") token = tokens[pos++];
+    if (token === "(") {
+      const value = sum();
+      return tokens[pos++] === ")" ? value : null;
+    }
+    if (token == null) return null;
+    const m = token.match(/^((?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?)(%|[a-z]+)?$/i);
+    if (m) return { n: parseFloat(m[1]), unit: (m[2] || "").toLowerCase() };
+    const name = token.toLowerCase();
+    return env && Object.hasOwn(env, name) ? { n: env[name], unit: "" } : null;
   }
-  return tok;
+  const result = sum();
+  return pos === tokens.length ? result : null;
 }
-function parseNumber(value) {
-  return parseFloat(String(value).trim());
+function round(n) {
+  return +n.toFixed(5);
 }
-function parsePercentOrNumber(value) {
-  const v = String(value).trim();
-  if (v.endsWith("%")) return parseFloat(v);
-  return parseFloat(v);
+function finish(space, c, alpha) {
+  const out = { space, c: c.map(round) };
+  if (space === "oklch") {
+    out.c[0] = Math.min(1, Math.max(0, out.c[0]));
+    out.c[1] = Math.max(0, out.c[1]);
+  }
+  if (!(alpha >= 1)) out.alpha = Number.isNaN(alpha) ? NaN : round(Math.max(0, alpha));
+  return out;
+}
+function fromHex(hex) {
+  const full = hex.length <= 4 ? hex.split("").map((ch) => ch + ch).join("") : hex;
+  const byte = (i) => parseInt(full.slice(i, i + 2), 16) / 255;
+  const out = { space: "srgb", c: [byte(0), byte(2), byte(4)], hex: "#" + full.slice(0, 6).toLowerCase() };
+  if (full.length === 8) out.alpha = byte(6);
+  return out;
+}
+function hslToSrgb(h, s, l) {
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) => {
+    const k = (n + h / 30) % 12;
+    return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+  };
+  return [f(0), f(8), f(4)];
+}
+function toSpace(color, space) {
+  if (!color) return null;
+  if (color.space === space) return color;
+  let lab;
+  if (color.space === "srgb") lab = srgbToOklab(color.c);
+  else if (color.space === "oklab") lab = color.c;
+  else if (color.space === "oklch") {
+    const [L, C, H] = color.c;
+    lab = [L, C * Math.cos(H * Math.PI / 180), C * Math.sin(H * Math.PI / 180)];
+  } else return null;
+  let c;
+  if (space === "oklab") c = lab;
+  else if (space === "srgb") c = oklabToSrgb(lab);
+  else if (space === "oklch") {
+    const C = Math.hypot(lab[1], lab[2]);
+    const H = C < 1e-6 ? 0 : (Math.atan2(lab[2], lab[1]) * 180 / Math.PI + 360) % 360;
+    c = [lab[0], C, H];
+  } else return null;
+  const out = { space, c };
+  if (color.alpha != null) out.alpha = color.alpha;
+  return out;
+}
+function srgbToOklab(rgb) {
+  const [r, g, b] = rgb.map((v) => Math.abs(v) <= 0.04045 ? v / 12.92 : Math.sign(v) * ((Math.abs(v) + 0.055) / 1.055) ** 2.4);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
+  ];
+}
+function oklabToSrgb([L, a, b]) {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s
+  ].map((v) => Math.abs(v) <= 31308e-7 ? 12.92 * v : Math.sign(v) * (1.055 * Math.abs(v) ** (1 / 2.4) - 0.055));
 }
 function parseFontFamily(value) {
   const out = [];
@@ -2158,57 +2492,6 @@ function parseFontFamily(value) {
   if (t) out.push(t);
   return out;
 }
-function parseDuration(value) {
-  const v = String(value).trim();
-  let m = v.match(/^(-?[\d.]+)(ms|s)$/);
-  if (m) return { value: parseFloat(m[1]), unit: m[2] };
-  return { value: parseFloat(v), unit: "ms" };
-}
-function buildCubicBezierToken(value) {
-  const m = String(value).match(/^cubic-bezier\(\s*([^)]+)\)\s*$/i);
-  if (!m) return { $type: "cubicBezier", $value: [0, 0, 1, 1], $extensions: { [VB_NS]: { literal: value } } };
-  const parts = m[1].split(",").map((s) => parseFloat(s.trim()));
-  if (parts.length !== 4 || parts.some(Number.isNaN)) {
-    return { $type: "cubicBezier", $value: [0, 0, 1, 1], $extensions: { [VB_NS]: { literal: value } } };
-  }
-  return { $type: "cubicBezier", $value: parts };
-}
-function buildShadowToken(value) {
-  const stops = splitTopLevelCommas(String(value));
-  const parsed = stops.map(parseShadowStop);
-  if (parsed.some((p) => p == null)) {
-    return { $type: "shadow", $value: { offsetX: { value: 0, unit: "px" }, offsetY: { value: 0, unit: "px" }, blur: { value: 0, unit: "px" }, color: { colorSpace: "srgb", components: [0, 0, 0] } }, $extensions: { [VB_NS]: { literal: value } } };
-  }
-  if (parsed.length === 1) return { $type: "shadow", $value: parsed[0] };
-  return { $type: "shadow", $value: parsed };
-}
-function parseShadowStop(raw) {
-  const s = raw.trim();
-  const colorMatch = s.match(/(#[0-9a-f]{3,8}|rgba?\([^)]+\)|oklch\([^)]+\))$/i);
-  if (!colorMatch) return null;
-  const color = parseColorValue(colorMatch[0]);
-  if (!color) return null;
-  const dimsRaw = s.slice(0, colorMatch.index).trim();
-  const dims = dimsRaw.split(/\s+/).filter(Boolean);
-  if (dims.length < 3) return null;
-  const dim = (i) => parseDimensionPart(dims[i]);
-  const out = {
-    offsetX: dim(0),
-    offsetY: dim(1),
-    blur: dim(2),
-    color
-  };
-  if (dims[3]) out.spread = dim(3);
-  return out;
-}
-function parseDimensionPart(part) {
-  const m = part.match(/^(-?[\d.]+)(px|rem|em)?$/);
-  if (!m) return { value: 0, unit: "px" };
-  const n = parseFloat(m[1]);
-  const unit = m[2] || "px";
-  const dtcgUnit = unit === "px" || unit === "rem" ? unit : "rem";
-  return { value: n, unit: dtcgUnit };
-}
 function splitTopLevelCommas(value) {
   const out = [];
   let buf = "";
@@ -2226,12 +2509,49 @@ function splitTopLevelCommas(value) {
   if (buf.trim()) out.push(buf);
   return out;
 }
-function parseLightDark(value) {
-  const m = String(value).match(/^light-dark\(\s*([\s\S]+)\s*\)\s*$/i);
-  if (!m) return null;
-  const parts = splitTopLevelCommas(m[1]);
-  if (parts.length !== 2) return null;
-  return { light: parts[0].trim(), dark: parts[1].trim() };
+function splitSpaces(value) {
+  const out = [];
+  let buf = "";
+  let depth = 0;
+  for (const ch of value) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    if (depth === 0 && /\s/.test(ch)) {
+      if (buf) out.push(buf);
+      buf = "";
+    } else {
+      buf += ch;
+    }
+  }
+  if (buf) out.push(buf);
+  return out;
+}
+function closeParen(text, open) {
+  let depth = 0;
+  for (let i = open; i < text.length; i++) {
+    if (text[i] === "(") depth++;
+    else if (text[i] === ")" && --depth === 0) return i;
+  }
+  return -1;
+}
+function topLevelIndex(text, ch) {
+  let depth = 0;
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === "(") depth++;
+    else if (text[i] === ")") depth--;
+    else if (text[i] === ch && depth === 0) return i;
+  }
+  return -1;
+}
+function pickLightDark(text, side) {
+  for (; ; ) {
+    const at = text.search(/light-dark\(/i);
+    if (at === -1) return text;
+    const end = closeParen(text, at + 10);
+    const parts = end === -1 ? [] : splitTopLevelCommas(text.slice(at + 11, end));
+    if (parts.length !== 2) return "";
+    text = text.slice(0, at) + parts[side].trim() + text.slice(end + 1);
+  }
 }
 function insertAt(root, path, name, token) {
   let node = root;
@@ -3587,6 +3907,12 @@ function deserializeDTCG(doc) {
   const ignored = [];
   const tree = doc && typeof doc === "object" ? doc : {};
   walk(tree, [], void 0, tree, tokens, ignored);
+  const cssOnly = tree.$extensions?.[VB_NS2]?.cssOnly;
+  if (cssOnly && typeof cssOnly === "object") {
+    for (const [name, css] of Object.entries(cssOnly)) {
+      if (name.startsWith("--") && typeof css === "string") tokens.push([name, css]);
+    }
+  }
   return {
     tokens,
     ignored,
@@ -3677,12 +4003,9 @@ function handleToken(token, path, type, root, tokens, ignored) {
   }
   const effectiveType = type ?? inferTypeFromPath(path);
   const ext = token.$extensions && token.$extensions[VB_NS2] || {};
-  if (ext.expression) {
-    tokens.push([cssVar, ext.expression]);
-    return;
-  }
-  if (ext.lightDark) {
-    tokens.push([cssVar, ext.lightDark]);
+  const css = sourceCss(ext);
+  if (css) {
+    tokens.push([cssVar, css]);
     return;
   }
   const value = renderValue(token.$value, effectiveType, ext, root);
@@ -3691,6 +4014,10 @@ function handleToken(token, path, type, root, tokens, ignored) {
     return;
   }
   tokens.push([cssVar, value]);
+}
+function sourceCss(ext) {
+  const css = ext.expression ?? ext.lightDark ?? ext.literal;
+  return typeof css === "string" && css ? css : null;
 }
 function inferTypeFromPath(path) {
   const [head, second] = path;
@@ -3716,8 +4043,9 @@ function handleVariantToken(node, path, type, root, tokens, ignored) {
     return;
   }
   const ext = node.$extensions && node.$extensions[VB_NS2] || {};
-  if (ext.lightDark) {
-    tokens.push([cssVar, ext.lightDark]);
+  const css = sourceCss(ext);
+  if (css) {
+    tokens.push([cssVar, css]);
     return;
   }
   const light = node.light?.$value ? renderValue(node.light.$value, type, {}, root) : null;
@@ -3758,7 +4086,7 @@ function renderValue(value, type, ext, root) {
     case "number":
       return renderNumber(value, ext);
     case "dimension":
-      return renderDimension(value, ext);
+      return renderDimension(value);
     case "duration":
       return renderDuration(value);
     case "cubicBezier":
@@ -3772,7 +4100,7 @@ function renderValue(value, type, ext, root) {
 }
 function renderColor2(value, ext) {
   if (!value || typeof value !== "object") return null;
-  if (value.hex) return value.hex;
+  if (value.hex && (value.alpha == null || value.alpha === 1)) return value.hex;
   if (value.colorSpace === "oklch") {
     const [L, C, H] = value.components || [0, 0, 0];
     const alpha = value.alpha != null ? ` / ${value.alpha}` : "";
@@ -3819,13 +4147,11 @@ function renderFontFamily(value) {
   }).join(", ");
 }
 function renderNumber(value, ext) {
-  if (ext.unit === "%") return `${value}%`;
-  return String(value);
+  return typeof ext.unit === "string" ? `${value}${ext.unit}` : String(value);
 }
-function renderDimension(value, ext) {
+function renderDimension(value) {
   if (!value || typeof value !== "object") return null;
-  const unit = ext.unit || value.unit || "px";
-  return `${value.value}${unit}`;
+  return `${value.value}${value.unit || "px"}`;
 }
 function renderDuration(value) {
   if (!value || typeof value !== "object") return null;
@@ -3837,21 +4163,21 @@ function renderShadow2(value) {
 }
 function renderShadowStop(stop) {
   if (!stop) return null;
-  const ox = renderDimension(stop.offsetX, {}) ?? "0px";
-  const oy = renderDimension(stop.offsetY, {}) ?? "0px";
-  const blur = renderDimension(stop.blur, {}) ?? "0px";
-  const spread = stop.spread ? " " + renderDimension(stop.spread, {}) : "";
+  const ox = renderDimension(stop.offsetX) ?? "0px";
+  const oy = renderDimension(stop.offsetY) ?? "0px";
+  const blur = renderDimension(stop.blur) ?? "0px";
+  const spread = stop.spread ? " " + renderDimension(stop.spread) : "";
   const color = renderColor2(stop.color, {}) ?? "#000";
-  return `${ox} ${oy} ${blur}${spread} ${color}`;
+  return `${stop.inset ? "inset " : ""}${ox} ${oy} ${blur}${spread} ${color}`;
 }
 function unpackTypography(token, path, tokens) {
   const v = token.$value;
   const leaf = path[path.length - 1];
   if (v.fontFamily != null) tokens.push([`--font-${leaf}`, renderFontFamily(v.fontFamily)]);
-  if (v.fontSize != null) tokens.push([`--font-size-${leaf}`, renderDimension(v.fontSize, {})]);
+  if (v.fontSize != null) tokens.push([`--font-size-${leaf}`, renderDimension(v.fontSize)]);
   if (v.fontWeight != null) tokens.push([`--font-weight-${leaf}`, String(v.fontWeight)]);
   if (v.lineHeight != null) tokens.push([`--line-height-${leaf}`, String(v.lineHeight)]);
-  if (v.letterSpacing != null) tokens.push([`--letter-spacing-${leaf}`, renderDimension(v.letterSpacing, {})]);
+  if (v.letterSpacing != null) tokens.push([`--letter-spacing-${leaf}`, renderDimension(v.letterSpacing)]);
 }
 
 // src/web-components/theme-import/logic.js
