@@ -249,59 +249,117 @@
   </dd>
 </dl>
 
-<h2>Color, dimension, and the parametric round-trip</h2>
+<h2 id="values">Which values convert</h2>
+<p>The format holds finished values. CSS can hold a calculation or a reference. Where a theme uses one, the file holds the value it works out to, and keeps the CSS text in <code>$extensions["com.vanilla-breeze"]</code> so that an import gives back the CSS the file was written from. References are looked up among the other tokens in the same set. This table says what another tool sees and what comes back on import.</p>
+<table>
+  <thead>
+    <tr>
+      <th scope="col">CSS value</th>
+      <th scope="col">In the file</th>
+      <th scope="col">Other tools see</th>
+      <th scope="col">Imported again</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A color written as <code>oklch()</code>, hex or <code>rgb()</code></td>
+      <td>A color in the <code>oklch</code> or <code>srgb</code> space</td>
+      <td>The color</td>
+      <td>The same color. Lightness is written as a number, so <code>55%</code> comes back as <code>0.55</code></td>
+    </tr>
+    <tr>
+      <td>A named color, <code>hsl()</code>, <code>oklab()</code> or <code>color()</code></td>
+      <td>The color, and the CSS text under <code>literal</code></td>
+      <td>The color</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td>A relative color, <code>oklch(from var(--color-primary) ...)</code></td>
+      <td>The computed color in <code>oklch</code>, and the CSS text under <code>expression</code></td>
+      <td>The computed color</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td><code>color-mix()</code> in <code>srgb</code>, <code>oklab</code> or <code>oklch</code></td>
+      <td>The mixed color, and the CSS text under <code>literal</code></td>
+      <td>The mixed color</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td><code>light-dark(a, b)</code>, or a color worked out from one</td>
+      <td>Three tokens, <code>$root</code>, <code>light</code> and <code>dark</code>, and the CSS text under <code>lightDark</code></td>
+      <td>Both colors</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td><code>var(--color-primary)</code> on its own, where the target is a token in the same set</td>
+      <td>A DTCG alias, <code>{color.primary}</code></td>
+      <td>A reference to the other token</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td><code>var()</code> inside a larger value, or pointing at a custom property that is not a token</td>
+      <td>The value with the reference filled in, and the CSS text under <code>literal</code></td>
+      <td>The value</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td>A length in <code>px</code> or <code>rem</code></td>
+      <td>A dimension</td>
+      <td>The length. A bare <code>0</code> is written, and comes back, as <code>0px</code></td>
+      <td>The same length</td>
+    </tr>
+    <tr>
+      <td>A length in <code>em</code>, <code>%</code> or another unit</td>
+      <td>A <code>number</code> token, and the unit under <code>unit</code>. A DTCG dimension can only be <code>px</code> or <code>rem</code></td>
+      <td>A number with no unit</td>
+      <td>The original length</td>
+    </tr>
+    <tr>
+      <td><code>calc()</code> of numbers or of lengths in one unit</td>
+      <td>The result, and the CSS text under <code>literal</code></td>
+      <td>The result</td>
+      <td>The original text</td>
+    </tr>
+    <tr>
+      <td>A font stack, a weight, a time, a <code>cubic-bezier()</code>, a shadow</td>
+      <td>The matching DTCG value</td>
+      <td>The value</td>
+      <td>The same value. Font names other than generic families come back quoted</td>
+    </tr>
+    <tr>
+      <td>An easing keyword: <code>linear</code>, <code>ease</code>, <code>ease-in</code>, <code>ease-out</code>, <code>ease-in-out</code></td>
+      <td>The keyword's <code>cubicBezier</code> curve, and the keyword under <code>literal</code></td>
+      <td>The curve</td>
+      <td>The keyword</td>
+    </tr>
+    <tr>
+      <td>A shadow of <code>none</code></td>
+      <td>A shadow with no size and a fully transparent color, and <code>none</code> under <code>literal</code></td>
+      <td>A shadow that draws nothing</td>
+      <td><code>none</code></td>
+    </tr>
+    <tr>
+      <td>A value that cannot be worked out from the set: a reference to a custom property that is not in it, <code>calc()</code> across units, <code>clamp()</code>, <code>currentColor</code>, <code>steps()</code>, a radius with several values</td>
+      <td>No token. The property and its CSS text are listed under <code>cssOnly</code> in the file's own <code>$extensions</code></td>
+      <td>Nothing for that token</td>
+      <td>The original text</td>
+    </tr>
+  </tbody>
+</table>
+<p>The format has no type for plain text, so a value with no finished form is left out. A stand-in would be read by another tool as the real value. In the bundled themes this applies to the <code>steps()</code> easings of 8bit, NES and Terminal and to one radius in Organic.</p>
+<p>Two things follow. A token that carries <code>expression</code>, <code>lightDark</code> or <code>literal</code> is imported from that text, so a change made to its <code>$value</code> in another tool is not picked up unless the tool also removes the extension. And a computed value is a snapshot: it does not follow later changes to the token it was worked out from. Keep the CSS as the source and treat the file as a copy.</p>
+<p>The themes most likely to be taken elsewhere, Modern, Minimal and Classic, set their brand colors from the hue, lightness and chroma seeds. Those export as numbers under <code>color.seeds</code>, and the file's <code>$extensions</code> carries <code>seedDerivation: true</code> to say the colors are built from them.</p>
 
 <p>
-  DTCG 2025.10 supports OKLCH and all CSS Color Module 4 spaces natively,
-  so VB's OKLCH primitives translate cleanly. Dimensions in
-  <code>px</code> and <code>rem</code> are spec-supported; for
-  <code>em</code> and percent units (which VB uses in places like
-  <code>--letter-spacing-tight</code>), VB stores the unit hint under
-  <code>$extensions["com.vanilla-breeze"].unit</code> so it round-trips
-  exactly.
-</p>
-
-<p>
-  The interesting case is <strong>parametric themes</strong>. VB themes
-  often define state colors as derivations:
-</p>
-
-<pre><code>--color-primary: oklch(var(--lightness-primary) var(--chroma-primary) var(--hue-primary));
---color-primary-hover:  oklch(from var(--color-primary) calc(l - 0.08) calc(c + 0.02) h);
---color-primary-active: oklch(from var(--color-primary) calc(l - 0.12) c h);</code></pre>
-
-<p>
-  The CSS <code>oklch(from …)</code> relative-color syntax has no
-  direct DTCG equivalent — DTCG aliases are pass-through references,
-  not derivations. So when VB exports a parametric theme:
-</p>
-
-<ul>
-  <li>
-    The <strong>resolved value</strong> goes into <code>$value</code> —
-    other tools see a real, usable color.
-  </li>
-  <li>
-    The <strong>original CSS expression</strong> is preserved under
-    <code>$extensions["com.vanilla-breeze"].expression</code>.
-  </li>
-  <li>
-    On re-import into VB, the importer prefers the preserved expression
-    over the resolved value, so a round-trip through VB tooling is
-    <em>lossless</em>.
-  </li>
-  <li>
-    A round-trip through a third-party tool that strips unknown extensions
-    will downgrade to the resolved value — functional but no longer
-    parametric. This is a known and documented trade-off.
-  </li>
-</ul>
-
-<p>
-  The same pattern applies to <code>light-dark(a, b)</code> values: VB
-  emits a <code>$root</code>/<code>light</code>/<code>dark</code> variant
-  triplet for cross-tool fidelity AND preserves the literal under
-  <code>$extensions["com.vanilla-breeze"].lightDark</code>.
+  <a href="/vb-design-system/elements/theme-export/"><code>&lt;theme-export&gt;</code></a>
+  serializes the custom properties set on its scope and looks references up
+  among those. A value that points at a token the scope does not set, for
+  example a hover color derived from a <code>--color-primary</code> that
+  comes from the stylesheet, is listed under <code>cssOnly</code>. The token
+  files for the bundled themes are built with the library defaults available,
+  so they resolve those references. The full account is on the
+  <a href="https://vanilla-breeze.com/docs/process/dtcg/">Vanilla Breeze DTCG page</a>.
 </p>
 
 <h2>Composite typography</h2>
@@ -387,7 +445,7 @@
   <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
        that the full bundle omits; registerComponent is first-wins, so loading
        both is safe (no double-registration). -->
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.7427e164.js"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.302d41fe.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/code-block.5c02aa57.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/browser-window.c85196f0.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/color-picker.13979743.js"></script>

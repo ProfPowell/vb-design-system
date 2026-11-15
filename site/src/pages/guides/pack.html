@@ -9,10 +9,9 @@ description: "Components and CSS patterns for documenting brand guidelines, desi
 
 <table>
   <tbody>
-    <tr><th>Type</th><td>Functional</td></tr>
-    <tr><th>Version</th><td>1.0.0</td></tr>
-    <tr><th>JS</th><td><code>packs/design-system.full.js</code></td></tr>
-    <tr><th>CSS</th><td><code>packs/design-system.full.css</code></td></tr>
+    <tr><th>Package</th><td><code>@profpowell/vb-design-system</code> on npm</td></tr>
+    <tr><th>JS</th><td><code>dist/vb-design-system.min.js</code></td></tr>
+    <tr><th>CSS</th><td><code>dist/vb-design-system.min.css</code></td></tr>
   </tbody>
 </table>
 
@@ -41,14 +40,17 @@ description: "Components and CSS patterns for documenting brand guidelines, desi
 <section>
   <h2>Loading</h2>
 
-  <code-block language="html" label="CDN loading" data-escape><link rel="stylesheet" href="/cdn/packs/design-system.full.css">
-<script type="module" src="/cdn/packs/design-system.full.js"></script></code-block>
+  <p>The components ship as their own package. Load Vanilla Breeze for the tokens and theme, then the package's script and stylesheet.</p>
 
-  <code-block language="js" label="Runtime activation" data-escape>import { activateBundle } from '/cdn/vanilla-breeze.js'
-await activateBundle('design-system')</code-block>
+  <code-block language="html" label="CDN loading" data-escape><link rel="stylesheet" href="https://unpkg.com/vanilla-breeze/dist/cdn/vanilla-breeze.css">
+<link rel="stylesheet" href="https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.css">
+<script type="module" src="https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.js"></script></code-block>
+
+  <code-block language="js" label="With a bundler" data-escape>import '@profpowell/vb-design-system'      // registers every element
+import '@profpowell/vb-design-system/css'  // component styles</code-block>
 
   <aside class="note">
-    <strong>Cherry-pick individual components.</strong> Load just what you need &mdash; for example, <code>/cdn/components/token-specimen.js</code> &mdash; without the full pack.
+    <strong>Load one component.</strong> Each element has its own entry, for example <code>import '@profpowell/vb-design-system/token-specimen'</code>.
   </aside>
 </section>
 

@@ -176,10 +176,9 @@
 
 <table>
   <tbody>
-    <tr><th>Type</th><td>Functional</td></tr>
-    <tr><th>Version</th><td>1.0.0</td></tr>
-    <tr><th>JS</th><td><code>packs/design-system.full.js</code></td></tr>
-    <tr><th>CSS</th><td><code>packs/design-system.full.css</code></td></tr>
+    <tr><th>Package</th><td><code>@profpowell/vb-design-system</code> on npm</td></tr>
+    <tr><th>JS</th><td><code>dist/vb-design-system.min.js</code></td></tr>
+    <tr><th>CSS</th><td><code>dist/vb-design-system.min.css</code></td></tr>
   </tbody>
 </table>
 
@@ -207,6 +206,8 @@
 
 <section>
   <h2>Loading</h2>
+
+  <p>The components ship as their own package. Load Vanilla Breeze for the tokens and theme, then the package's script and stylesheet.</p>
 
   <code-block language="html" data-ssr="" label="CDN loading"><template shadowrootmode="open"><style>
       :host {
@@ -691,12 +692,13 @@
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/cdn/packs/design-system.full.css"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"module"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/cdn/packs/design-system.full.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
+        <pre><code class="language-html" tabindex="0"><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"https://unpkg.com/vanilla-breeze/dist/cdn/vanilla-breeze.css"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">"stylesheet"</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.css"</span>&gt;</span></span><span class="code-line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"module"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.js"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">&lt;link rel=&quot;stylesheet&quot; href=&quot;/cdn/packs/design-system.full.css&quot;&gt;
-&lt;script type=&quot;module&quot; src=&quot;/cdn/packs/design-system.full.js&quot;&gt;&lt;/script&gt;</textarea></code-block>
+      </template><textarea style="display:none">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/vanilla-breeze/dist/cdn/vanilla-breeze.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.css&quot;&gt;
+&lt;script type=&quot;module&quot; src=&quot;https://unpkg.com/@profpowell/vb-design-system/dist/vb-design-system.min.js&quot;&gt;&lt;/script&gt;</textarea></code-block>
 
-  <code-block language="js" data-ssr="" label="Runtime activation"><template shadowrootmode="open"><style>
+  <code-block language="js" data-ssr="" label="With a bundler"><template shadowrootmode="open"><style>
       :host {
         --_cb-bg: var(--color-surface-raised, #f6f8fa);
         --_cb-code-bg: var(--color-surface, #fff);
@@ -1174,18 +1176,18 @@
       }
     </style>
       <div class="header">
-        <div class="label-container" id="code-label"><span class="label">Runtime activation</span></div>
+        <div class="label-container" id="code-label"><span class="label">With a bundler</span></div>
         <div class="header-actions"><button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">Copy</button></div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label">
         
-        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> { activateBundle } <span class="hljs-keyword">from</span> <span class="hljs-string">'/cdn/vanilla-breeze.js'</span></span><span class="code-line"><span class="hljs-keyword">await</span> <span class="hljs-title function_">activateBundle</span>(<span class="hljs-string">'design-system'</span>)</span></code></pre>
+        <pre><code class="language-js" tabindex="0"><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">'@profpowell/vb-design-system'</span>      <span class="hljs-comment">// registers every element</span></span><span class="code-line"><span class="hljs-keyword">import</span> <span class="hljs-string">'@profpowell/vb-design-system/css'</span>  <span class="hljs-comment">// component styles</span></span></code></pre>
       </div>
-      </template><textarea style="display:none">import { activateBundle } from &#39;/cdn/vanilla-breeze.js&#39;
-await activateBundle(&#39;design-system&#39;)</textarea></code-block>
+      </template><textarea style="display:none">import &#39;@profpowell/vb-design-system&#39;      // registers every element
+import &#39;@profpowell/vb-design-system/css&#39;  // component styles</textarea></code-block>
 
   <aside class="note">
-    <strong>Cherry-pick individual components.</strong> Load just what you need — for example, <code>/cdn/components/token-specimen.js</code> — without the full pack.
+    <strong>Load one component.</strong> Each element has its own entry, for example <code>import '@profpowell/vb-design-system/token-specimen'</code>.
   </aside>
 </section>
 
@@ -5193,7 +5195,7 @@ await activateBundle(&#39;design-system&#39;)</textarea></code-block>
   <!-- Pack supplies the pack-only specimens (token-specimen, component-sampler)
        that the full bundle omits; registerComponent is first-wins, so loading
        both is safe (no double-registration). -->
-  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.7427e164.js"></script>
+  <script type="module" src="/vb-design-system/assets/pack/vb-design-system.302d41fe.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/code-block.5c02aa57.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/browser-window.c85196f0.js"></script>
   <script type="module" src="/vb-design-system/assets/vendor/color-picker.13979743.js"></script>
