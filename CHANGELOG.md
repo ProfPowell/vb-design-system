@@ -5,6 +5,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-14
+
 ### Fixed
 
 - `<theme-export format="dtcg">` writes computed values: relative colors,
