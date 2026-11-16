@@ -346,19 +346,7 @@
     },
     "focus": {
       "$type": "color",
-      "$value": {
-        "colorSpace": "srgb",
-        "components": [
-          0,
-          0,
-          0
-        ]
-      },
-      "$extensions": {
-        "com.vanilla-breeze": {
-          "literal": "var(--color-primary)"
-        }
-      }
+      "$value": "{color.primary}"
     }
   },
   "typography": {
@@ -587,7 +575,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "seedDerivation": true,
       "unmapped": [
         "--theme-border-style",

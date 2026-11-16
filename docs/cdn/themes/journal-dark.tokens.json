@@ -121,6 +121,14 @@
         ]
       }
     },
+    "interactive": {
+      "$type": "color",
+      "$value": "{color.primary}"
+    },
+    "interactive-hover": {
+      "$type": "color",
+      "$value": "{color.primary-hover}"
+    },
     "accent": {
       "$type": "color",
       "$value": {
@@ -395,11 +403,13 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "unmapped": [
         "--page-bg-color",
         "--page-bg-image",
-        "--page-bg-size"
+        "--page-bg-size",
+        "--_journal-bw-url-text",
+        "--_journal-bw-minimize"
       ]
     }
   }

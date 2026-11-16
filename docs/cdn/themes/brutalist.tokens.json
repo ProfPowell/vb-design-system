@@ -99,6 +99,28 @@
         ]
       }
     },
+    "interactive": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.43,
+          0.3,
+          145
+        ]
+      }
+    },
+    "interactive-hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.38,
+          0.3,
+          145
+        ]
+      }
+    },
     "primary-hover": {
       "$type": "color",
       "$value": {
@@ -336,11 +358,8 @@
     },
     "size": {
       "adjust": {
-        "$type": "dimension",
-        "$value": {
-          "value": 0.48,
-          "unit": "px"
-        }
+        "$type": "number",
+        "$value": 0.48
       }
     },
     "lineHeight": {
@@ -355,11 +374,8 @@
     },
     "letterSpacing": {
       "normal": {
-        "$type": "dimension",
-        "$value": {
-          "value": -0.01,
-          "unit": "rem"
-        },
+        "$type": "number",
+        "$value": -0.01,
         "$extensions": {
           "com.vanilla-breeze": {
             "unit": "em"
@@ -649,7 +665,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "unmapped": [
         "--theme-border-style",
         "--caret-color",

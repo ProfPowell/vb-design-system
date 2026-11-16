@@ -110,6 +110,14 @@
         ]
       }
     },
+    "interactive": {
+      "$type": "color",
+      "$value": "{color.primary}"
+    },
+    "interactive-hover": {
+      "$type": "color",
+      "$value": "{color.primary-hover}"
+    },
     "primary-subtle": {
       "$type": "color",
       "$value": {
@@ -459,7 +467,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "unmapped": [
         "--cb-header-bg",
         "--cb-keyword",

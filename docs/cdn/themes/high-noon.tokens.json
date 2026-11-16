@@ -242,6 +242,15 @@
           "Consolas",
           "monospace"
         ]
+      },
+      "heading": {
+        "$type": "fontFamily",
+        "$value": [
+          "Big Shoulders Display",
+          "Arial Narrow",
+          "Impact",
+          "sans-serif"
+        ]
       }
     },
     "lineHeight": {
@@ -523,7 +532,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "unmapped": [
         "--theme-border-style",
         "--theme-icon-set"

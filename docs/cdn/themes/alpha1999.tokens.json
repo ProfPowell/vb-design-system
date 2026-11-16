@@ -791,11 +791,8 @@
     },
     "letterSpacing": {
       "wide": {
-        "$type": "dimension",
-        "$value": {
-          "value": 0.04,
-          "unit": "rem"
-        },
+        "$type": "number",
+        "$value": 0.04,
         "$extensions": {
           "com.vanilla-breeze": {
             "unit": "em"
@@ -832,7 +829,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "seedDerivation": true,
       "unmapped": [
         "--motion-enter-duration",

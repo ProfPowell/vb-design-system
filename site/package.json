@@ -16,6 +16,6 @@
     "cook-ssg": "^2.5.0",
     "linkedom": "^0.18.15",
     "pagefind": "^1.6.0",
-    "vanilla-breeze": "^0.4.1"
+    "vanilla-breeze": "^0.7.0"
   }
 }

@@ -3,9 +3,9 @@
     "surface": {
       "$type": "color",
       "$value": {
-        "colorSpace": "srgb",
+        "colorSpace": "oklch",
         "components": [
-          0,
+          0.3,
           0,
           0
         ]
@@ -87,7 +87,7 @@
       "$value": {
         "colorSpace": "oklch",
         "components": [
-          0.7,
+          0.8,
           0,
           0
         ]
@@ -106,35 +106,11 @@
     },
     "hover-text": {
       "$type": "color",
-      "$value": {
-        "colorSpace": "srgb",
-        "components": [
-          0,
-          0,
-          0
-        ]
-      },
-      "$extensions": {
-        "com.vanilla-breeze": {
-          "literal": "var(--color-primary)"
-        }
-      }
+      "$value": "{color.interactive}"
     },
     "active-text": {
       "$type": "color",
-      "$value": {
-        "colorSpace": "srgb",
-        "components": [
-          0,
-          0,
-          0
-        ]
-      },
-      "$extensions": {
-        "com.vanilla-breeze": {
-          "literal": "var(--color-primary)"
-        }
-      }
+      "$value": "{color.interactive}"
     },
     "primary": {
       "$type": "color",
@@ -143,6 +119,17 @@
         "components": [
           0.6,
           0.15,
+          250
+        ]
+      }
+    },
+    "interactive": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklch",
+        "components": [
+          0.74,
+          0.13,
           250
         ]
       }
@@ -520,7 +507,7 @@
   "$extensions": {
     "com.vanilla-breeze": {
       "spec": "2025.10",
-      "vbVersion": "0.4.1",
+      "vbVersion": "0.7.0",
       "unmapped": [
         "--_win9x-bg",
         "--_win9x-highlight",
@@ -529,6 +516,7 @@
         "--_win9x-dark-shadow",
         "--_win9x-window-bg",
         "--control-size",
+        "--_win9x-field-edge",
         "--control-border",
         "--control-checked-bg",
         "--control-checked-border",
@@ -556,7 +544,10 @@
         "--cb-button-color",
         "--cb-scrollbar-track",
         "--cb-scrollbar-thumb",
-        "--browser-window-header-bg"
+        "--browser-window-header-bg",
+        "--browser-window-close-color",
+        "--browser-window-minimize-color",
+        "--browser-window-maximize-color"
       ]
     }
   }
